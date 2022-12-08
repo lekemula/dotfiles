@@ -9,6 +9,8 @@ This is a repository of all my dotfiles configurations. It's primary intented fo
   - `brew install node`
 - vim-fzf: 
   - `brew install the_silver_searcher`
+- vim-instant-markdown:
+  - `npm -g install instant-markdown-d`
 
 
 ## Installation
