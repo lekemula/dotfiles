@@ -35,7 +35,7 @@ Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-repeat'
 Plug 'vim-ruby/vim-ruby'
 " Error: "It seems your ruby installation is missing psych"
-Plug 'stefanoverna/vim-i18n'
+" Plug 'stefanoverna/vim-i18n'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'chun-yang/auto-pairs'
 Plug 'craigemery/vim-autotag'
@@ -200,7 +200,7 @@ vmap <C-j> <Plug>(coc-snippets-select)
 let g:autotagTagsFile = 'tmp/tags'
 let g:autotagStartMethod='fork'
 let g:rails_ctags_arguments=['-f tmp/tags', '-R', '--exclude=tmp', '--exclude=log', '--exclude=.git','--languages=Ruby', '.', '$(bundle list --paths)']
-"ctags -R --exclude=tmp --exclude=log --exclude=.git . $(bundle list --paths) -f tmp/tags
+"ctags -f tmp/tags -R --exclude=tmp --exclude=log --exclude=.git . $(bundle list --paths) 
 vmap <leader>gt :call I18nTranslateString()<CR>
 vmap <leader>dt :call I18nDisplayTranslation()<CR>
 
@@ -253,7 +253,9 @@ noremap <silent> <C-h>h :vertical resize -15<CR>
 " => Appearance
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " https://github.com/ryanoasis/nerd-fonts#option-4-homebrew-fonts
+" Set theme
 colorscheme gruvbox
+set background=dark
 let NERDTreeShowHidden=1
 let g:webdevicons_conceal_nerdtree_brackets=1
 :set colorcolumn=120
