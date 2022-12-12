@@ -1,0 +1,32 @@
+{
+  "languageserver": {
+    "ruby-lsp": {
+      "command": "bundle",
+      "args": ["exec", "ruby-lsp"],
+      "initializationOptions": {
+        "enabledFeatures": [
+          "codeActions",
+          "diagnostics",
+          "documentHighlights",
+          "documentLink",
+          "documentSymbols",
+          "foldingRanges",
+          "formatting",
+          "hover",
+          "inlayHint",
+          "onTypeFormatting",
+          "selectionRanges"
+        ]
+      },
+      "filetypes": ["ruby"]
+    },
+    "sorbet": {
+      "command": "bundle",
+      "args": ["exec", "srb","typecheck", "--lsp"],
+      "filetypes": ["ruby"],
+      "rootPatterns": ["sorbet/config"],
+      "initializationOptions": {},
+      "settings": {}
+    }
+  }
+}
