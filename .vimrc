@@ -157,8 +157,11 @@ nnoremap L $
 nnoremap <F5> :source ~/.vimrc<CR>
 nnoremap <F12> :edit ~/.vimrc<CR>
 nnoremap <leader>fs :Files <CR>
-nnoremap g? :execute "!open 'https://www.google.com/search?q=" . expand("<cword>"). "'"<cr>
-vnoremap g? y:execute "!open 'https://www.google.com/search?q=" . expand("<C-r>0"). "'"<cr>
+nnoremap g? :execute "!open 'https://www.google.com/search?q=" . expand("<cword>") . "'"<cr>
+vnoremap g? y:execute "!open 'https://www.google.com/search?q=" . expand("<C-r>0") . "'"<cr>
+" Workaround for URL navigation on Shopify spin remote instance
+nnoremap <leader>gx :execute "!open '" . shellescape("<cWORD>") . "'"<cr>
+vnoremap <leader>gx y:execute "!open '" . shellescape("<C-r>0") . "'"<cr>
 nmap <leader>gcp :let @*=join([expand('%'),  line(".")], ':')<CR>
 
 let g:which_key_map.c = { 'name' : '+quickfix' }
