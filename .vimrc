@@ -210,6 +210,9 @@ vmap <leader>dt :call I18nDisplayTranslation()<CR>
 " Yank/Copy fully quialified class name to clipboard
 let g:yankfqn_register = '*'
 nmap yfc :call YankFQN()<CR>:let @"=@*<CR>
+
+# https://github.com/tpope/vim-rails/issues/503#issuecomment-1158877143
+command AC :execute "e " . eval('rails#buffer().alternate()')
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
