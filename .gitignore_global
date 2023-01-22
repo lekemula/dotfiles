@@ -26,4 +26,9 @@
 # Vim
 *.swp
 *.swo
+.undodir/
 
+.DS_Store
+tags.*
+projections.json
+.projections.json

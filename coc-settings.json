@@ -1,4 +1,6 @@
 {
+  "html.format.templating": true,
+  "coc.preferences.formatOnType": true,
   "languageserver": {
     "ruby-lsp": {
       "command": "bundle",

@@ -6,6 +6,9 @@
 " 	  - `brew install the_silver_searcher`
 "
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugins
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Auto-install vim-plug: https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -61,13 +64,20 @@ Plug 'sirver/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'liuchengxu/vim-which-key'
 Plug 'tommcdo/vim-exchange'
+Plug 'mattn/emmet-vim'
+Plug 'ojroques/vim-oscyank', {'branch': 'main'}
+Plug 'thaerkh/vim-workspace'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'andrewradev/splitjoin.vim'
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General Config
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "https://vimdoc.sourceforge.net/htmldoc/intro.html#key-notation
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | wincmd p | endif
 
 " Set leader key
 nnoremap <SPACE> <Nop>
@@ -81,14 +91,9 @@ let mapleader=" "
 ":nnoremap <C-r>n :set<Space>rnu!<CR>
 ":nnoremap <C-n> :set<Space>nu!<CR>
 
-" Fix ctags relative path from ./tmp folder
-set notagrelative
-" Git gutter refresh rate
-set updatetime=100
+" Copy to clipboard after any yank (works even over SSH)
+autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 
-" Yank/Copy to clipboard
-vnoremap <C-c> "*y :let @+=@*<CR>
-map <C-v> "+P
 " Cursor change on edit mode
 " replace the number after '\e[]'
 " Ps = 0  -> blinking block.
@@ -101,8 +106,13 @@ map <C-v> "+P
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
+" Workspace
+let g:workspace_autocreate = 1
+let g:workspace_session_directory = $HOME . '/.vim/sessions/'
+let g:workspace_autosave_always = 1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text Objects
+" => Text Objects (documentation)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ]m - Go to start of "next method"
 " ]M - Go to end of "next method"
@@ -142,7 +152,7 @@ let g:which_key_map.s.n = 'disable-spell-comletion'
 let g:which_key_map.t = { 'name' : '+file-tree' }
 nnoremap <leader>tt :NERDTreeToggle<CR>
 let g:which_key_map.t.t = 'toggle-file-tree'
-nnoremap <leader>tf :NERDTreeFind %<CR>
+nnoremap <leader>tf :NERDTreeFind %<CR>zz
 let g:which_key_map.t.f = 'file-tree-find-file'
 nnoremap <leader><space> :Buffers<CR>
 
@@ -162,7 +172,7 @@ vnoremap g? y:execute "!open 'https://www.google.com/search?q=" . expand("<C-r>0
 " Workaround for URL navigation on Shopify spin remote instance
 nnoremap <leader>gx :execute "!open '" . shellescape("<cWORD>") . "'"<cr>
 vnoremap <leader>gx y:execute "!open '" . shellescape("<C-r>0") . "'"<cr>
-nmap <leader>gcp :let @*=join([expand('%'),  line(".")], ':')<CR>
+nnoremap <leader>gcp :let @"=join([expand('%'),  line(".")], ':')<CR>:OSCYankReg "<CR>
 
 let g:which_key_map.c = { 'name' : '+quickfix' }
 nnoremap <leader>cc :cc<CR>
@@ -196,31 +206,33 @@ nnoremap <leader>ws :setlocal list!<cr>
 " Snippets
 imap <C-l> <Plug>(coc-snippets-expand)
 vmap <C-j> <Plug>(coc-snippets-select)
+let g:UltiSnipsSnippetDirectories=["my-snippets", "UltiSnips"]
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Ruby/Rails
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :let ruby_spellcheck_strings = 1
-let g:autotagTagsFile = 'tmp/tags'
 let g:autotagStartMethod='fork'
 let g:rails_ctags_arguments=['-f tmp/tags', '-R', '--exclude=tmp', '--exclude=log', '--exclude=.git','--languages=Ruby', '.', '$(bundle list --paths)']
-"ctags -f tmp/tags -R --exclude=tmp --exclude=log --exclude=.git . $(bundle list --paths) 
+"ctags -f tmp/tags -R --exclude=tmp --exclude=log --exclude=.git . $(bundle list --paths)
 vmap <leader>gt :call I18nTranslateString()<CR>
 vmap <leader>dt :call I18nDisplayTranslation()<CR>
 
 " Yank/Copy fully quialified class name to clipboard
-let g:yankfqn_register = '*'
-nmap yfc :call YankFQN()<CR>:let @"=@*<CR>
+let g:yankfqn_register = '"'
+nmap <leader>gcc :call YankFQN()<CR>:OSCYankReg "<CR>
 
-# https://github.com/tpope/vim-rails/issues/503#issuecomment-1158877143
+" https://github.com/tpope/vim-rails/issues/503#issuecomment-1158877143
 command AC :execute "e " . eval('rails#buffer().alternate()')
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-:setlocal foldmethod=syntax
+" https://stackoverflow.com/a/15087735
+setlocal foldmethod=indent
+set foldlevel=99
 " :set foldmethod=indent
-" :set foldlevel=99
-:let ruby_fold = 0
-set nofoldenable
+" :let ruby_fold = 0
+" set nofoldenable
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocompletion
@@ -243,12 +255,6 @@ nnoremap <C-t>t :tabnew<CR>
 nnoremap <C-t>h <Esc>:tabprevious<CR>
 nnoremap <C-t>l <Esc>:tabnext<CR>
 nnoremap <C-t>t <Esc>:tabnew<CR>
-
-" Remap splits navigation to just CTRL + hjkl
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 
 " Make adjusing split sizes a bit more friendly
 noremap <silent> <C-j>j :resize +15<CR>
@@ -296,7 +302,7 @@ let g:which_key_map.g = {
       \ }
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
-nnoremap <leader>gcu :CocCommand git.copyUrl<CR>
+nnoremap <leader>gcu :let @" = execute('.GBrowse!')<CR>:OSCYankReg "<CR>
 nnoremap <leader>gbl :Git blame<CR>
 nnoremap <leader>gbr v:GBrowse<CR>
 vnoremap <leader>gbr :GBrowse<CR>
@@ -342,7 +348,7 @@ let g:fzf_layout = { 'down': '40%' }
 "   'previous-history' instead of 'down' and 'up'.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
-command! -bang -nargs=? Ag call fzf#vim#ag(<q-args>, "--hidden --ignore .git", fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=? Ag call fzf#vim#ag(<q-args>, "--hidden --ignore sorbet/rbi --ignore .git", fzf#vim#with_preview(), <bang>0)
 
 " https://github.com/junegunn/fzf.vim/issues/27#issuecomment-608294881
 " "Raw" version of ag; arguments directly passed to ag
@@ -376,7 +382,7 @@ command! -bang -nargs=+ -complete=dir AgIn call s:ag_in(<bang>0, <f-args>)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => COC
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver']
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver', 'coc-solargraph']
 " https://github.com/neoclide/coc.nvim#example-vim-configuration
 " Some servers have issues with backup files, see #649.
 set nobackup
@@ -384,7 +390,7 @@ set nowritebackup
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=300
+set updatetime=1000
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
@@ -449,6 +455,8 @@ nmap <leader>rn <Plug>(coc-rename)
 " Formatting selected code.
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+" Formatting current file
+nmap <leader>fd  :CocCommand editor.action.formatDocument<CR>
 
 augroup mygroup
   autocmd!
@@ -538,6 +546,9 @@ syntax enable
 set encoding=UTF-8
 let g:airline_powerline_fonts = 1
 filetype plugin indent on
+set autoindent
+set cindent
+set smartindent
 set omnifunc=syntaxcomplete#Complete
 " after a re-source, fix syntax matching issues (concealing brackets):
 " https://github.com/ryanoasis/vim-devicons/issues/154#issuecomment-222032236
