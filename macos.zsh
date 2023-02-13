@@ -18,10 +18,12 @@ if [[ -z $(which node) ]]; then
   brew install node 
 fi
 
+# https://github.com/ggreer/the_silver_searcher
 if [[ -z $(which ag) ]]; then
   brew install the_silver_searcher
 fi
 
+# https://github.com/junegunn/fzf
 if [[ -z $(which fzf) ]]; then
   brew install fzf
 fi
@@ -38,7 +40,15 @@ if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
   echo "Don't forget to set your font settings in Iterm2 to 'MesloLGS NF': https://webinstall.dev/nerdfont/"
 fi
 
+# 1Passord CLI
 if ! command -v op &> /dev/null; then
   brew install --cask 1password/tap/1password-cli
   echo "Follow instructions here for sign in: https://developer.1password.com/docs/cli/get-started"
+fi
+
+# Github CLI
+if ! command -v gh &> /dev/null; then
+  brew install gh
+  gh auth login
+  gh auth setup-git
 fi

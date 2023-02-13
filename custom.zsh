@@ -7,7 +7,7 @@
 # Shopify dev tool
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit -i
 
 # Shopify spin completion
 if [[ $(which spin) != *'not found' ]]; then
@@ -16,5 +16,4 @@ fi
 
 source ~/.aliases.zsh
 
-# 1Password CLI autocompletion
-eval "$(op completion zsh)"; compdef _op op
+# source $HOME/.config/op/plugins.sh

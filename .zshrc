@@ -22,3 +22,14 @@ source $DF_HOME/antigen_bundles.zsh
 antigen apply
 
 source $DF_HOME/custom.zsh
+
+# 1Password CLI autocompletion
+if [[ $(which op) != *'not found' ]]; then
+  eval "$(op completion zsh)"; compdef _op op
+fi
+
+# Github CLI autocompletion
+if [[ $(which gh) != *'not found' ]]; then
+  eval "$(gh completion -s zsh)"
+  compdef _gh gh
+fi
