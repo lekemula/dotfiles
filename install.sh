@@ -8,8 +8,8 @@ if [[ ! -d $HOME/antigen ]]; then
 	cd -
 fi
 
-if [[ -z $(gem list solargraph) ]]; then
-  sudo gem install solargraph
+if [[ -z $(gem list solargraph | grep solargraph) ]]; then
+  gem install solargraph
 fi
 
 # This runs after default install actions, so you can overwrite changes it makes if you want.

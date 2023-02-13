@@ -38,3 +38,7 @@ if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
   echo "Don't forget to set your font settings in Iterm2 to 'MesloLGS NF': https://webinstall.dev/nerdfont/"
 fi
 
+if ! command -v op &> /dev/null; then
+  brew install --cask 1password/tap/1password-cli
+  echo "Follow instructions here for sign in: https://developer.1password.com/docs/cli/get-started"
+fi
