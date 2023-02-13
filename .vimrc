@@ -149,6 +149,7 @@ let g:which_key_map.s.n = 'disable-spell-comletion'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Navigation
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set mouse=a
 let g:which_key_map.t = { 'name' : '+file-tree' }
 nnoremap <leader>tt :NERDTreeToggle<CR>
 let g:which_key_map.t.t = 'toggle-file-tree'

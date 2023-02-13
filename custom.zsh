@@ -13,4 +13,4 @@ if [[ $(which spin) != *'not found' ]]; then
   source <(spin completion --shell=zsh)
 fi
 
-source ~/$DOTFILES_DIRECTORY_NAME/personal/aliases.zsh
+source ~/.aliases.zsh
