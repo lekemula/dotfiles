@@ -52,3 +52,7 @@ if ! command -v gh &> /dev/null; then
   gh auth login
   gh auth setup-git
 fi
+
+if ! command -v bat &> /dev/null; then
+  brew install bat
+fi
