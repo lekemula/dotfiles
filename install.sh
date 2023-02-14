@@ -24,6 +24,5 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.vim/coc-settin
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vim/my-snippets ~/.vim/my-snippets
 
 # https://iterm2.com/documentation-images.html
-# FIXME
-# curl https://iterm2.com/utilities/imgcat >> /opt/dev/bin/user/imgcat
-# chmod +x /opt/dev/bin/user/imgcat
+sudo curl https://iterm2.com/utilities/imgcat -o /usr/local/bin/imgcat
+sudo chmod +x /usr/local/bin/imgcat
