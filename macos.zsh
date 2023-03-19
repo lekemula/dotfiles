@@ -44,6 +44,7 @@ fi
 if ! command -v op &> /dev/null; then
   brew install --cask 1password/tap/1password-cli
   echo "Follow instructions here for sign in: https://developer.1password.com/docs/cli/get-started"
+  eval "$(op completion zsh)"; compdef _op op
 fi
 
 # Github CLI
@@ -51,6 +52,8 @@ if ! command -v gh &> /dev/null; then
   brew install gh
   gh auth login
   gh auth setup-git
+  eval "$(gh completion -s zsh)"
+  compdef _gh gh
 fi
 
 if ! command -v bat &> /dev/null; then

@@ -13,7 +13,11 @@ if [[ -z $(gem list solargraph | grep solargraph) ]]; then
 fi
 
 # This runs after default install actions, so you can overwrite changes it makes if you want.
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.zshrc ~/.zshrc
+if [[ -z "$WITHOUT_ZSHRC_SYMLINK" ]]; then
+  # Create a symlink to the zshrc file in the dotfiles directory.
+  ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.zshrc ~/.zshrc
+fi
+
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/aliases.zsh ~/.aliases.zsh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vimrc ~/.vimrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.p10k.zsh ~/.p10k.zsh
