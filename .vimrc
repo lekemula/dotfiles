@@ -36,6 +36,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-repeat'
+Plug 'vim-test/vim-test'
+Plug 'github/copilot.vim'
 Plug 'vim-ruby/vim-ruby'
 " Error: "It seems your ruby installation is missing psych"
 " Plug 'stefanoverna/vim-i18n'
@@ -92,7 +94,7 @@ let mapleader=" "
 ":nnoremap <C-n> :set<Space>nu!<CR>
 
 " Copy to clipboard after any yank (works even over SSH)
-autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
+autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister "' | endif
 
 " Cursor change on edit mode
 " replace the number after '\e[]'
@@ -156,6 +158,7 @@ let g:which_key_map.t.t = 'toggle-file-tree'
 nnoremap <leader>tf :NERDTreeFind %<CR>zz
 let g:which_key_map.t.f = 'file-tree-find-file'
 nnoremap <leader><space> :Buffers<CR>
+map ` :Marks<CR>
 
 " Multi Cursor
 let g:VM_maps = {}
@@ -173,7 +176,7 @@ vnoremap g? y:execute "!open 'https://www.google.com/search?q=" . expand("<C-r>0
 " Workaround for URL navigation on Shopify spin remote instance
 nnoremap <leader>gx :execute "!open '" . shellescape("<cWORD>") . "'"<cr>
 vnoremap <leader>gx y:execute "!open '" . shellescape("<C-r>0") . "'"<cr>
-nnoremap <leader>gcp :let @"=join([expand('%'),  line(".")], ':')<CR>:OSCYankReg "<CR>
+nnoremap <leader>gcp :let @"=join([expand('%'),  line(".")], ':')<CR>:OSCYankRegister "<CR>
 
 let g:which_key_map.c = { 'name' : '+quickfix' }
 nnoremap <leader>cc :cc<CR>
@@ -182,6 +185,16 @@ nnoremap <leader>cn :cnext<CR>
 let g:which_key_map.c.n = 'fix-next'
 nnoremap <leader>cp :cprevious<CR>
 let g:which_key_map.c.p = 'fix-previous'
+
+" Tests
+let test#strategy = "dispatch"
+let b:dispatch = ":0Spawn!"
+nmap <silent> <leader>TT :let test#strategy = "dispatch"<CR>:TestNearest<CR>
+nmap <silent> <leader>TD :let test#strategy = "basic"<CR>:TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>TS :TestSuite<CR>
+nmap <silent> <leader>TL :TestLast<CR>
+nmap <silent> <leader>TV :TestVisit<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Edit
@@ -221,7 +234,7 @@ vmap <leader>dt :call I18nDisplayTranslation()<CR>
 
 " Yank/Copy fully quialified class name to clipboard
 let g:yankfqn_register = '"'
-nmap <leader>gcc :call YankFQN()<CR>:OSCYankReg "<CR>
+nmap <leader>gcc :call YankFQN()<CR>:OSCYankRegister "<CR>
 
 " https://github.com/tpope/vim-rails/issues/503#issuecomment-1158877143
 command AC :execute "e " . eval('rails#buffer().alternate()')
@@ -301,9 +314,10 @@ let g:which_key_map.g = {
       \   'dh':   'git-diff-left',
       \   'dl':   'git-diff-right',
       \ }
+let g:gitgutter_preview_win_location='bel'
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
-nnoremap <leader>gcu :let @" = execute('.GBrowse!')<CR>:OSCYankReg "<CR>
+nnoremap <leader>gcu :let @" = execute('.GBrowse!')<CR>:OSCYankRegister "<CR>
 nnoremap <leader>gbl :Git blame<CR>
 nnoremap <leader>gbr v:GBrowse<CR>
 vnoremap <leader>gbr :GBrowse<CR>
@@ -313,8 +327,18 @@ nnoremap <leader>glf :Git log --oneline --decorate --graph -- %<CR>
 nnoremap <leader>gll :execute ":!git log -L " . line(".") . "," . line(".") . ":" . expand("%")<CR>
 nnoremap <leader>glm :execute ":!git log -L " . ":" . expand("<cword>") . ":" . expand("%")<CR>
 nnoremap <leader>gd :Gvdiffsplit!<CR>
+nnoremap <leader>gdb :Gvdiffsplit origin/main<CR>
+nnoremap <leader>gdg :diffget<CR>
 nnoremap <leader>gdh :diffget //2<CR>
 nnoremap <leader>gdl :diffget //3<CR>
+
+" Copilot
+imap <silent><script><expr> <C-l> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+imap <silent> <C-j> <Plug>(copilot-next)
+imap <silent> <C-k> <Plug>(copilot-previous)
+imap <silent> <C-h> <Plug>(copilot-dismiss)
+
     
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => FZF
@@ -383,7 +407,7 @@ command! -bang -nargs=+ -complete=dir AgIn call s:ag_in(<bang>0, <f-args>)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => COC
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver', 'coc-solargraph']
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver']
 " https://github.com/neoclide/coc.nvim#example-vim-configuration
 " Some servers have issues with backup files, see #649.
 set nobackup
@@ -427,12 +451,12 @@ endif
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> [e <Plug>(coc-diagnostic-prev)
+nmap <silent> ]e <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gtd <Plug>(coc-type-definition)
 nmap <silent> gim <Plug>(coc-implementation)
 nmap <silent> grf <Plug>(coc-references)
 
@@ -475,7 +499,7 @@ nmap <leader>a  <Plug>(coc-codeaction-selected)
 " Remap keys for applying codeAction to the current buffer.
 nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>.  <Plug>(coc-fix-current)
 
 " Run the Code Lens action on the current line.
 nmap <leader>cl  <Plug>(coc-codelens-action)
@@ -522,9 +546,9 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <space>e  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent><nowait> <space>ex  :<C-u>CocList extensions<cr>
 " Show commands.
 " nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document.
@@ -561,4 +585,3 @@ endif
 if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
 endif
-
