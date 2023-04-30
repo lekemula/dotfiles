@@ -30,6 +30,11 @@
       "rootPatterns": ["sorbet/config"],
       "initializationOptions": {},
       "settings": {}
+    },
+    "metals": {
+      "command": "metals-vim",
+      "rootPatterns": ["build.sbt"],
+      "filetypes": ["scala", "sbt"]
     }
   }
 }

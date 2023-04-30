@@ -59,3 +59,8 @@ fi
 if ! command -v bat &> /dev/null; then
   brew install bat
 fi
+
+if ! command -v scala &> /dev/null; then
+  brew install coursier/formulas/coursier && cs setup
+fi
+
