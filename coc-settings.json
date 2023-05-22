@@ -20,7 +20,8 @@
           "inlayHint",
           "onTypeFormatting",
           "selectionRanges"
-        ]
+        ],
+        "formatter": "auto"
       },
       "filetypes": ["ruby"]
     },

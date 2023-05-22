@@ -72,8 +72,17 @@ if ! command -v ccls &> /dev/null; then
   brew install ccls
 fi
 
-if [[ -z $(which rvm) ]] then
+if [[ ! -d ~/.rvm/ ]] then
   curl -sSL https://get.rvm.io | bash
+  # https://rvm.io/workflow/completion
+  source ~/.rvm/scripts/rvm
+  mkdir -p $HOME/.zsh/Completion
+  cp $rvm_path/scripts/zsh/Completion/_rvm $HOME/.zsh/Completion
+  chmod +x $rvm_path/scripts/zsh/Completion/_rvm
+
   rvm install ruby --latest
+
+  # Required for sorbet
+  brew install watchman
 fi
 
