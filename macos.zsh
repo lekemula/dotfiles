@@ -86,3 +86,8 @@ if [[ ! -d ~/.rvm/ ]] then
   brew install watchman
 fi
 
+if [[ ! -d /Applications/Docker.app ]]; then
+  brew install --cask docker
+fi
+
+
