@@ -64,3 +64,16 @@ if ! command -v scala &> /dev/null; then
   brew install coursier/formulas/coursier && cs setup
 fi
 
+if ! command -v cmake &> /dev/null; then
+  brew install cmake
+fi
+
+if ! command -v ccls &> /dev/null; then
+  brew install ccls
+fi
+
+if [[ -z $(which rvm) ]] then
+  curl -sSL https://get.rvm.io | bash
+  rvm install ruby --latest
+fi
+

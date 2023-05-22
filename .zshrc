@@ -22,3 +22,6 @@ source $DF_HOME/antigen_bundles.zsh
 antigen apply
 
 source $DF_HOME/custom.zsh
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"

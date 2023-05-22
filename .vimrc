@@ -49,6 +49,7 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree'
+Plug 'unkiwii/vim-nerdtree-sync'
 Plug 'xuyuanp/nerdtree-git-plugin'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -71,6 +72,10 @@ Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 Plug 'thaerkh/vim-workspace'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'andrewradev/splitjoin.vim'
+Plug 'bfrg/vim-cpp-modern'
+Plug 'vhdirk/vim-cmake'
+Plug 'derekwyatt/vim-scala'
+Plug 'puremourning/vimspector'
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
@@ -196,6 +201,25 @@ nmap <silent> <leader>TS :TestSuite<CR>
 nmap <silent> <leader>TL :TestLast<CR>
 nmap <silent> <leader>TV :TestVisit<CR>
 
+let g:nerdtree_sync_cursorline = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Debugging
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <Leader>dc <Plug>VimspectorContinue
+" nmap <Leader>dd <Plug>VimspectorReset
+nmap <Leader>ds <Plug>VimspectorStop
+nmap <Leader>dr <Plug>VimspectorRestart
+nmap <Leader>dd <Plug>VimspectorToggleBreakpoint
+nmap <Leader>di <Plug>VimspectorToggleConditionalBreakpoint
+nmap <Leader>dj <Plug>VimspectorStepOver
+nmap <Leader>dh <Plug>VimspectorStepInto
+nmap <Leader>dk <Plug>VimspectorStepOut
+nmap <Leader>dt <Plug>VimspectorRunToCursor
+nmap <Leader>de :VimspectorEval <C-R><C-W><CR>
+
+nnoremap <leader>dd <Plug>VimspectorToggleBreakpoint
+nnoremap <leader>dl <Plug>VimspectorBreakpoints
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Edit
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -238,7 +262,7 @@ nmap <leader>gcc :call YankFQN()<CR>:OSCYankRegister "<CR>
 
 " https://github.com/tpope/vim-rails/issues/503#issuecomment-1158877143
 command AC :execute "e " . eval('rails#buffer().alternate()')
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " https://stackoverflow.com/a/15087735
@@ -407,7 +431,7 @@ command! -bang -nargs=+ -complete=dir AgIn call s:ag_in(<bang>0, <f-args>)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => COC
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver', 'coc-metals']
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver', 'coc-metals', 'coc-clangd']
 " https://github.com/neoclide/coc.nvim#example-vim-configuration
 " Some servers have issues with backup files, see #649.
 set nobackup
