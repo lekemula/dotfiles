@@ -76,6 +76,7 @@ Plug 'bfrg/vim-cpp-modern'
 Plug 'vhdirk/vim-cmake'
 Plug 'derekwyatt/vim-scala'
 Plug 'puremourning/vimspector'
+Plug 'christoomey/vim-tmux-navigator'
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
@@ -294,11 +295,11 @@ nnoremap <C-t>h <Esc>:tabprevious<CR>
 nnoremap <C-t>l <Esc>:tabnext<CR>
 nnoremap <C-t>t <Esc>:tabnew<CR>
 
-" Make adjusing split sizes a bit more friendly
-noremap <silent> <C-j>j :resize +15<CR>
-noremap <silent> <C-k>k :resize -15<CR>
-noremap <silent> <C-l>l :vertical resize +15<CR>
-noremap <silent> <C-h>h :vertical resize -15<CR>
+" Make adjusing split ssdizes a bit more friendly
+noremap <silent> <C-r>j :resize +15<CR>
+noremap <silent> <C-r>k :resize -15<CR>
+noremap <silent> <C-r>h :vertical resize +15<CR>
+noremap <silent> <C-r>l :vertical resize -15<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Appearance
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

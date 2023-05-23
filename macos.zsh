@@ -90,4 +90,10 @@ if [[ ! -d /Applications/Docker.app ]]; then
   brew install --cask docker
 fi
 
+if ! command -v tmux &> /dev/null; then
+  brew install tmux
+
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 
