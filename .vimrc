@@ -77,6 +77,7 @@ Plug 'vhdirk/vim-cmake'
 Plug 'derekwyatt/vim-scala'
 Plug 'puremourning/vimspector'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'michaeljsmith/vim-indent-object'
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
@@ -207,8 +208,10 @@ let g:nerdtree_sync_cursorline = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Debugging
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:vimspector_install_gadgets = ['CodeLLDB']
+
 nmap <Leader>dc <Plug>VimspectorContinue
-" nmap <Leader>dd <Plug>VimspectorReset
+nmap <Leader>dq :VimspectorReset<CR>
 nmap <Leader>ds <Plug>VimspectorStop
 nmap <Leader>dr <Plug>VimspectorRestart
 nmap <Leader>dd <Plug>VimspectorToggleBreakpoint
@@ -267,7 +270,7 @@ command AC :execute "e " . eval('rails#buffer().alternate()')
 " => Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " https://stackoverflow.com/a/15087735
-setlocal foldmethod=indent
+set foldmethod=syntax
 set foldlevel=99
 " :set foldmethod=indent
 " :let ruby_fold = 0
