@@ -207,6 +207,30 @@ nmap <silent> <leader>TV :TestVisit<CR>
 
 let g:nerdtree_sync_cursorline = 1
 
+let g:projectionist_heuristics = {
+\  "*": {
+\    "include/*.h": {
+\      "alternate": ["src/{}.cpp", "source/{}.cpp"],
+\      "related": ["test/source/{}.cpp"],
+\      "type": "header"
+\    },
+\    "src/*.cpp": {
+\      "alternate": "include/{}.h",
+\      "related": ["test/source/{}.cpp"],
+\      "type": "source"
+\    },
+\    "source/*.cpp": {
+\      "alternate": "include/{}.h",
+\      "related": ["test/source/{}.cpp"],
+\      "type": "source"
+\    },
+\    "test/source/*.cpp": {
+\      "alternate": ["src/{}.cpp", "source/{}.cpp"],
+\      "type": "test"
+\    }
+\  }
+\}
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Debugging
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
