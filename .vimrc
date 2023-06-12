@@ -64,8 +64,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'codegourmet/ruby-yank-fqn'
 Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
 Plug 'sirver/ultisnips'
-Plug 'honza/vim-snippets'
+Plug 'honza/snippets-vim'
 Plug 'liuchengxu/vim-which-key'
+" Exchange 2 words using:  cx (as change eXchange)
+" http://vimcasts.org/episodes/swapping-two-regions-of-text-with-exchange-vim/
 Plug 'tommcdo/vim-exchange'
 Plug 'mattn/emmet-vim'
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}
@@ -86,7 +88,7 @@ call plug#end()
 " => General Config
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "https://vimdoc.sourceforge.net/htmldoc/intro.html#key-notation
-autocmd StdinReadPre * let s:std_in=1
+autocmd StdinReadPre * let s:std_in=0
 
 " Set leader key
 nnoremap <SPACE> <Nop>
@@ -209,6 +211,19 @@ let g:nerdtree_sync_cursorline = 1
 " => Debugging
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:vimspector_install_gadgets = ['CodeLLDB']
+let g:vimspector_configurations = {
+\   "configurations": {
+\     "ruby - launch current file": {
+\       "filetypes": ["ruby"],
+\       "adapter": "cust_vscode-ruby",
+\       "configuration": {
+\         "request": "launch",
+\         "program": "${file}",
+\         "args": [ "*${args}"  ]
+\       }
+\     }
+\   }
+\ }
 
 nmap <Leader>dc <Plug>VimspectorContinue
 nmap <Leader>dq :VimspectorReset<CR>
@@ -297,6 +312,7 @@ nnoremap <C-t>t :tabnew<CR>
 nnoremap <C-t>h <Esc>:tabprevious<CR>
 nnoremap <C-t>l <Esc>:tabnext<CR>
 nnoremap <C-t>t <Esc>:tabnew<CR>
+nnoremap <C-t>q <Esc>:tabclose<CR>
 
 " Make adjusing split ssdizes a bit more friendly
 noremap <silent> <C-r>j :resize +15<CR>

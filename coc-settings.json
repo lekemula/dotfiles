@@ -18,7 +18,6 @@
           "formatting",
           "hover",
           "inlayHint",
-          "onTypeFormatting",
           "selectionRanges"
         ],
         "formatter": "auto"

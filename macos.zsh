@@ -14,6 +14,10 @@ if [[ -z $(which vim) ]] || [[ -z $(vim --version | grep "\+conceal") ]]; then
   brew install vim
 fi
 
+if ! command -v nvim &> /dev/null; then
+  brew install neovim
+fi
+
 if [[ -z $(which node) ]]; then
   brew install node 
 fi
@@ -81,6 +85,7 @@ if [[ ! -d ~/.rvm/ ]] then
   chmod +x $rvm_path/scripts/zsh/Completion/_rvm
 
   rvm install ruby --latest
+  gem install solargraph ruby-debug-ide
 
   # Required for sorbet
   brew install watchman

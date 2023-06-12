@@ -24,9 +24,19 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.p10k.zsh ~/.p10k.zsh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.fzf.zsh ~/.fzf.zsh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.tmux.conf ~/.tmux.conf
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitignore_global ~/.gitignore_global
+
 [ ! -d ~/.vim ] && mkdir ~/.vim
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.vim/coc-settings.json
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vim/my-snippets ~/.vim/my-snippets
+
+NEOVIM_CONFIG_DIR=~/.config/nvim
+[ ! -d $NEOVIM_CONFIG_DIR ] && mkdir -p $NEOVIM_CONFIG_DIR
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/init.vim $NEOVIM_CONFIG_DIR/init.vim
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.config/nvim/coc-settings.json
+
+VIMSPECTOR_GADGETS_DIR=~/.vim/plugged/vimspector/gadgets/custom
+[ ! -d $VIMSPECTOR_GADGETS_DIR ] && mkdir -p $VIMSPECTOR_GADGETS_DIR
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vim/vimspector/gadgets/custom/cust_vscode-ruby.json  $VIMSPECTOR_GADGETS_DIR/cust_vscode-ruby.json
 
 # https://iterm2.com/documentation-images.html
 sudo curl https://iterm2.com/utilities/imgcat -o /usr/local/bin/imgcat
