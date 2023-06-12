@@ -19,7 +19,8 @@ if ! command -v nvim &> /dev/null; then
 fi
 
 if [[ -z $(which node) ]]; then
-  brew install node 
+  brew install node
+  npm -g install instant-markdown-d # https://github.com/instant-markdown/vim-instant-markdown
 fi
 
 # https://github.com/ggreer/the_silver_searcher
