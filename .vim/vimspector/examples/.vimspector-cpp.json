@@ -1,0 +1,15 @@
+{
+  "configurations": {
+    "launch": {
+      "adapter": "CodeLLDB",
+      "filetypes": [
+        "cpp"
+      ],
+      "configuration": {
+        "request": "launch",
+        "program": "${workspaceRoot}/build/<your-project>",
+        "args": ["<..your-args>"]
+      }
+    }
+  }
+}
