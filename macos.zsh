@@ -20,7 +20,6 @@ fi
 
 if [[ -z $(which node) ]]; then
   brew install node
-  npm -g install instant-markdown-d # https://github.com/instant-markdown/vim-instant-markdown
 fi
 
 # https://github.com/ggreer/the_silver_searcher

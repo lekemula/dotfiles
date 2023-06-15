@@ -62,7 +62,7 @@ Plug 'mg979/vim-visual-multi'
 Plug 'kana/vim-textobj-user'
 Plug 'ryanoasis/vim-devicons'
 Plug 'codegourmet/ruby-yank-fqn'
-Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install()  }, 'for': ['markdown', 'vim-plug'] }
 Plug 'sirver/ultisnips'
 Plug 'honza/snippets-vim'
 Plug 'liuchengxu/vim-which-key'
@@ -230,6 +230,11 @@ let g:projectionist_heuristics = {
 \    }
 \  }
 \}
+
+" Markdown
+let g:mkdp_auto_start = 0
+
+nnoremap <leader>mp <Plug>MarkdownPreviewToggle
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Debugging
