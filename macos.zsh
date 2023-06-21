@@ -19,7 +19,8 @@ if ! command -v nvim &> /dev/null; then
 fi
 
 if [[ -z $(which node) ]]; then
-  brew install node
+  brew install nvm
+  nvm install node
 fi
 
 # https://github.com/ggreer/the_silver_searcher
@@ -87,8 +88,10 @@ if [[ ! -d ~/.rvm/ ]] then
   rvm install ruby --latest
   gem install solargraph ruby-debug-ide
 
-  # Required for sorbet
-  brew install watchman
+  brew install watchman # Required for solargraph
+  # Required for pg gem
+  brew install libpq
+  brew install postgresql
 fi
 
 if [[ ! -d /Applications/Docker.app ]]; then
