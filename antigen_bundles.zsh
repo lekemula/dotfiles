@@ -12,6 +12,9 @@
 # custom caching keys for different environments, if you desire that. The cache speeds up your terminal startup, so
 # try to avoid disabling the cache unless you have no other choice.
 
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
+
 # Staples theme: https://github.com/romkatv/powerlevel10k
 antigen theme romkatv/powerlevel10k
 
@@ -37,3 +40,5 @@ antigen bundle rbenv
 antigen bundle ruby
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/rails
 antigen bundle rails
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker
+antigen bundle docker

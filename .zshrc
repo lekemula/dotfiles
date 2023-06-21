@@ -26,3 +26,7 @@ source $DF_HOME/custom.zsh
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 fpath=(~/.zsh/Completion $fpath)
+fpath=($(brew --prefix)/share/zsh/site-functions ${fpath})
+
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
