@@ -1,6 +1,6 @@
 {
   "codeLens.enable": true,
-  "solargraph.completion": false,
+  "solargraph.completion": true,
   "html.format.templating": true,
   "coc.preferences.formatOnType": true,
   "languageserver": {
