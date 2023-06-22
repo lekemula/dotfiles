@@ -19,6 +19,8 @@ fi
 # Load zsh plugins via Antigen
 source ~/antigen/antigen.zsh
 source $DF_HOME/antigen_bundles.zsh
+# remove comment for line below to update antigen bundles
+# bat $DF_HOME/antigen_bundles.zsh
 antigen apply
 
 source $DF_HOME/custom.zsh

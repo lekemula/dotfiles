@@ -12,6 +12,9 @@
 # custom caching keys for different environments, if you desire that. The cache speeds up your terminal startup, so
 # try to avoid disabling the cache unless you have no other choice.
 
+# Check loaded plugins:
+# antigen list
+#
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
@@ -42,3 +45,5 @@ antigen bundle ruby
 antigen bundle rails
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker
 antigen bundle docker
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker-compose
+antigen bundle docker-compose
