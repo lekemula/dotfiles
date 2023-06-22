@@ -18,8 +18,12 @@ if ! command -v nvim &> /dev/null; then
   brew install neovim
 fi
 
-if [[ -z $(which node) ]]; then
+if [[ ! -d $HOME/.nvm ]] then
   brew install nvm
+  mkdir $HOME/.nvm
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"  ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
   nvm install node
 fi
 
@@ -103,5 +107,4 @@ if ! command -v tmux &> /dev/null; then
 
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
-
 
