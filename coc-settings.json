@@ -1,4 +1,6 @@
 {
+  "yaml.enable": true,
+  "yaml.format.enable": true,
   "codeLens.enable": true,
   "solargraph.completion": true,
   "html.format.templating": true,
