@@ -69,6 +69,9 @@ Plug 'liuchengxu/vim-which-key'
 " Exchange 2 words using:  cx (as change eXchange)
 " http://vimcasts.org/episodes/swapping-two-regions-of-text-with-exchange-vim/
 Plug 'tommcdo/vim-exchange'
+" HTML tags completion
+" Example: ul#my-id>li*3.my-class<C-y>,
+" https://raw.githubusercontent.com/mattn/emmet-vim/master/TUTORIAL
 Plug 'mattn/emmet-vim'
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 Plug 'thaerkh/vim-workspace'
@@ -149,14 +152,17 @@ let g:which_key_map_visual =  {}
 " => Spelling
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " https://thoughtbot.com/blog/vim-spell-checking
+" hover over a word and press `z=` for spell suggestions
 let g:which_key_map.s = { 'name' : '+spelling' }
 :set spelllang=en_us
+:set spell
+:set complete+=kspell
 nnoremap <leader>ss :setlocal spell!<CR>
 let g:which_key_map.s.s = 'enable-spelling'
 nnoremap <leader>sc :set complete+=kspell<CR>
-let g:which_key_map.s.c = 'enable-spell-comletion'
+let g:which_key_map.s.c = 'enable-spell-completion'
 nnoremap <leader>sn :set complete-=kspell<CR>
-let g:which_key_map.s.n = 'disable-spell-comletion'
+let g:which_key_map.s.n = 'disable-spell-completion'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Navigation
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -282,6 +288,7 @@ vnoremap ∆ :m '>+1<CR>gv=gv
 " Alt+k
 vnoremap ˚ :m '<-2<CR>gv=gv
 
+nmap <leader>R :%s/
 nmap <leader>' ysiw'
 nmap <leader>" ysiw"
 vmap <leader>' S'
