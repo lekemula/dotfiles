@@ -108,3 +108,7 @@ if ! command -v tmux &> /dev/null; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
+if ! command -v go &> /dev/null; then
+  brew install go
+fi
+
