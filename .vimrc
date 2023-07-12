@@ -92,6 +92,7 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "https://vimdoc.sourceforge.net/htmldoc/intro.html#key-notation
 autocmd StdinReadPre * let s:std_in=0
+autocmd VimLeave * NERDTreeClose
 
 " Set leader key
 nnoremap <SPACE> <Nop>
