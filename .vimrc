@@ -94,6 +94,10 @@ call plug#end()
 "https://vimdoc.sourceforge.net/htmldoc/intro.html#key-notation
 autocmd StdinReadPre * let s:std_in=0
 autocmd VimLeave * NERDTreeClose
+autocmd BufNewFile,BufRead *.erb set filetype=html
+
+" Fix paste indentation
+set pastetoggle=<F2>
 
 " Set leader key
 nnoremap <SPACE> <Nop>
