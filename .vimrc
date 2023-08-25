@@ -64,8 +64,7 @@ Plug 'kana/vim-textobj-user'
 Plug 'ryanoasis/vim-devicons'
 Plug 'codegourmet/ruby-yank-fqn'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install()  }, 'for': ['markdown', 'vim-plug'] }
-Plug 'sirver/ultisnips'
-Plug 'honza/snippets-vim'
+Plug 'honza/vim-snippets'
 Plug 'liuchengxu/vim-which-key'
 " Exchange 2 words using:  cx (as change eXchange)
 " http://vimcasts.org/episodes/swapping-two-regions-of-text-with-exchange-vim/
@@ -94,7 +93,7 @@ call plug#end()
 "https://vimdoc.sourceforge.net/htmldoc/intro.html#key-notation
 autocmd StdinReadPre * let s:std_in=0
 autocmd VimLeave * NERDTreeClose
-autocmd BufNewFile,BufRead *.erb set filetype=html
+autocmd BufNewFile,BufRead *.erb set filetype=eruby.html
 
 " Fix paste indentation
 set pastetoggle=<F2>
@@ -303,10 +302,12 @@ vmap <leader>" S"
 nnoremap <leader>ws :setlocal list!<cr>
 
 " Snippets
-imap <C-l> <Plug>(coc-snippets-expand)
+imap <tab> <Plug>(coc-snippets-expand)
+" imap <C-s> <Plug>(coc-snippets-expand)
 vmap <C-j> <Plug>(coc-snippets-select)
-let g:UltiSnipsSnippetDirectories=["my-snippets", "UltiSnips"]
-
+inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
+let g:coc_snippet_next = '<TAB>'
+let g:coc_snippet_prev = '<S-TAB>'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Ruby/Rails
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -327,7 +328,10 @@ command AC :execute "e " . eval('rails#buffer().alternate()')
 " => Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " https://stackoverflow.com/a/15087735
-set foldmethod=syntax
+autocmd BufNewFile,BufRead * set foldmethod=syntax
+autocmd BufNewFile,BufRead *.erb,*.html set foldmethod=indent
+autocmd BufWinLeave *.erb set foldmethod=syntax
+
 set foldlevel=99
 " :set foldmethod=indent
 " :let ruby_fold = 0
@@ -367,6 +371,8 @@ noremap <silent> <C-r>l :vertical resize -15<CR>
 " https://github.com/ryanoasis/nerd-fonts#option-4-homebrew-fonts
 " Set theme
 colorscheme gruvbox
+let g:gruvbox_transparent_bg = 1
+autocmd VimEnter * hi Normal ctermbg=none
 set background=dark
 let NERDTreeShowHidden=1
 let g:webdevicons_conceal_nerdtree_brackets=1
