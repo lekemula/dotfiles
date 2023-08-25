@@ -4,6 +4,13 @@
   "codeLens.enable": true,
   "solargraph.completion": true,
   "html.format.templating": true,
+  "html.filetypes": [
+    "html",
+    "eruby",
+    "handlebars",
+    "htmldjango",
+    "blade"
+  ],
   "coc.preferences.formatOnType": true,
   "languageserver": {
     "ruby-lsp": {
