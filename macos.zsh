@@ -54,6 +54,15 @@ if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
   echo "Don't forget to set your font settings in Iterm2 to 'MesloLGS NF': https://webinstall.dev/nerdfont/"
 fi
 
+# Install google chrome if not installed
+if [[ ! -e "/Applications/Google Chrome.app" ]]; then
+  brew install --cask google-chrome
+fi
+
+if [[ ! -e "/Applications/1Password.app" ]]; then
+  brew install --cask 1password
+fi
+
 # 1Passord CLI
 if ! command -v op &> /dev/null; then
   brew install --cask 1password/tap/1password-cli
