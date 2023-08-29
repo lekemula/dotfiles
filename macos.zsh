@@ -2,7 +2,8 @@
 # This file will only be executed if the current environment is MacOS.
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-if [[ -z $(which brew) ]]; then
+# Install homebrew if not installed
+if ! command -v brew &> /dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/.zprofile
