@@ -158,3 +158,22 @@ if ! command -v go &> /dev/null; then
   brew install go
 fi
 
+if [[ ! -e "/Applications/logioptionsplus.app" ]]; then
+  brew install --cask logi-options-plus
+fi
+
+# https://rectangleapp.com/
+if [[ ! -e "/Applications/Rectangle.app" ]]; then
+  brew install --cask rectangle
+  echo "Import Rectangle settings from RectangleConfig.json"
+  echo "Press Enter to continue..."
+  read
+fi
+
+# https://www.raycast.com/
+if [[ ! -e "/Applications/Raycast.app" ]]; then
+  brew install --cask raycast
+  echo "Import Raycast settings from RaycastConfig.json"
+  echo "Press Enter to continue..."
+  read
+fi
