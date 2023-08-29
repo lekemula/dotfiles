@@ -52,5 +52,6 @@
       "rootPatterns": [".clangd", "compile_commands.json", ".git/", ".hg/"],
       "args": ["--compile-commands-dir=build", "--fallback-style=Google"]
     }
-  }
+  },
+  "snippets.ultisnips.pythonPrompt": false
 }

@@ -1,6 +1,11 @@
 # Custom configs for MacOS environments.
 # This file will only be executed if the current environment is MacOS.
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if [[ $(uname -m) == "arm64" ]]; then
+  is_apple_silicon_chip="true"
+else
+  is_apple_silicon_chip="false"
+fi
 
 # Install homebrew if not installed
 if ! command -v brew &> /dev/null; then
@@ -34,13 +39,16 @@ if [[ ! -d $HOME/.nvm ]] then
 fi
 
 # https://github.com/ggreer/the_silver_searcher
-if [[ -z $(which ag) ]]; then
+if ! command -v ag &> /dev/null; then
   brew install the_silver_searcher
 fi
 
 # https://github.com/junegunn/fzf
-if [[ -z $(which fzf) ]]; then
+if [[ ! -e "$HOME/.fzf.zsh" ]]; then
   brew install fzf
+
+  # To install useful key bindings and fuzzy completion:
+  $(brew --prefix)/opt/fzf/install
 fi
 
 if [[ ! -e "/Applications/iTerm.app" ]]; then
@@ -53,6 +61,8 @@ if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
   brew tap homebrew/cask-fonts
   brew install font-meslo-lg-nerd-font
   echo "Don't forget to set your font settings in Iterm2 to 'MesloLGS NF': https://webinstall.dev/nerdfont/"
+  echo "Press Enter to continue..."
+  read
 fi
 
 # Install google chrome if not installed
@@ -64,16 +74,13 @@ if [[ ! -e "/Applications/1Password.app" ]]; then
   brew install --cask 1password
 fi
 
-if [[ ! -e "/usr/local/share/zsh/site-functions/_compdef" ]]; then
-  brew install compdef
-  autoload -Uz compinit && compinit -i
-fi
-
 # 1Passord CLI
 if ! command -v op &> /dev/null; then
   brew install --cask 1password/tap/1password-cli
-  echo "Follow instructions here for sign in: https://developer.1password.com/docs/cli/get-started"
   eval "$(op completion zsh)"; compdef _op op
+  echo "Follow instructions here for sign in: https://developer.1password.com/docs/cli/get-started"
+  echo "Press Enter to continue..."
+  read
 fi
 
 # Github CLI
@@ -90,7 +97,13 @@ if ! command -v bat &> /dev/null; then
 fi
 
 if ! command -v scala &> /dev/null; then
-  brew install coursier/formulas/coursier && cs setup
+  brew install coursier/formulas/coursier
+
+  if [[ $is_apple_silicon_chip == "true" ]]; then
+    brew install scala
+  else
+    cs setup
+  fi
 fi
 
 if ! command -v cmake &> /dev/null; then
@@ -109,9 +122,13 @@ if [[ ! -d ~/.rvm/ ]] then
   cp $rvm_path/scripts/zsh/Completion/_rvm $HOME/.zsh/Completion
   chmod +x $rvm_path/scripts/zsh/Completion/_rvm
 
-  rvm install ruby --latest
-  gem install solargraph ruby-debug-ide
+  if [[ $is_apple_silicon_chip == "true" ]]; then
+    rvm install ruby --latest
+  else
+    rvm install ruby --latest -C --with-openssl-dir=/opt/local/libexec/openssl11
+  fi
 
+  gem install solargraph ruby-debug-ide
   brew install watchman # Required for solargraph
   # Required for pg gem
   brew install libpq
@@ -120,12 +137,21 @@ fi
 
 if [[ ! -d /Applications/Docker.app ]]; then
   brew install --cask docker
+
+
+  # Antigen docker plugin experts this directory to be present
+  if [[ ! -d "$ZSH_CACHE_DIR/completions/"  ]]; then
+    mkdir -p $ZSH_CACHE_DIR/completions
+  fi
 fi
 
 if ! command -v tmux &> /dev/null; then
   brew install tmux
 
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  echo "Don't forget to install tmux plugins \"<C-b> + I\" after starting a new tmux session: \"tmux start-session\""
+  echo "Press Enter to continue..."
+  read
 fi
 
 if ! command -v go &> /dev/null; then
