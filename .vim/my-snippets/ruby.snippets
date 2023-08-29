@@ -1,3 +1,9 @@
+# See https://www.sirver.net/blog/2012/01/08/second-episode-of-ultisnips-screencast/
+# Placeholders - ${1:default}
+# Mirrors - ${1} - Copies the value of the first placeholder
+# Interpolation
+#   Shell - `echo hi`
+#		Pyton - `!p snip.rv = "hi"`
 snippet testu "Create unit test class"
 # typed: false
 # frozen_string_literal: true
@@ -7,4 +13,25 @@ require "test_helper"
 class ${1:Class}Test < ActiveSupport::TestCase
 	test$0
 end
+endsnippet
+
+### Dry-rb snippets
+snippet attr "Typed Dry::Struct attribute with Yardoc" b
+attribute :${1}, Types::Coercible::${2}
+endsnippet
+
+snippet attro "Typed Dry::Struct attribute with Yardoc" b
+attribute :${1}?, Types::Coercible::${2}.optional
+endsnippet
+
+snippet tattr "Typed Dry::Struct attribute with Yardoc" b
+# @!method ${1}
+#   @return [${2:String}]
+attribute :${1}, Types::Coercible::${2}
+endsnippet
+
+snippet tattro "Typed Optional Dry::Struct attribute with Yardoc" b
+# @!method ${1}
+#   @return [${2:String}, nil]
+attribute :${1}?, Types::Coercible::${2}.optional
 endsnippet

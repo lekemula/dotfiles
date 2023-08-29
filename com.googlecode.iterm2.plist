@@ -1823,7 +1823,7 @@
 	<key>QuickPasteDelayBetweenCalls</key>
 	<real>0.015151514671742916</real>
 	<key>ShowFullScreenTabBar</key>
-	<true/>
+	<false/>
 	<key>SoundForEsc</key>
 	<false/>
 	<key>SplitPaneDimmingAmount</key>
