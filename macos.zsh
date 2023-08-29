@@ -64,6 +64,11 @@ if [[ ! -e "/Applications/1Password.app" ]]; then
   brew install --cask 1password
 fi
 
+if [[ ! -e "/usr/local/share/zsh/site-functions/_compdef" ]]; then
+  brew install compdef
+  autoload -Uz compinit && compinit -i
+fi
+
 # 1Passord CLI
 if ! command -v op &> /dev/null; then
   brew install --cask 1password/tap/1password-cli
