@@ -1,3 +1,6 @@
+# See https://digitalfortress.tech/tutorial/create-global-gitconfig-git-alias/
 # Add your preferred git settings here. This will overwrite anything in `core/configs/.gitconfig`.
-# user.name="Lekë Mula"
-# user.email=leke.mula@gmail.com
+[core]
+  excludesfile = ~/.gitignore_global
+[user]
+  name = Lekë Mula

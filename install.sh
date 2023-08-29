@@ -23,8 +23,8 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vimrc ~/.vimrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.p10k.zsh ~/.p10k.zsh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.fzf.zsh ~/.fzf.zsh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.tmux.conf ~/.tmux.conf
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitconfig ~/.gitconfig
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitignore_global ~/.gitignore_global
-git config --global core.excludesfile '~/.gitignore_global'
 
 [ ! -d ~/.vim ] && mkdir ~/.vim
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.vim/coc-settings.json
