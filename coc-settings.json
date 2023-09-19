@@ -3,6 +3,8 @@
   "yaml.format.enable": true,
   "codeLens.enable": true,
   "solargraph.completion": true,
+  "solargraph.diagnostics": true,
+  "solargraph.formatting": true,
   "html.format.templating": true,
   "html.filetypes": [
     "html",
