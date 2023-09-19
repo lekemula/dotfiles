@@ -37,6 +37,7 @@ Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-cucumber'
+Plug 'tpope/vim-liquid'
 " http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
 Plug 'godlygeek/tabular'
 Plug 'vim-test/vim-test'

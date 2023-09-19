@@ -9,6 +9,7 @@
   "html.filetypes": [
     "html",
     "eruby",
+    "liquid",
     "handlebars",
     "htmldjango",
     "blade"
