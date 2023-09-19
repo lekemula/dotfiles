@@ -210,6 +210,21 @@ vnoremap g? y:execute "!open 'https://www.google.com/search?q=" . expand("<C-r>0
 nnoremap <leader>gx :execute "!open '" . shellescape("<cWORD>") . "'"<cr>
 vnoremap <leader>gx y:execute "!open '" . shellescape("<C-r>0") . "'"<cr>
 nnoremap <leader>gcp :let @"=join([expand('%'),  line(".")], ':')<CR>:OSCYankRegister "<CR>
+let g:which_key_map.s =
+  \ {
+  \   'name' : '+search/spell',
+  \   'iw' : 'inner-word',
+  \   'iW' : 'inner-WORD',
+  \   'd' : 'method-definition',
+  \   'D' : 'method-definition-WORD',
+  \   'c' : 'class-definition'
+  \ }
+nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
+nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
+nnoremap <leader>sd :execute ":Ag def (self\.)?" . expand("<cword>") . "" <cr>
+nnoremap <leader>sD :execute ":Ag def (self\.)?" . expand("<cWORD>") . "" <cr>
+nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "" <CR>
+
 
 let g:which_key_map.c = { 'name' : '+quickfix' }
 nnoremap <leader>cc :cc<CR>
