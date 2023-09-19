@@ -37,6 +37,8 @@ Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-cucumber'
+" http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
+Plug 'godlygeek/tabular'
 Plug 'vim-test/vim-test'
 Plug 'github/copilot.vim'
 Plug 'vim-ruby/vim-ruby'
@@ -63,7 +65,8 @@ Plug 'mg979/vim-visual-multi'
 Plug 'kana/vim-textobj-user'
 Plug 'ryanoasis/vim-devicons'
 Plug 'codegourmet/ruby-yank-fqn'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install()  }, 'for': ['markdown', 'vim-plug'] }
+Plug 'preservim/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 Plug 'honza/vim-snippets'
 Plug 'liuchengxu/vim-which-key'
 " Exchange 2 words using:  cx (as change eXchange)
@@ -82,7 +85,14 @@ Plug 'vhdirk/vim-cmake'
 Plug 'derekwyatt/vim-scala'
 Plug 'puremourning/vimspector'
 Plug 'christoomey/vim-tmux-navigator'
+" Text Objects
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'kana/vim-textobj-entire'
+Plug 'vim-scripts/argtextobj.vim'
+" post install (yarn install | npm install) then load plugin only for editing supported files
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
@@ -130,7 +140,10 @@ let g:workspace_autocreate = 1
 let g:workspace_session_directory = $HOME . '/.vim/sessions/'
 let g:workspace_autosave_always = 1
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pettier Formatting
+let g:prettier#autoformat = 0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""e
 " => Text Objects (documentation)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ]m - Go to start of "next method"
@@ -243,7 +256,9 @@ let g:projectionist_heuristics = {
 \}
 
 " Markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 let g:mkdp_auto_start = 0
+let g:vim_markdown_new_list_item_indent = 2
 
 nnoremap <leader>mp <Plug>MarkdownPreviewToggle
 
@@ -293,6 +308,7 @@ vnoremap ∆ :m '>+1<CR>gv=gv
 " Alt+k
 vnoremap ˚ :m '<-2<CR>gv=gv
 
+" Replace
 nmap <leader>R :%s/
 nmap <leader>' ysiw'
 nmap <leader>" ysiw"
