@@ -402,8 +402,8 @@ noremap <silent> <C-r>l :vertical resize -15<CR>
 " https://github.com/ryanoasis/nerd-fonts#option-4-homebrew-fonts
 " Set theme
 colorscheme gruvbox
-let g:gruvbox_transparent_bg = 1
-autocmd VimEnter * hi Normal ctermbg=none
+" let g:gruvbox_transparent_bg = 0
+" autocmd VimEnter * hi Normal ctermbg=none
 set background=dark
 let NERDTreeShowHidden=1
 let g:webdevicons_conceal_nerdtree_brackets=1
@@ -641,8 +641,10 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
-" Remap <C-f> and <C-b> for scroll float windows/popups.
+" Remap <C-f> and <C-b> to scroll float windows/popups
 if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
   inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
   inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -684,7 +686,7 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item.
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 " END OF COC configs
 
 " Pathogen plugins
