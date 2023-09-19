@@ -36,6 +36,7 @@ if [[ ! -d $HOME/.nvm ]] then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"  ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
   nvm install node
+  npm install --global yarn
 fi
 
 # https://github.com/ggreer/the_silver_searcher
@@ -125,6 +126,8 @@ if [[ ! -d ~/.rvm/ ]] then
   if [[ $is_apple_silicon_chip == "true" ]]; then
     rvm install ruby --latest
   else
+    # Make sure to install ruby before tmux due to issues with openssl@3
+    # https://github.com/rvm/rvm/issues/5254#issuecomment-1635288856
     rvm install ruby --latest -C --with-openssl-dir=/opt/local/libexec/openssl11
   fi
 
@@ -176,4 +179,9 @@ if [[ ! -e "/Applications/Raycast.app" ]]; then
   echo "Import Raycast settings from RaycastConfig.json"
   echo "Press Enter to continue..."
   read
+fi
+
+# https://www.pgcli.com/
+if ! command -v pgcli &> /dev/null; then
+  brew install pgcli
 fi
