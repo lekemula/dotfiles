@@ -417,6 +417,9 @@ set tabstop=2
 set softtabstop=2
 " when indenting with '>', use 2 spaces width
 set shiftwidth=2
+autocmd FileType markdown setlocal shiftwidth=2
+autocmd FileType markdown setlocal tabstop=2
+autocmd FileType markdown setlocal softtabstop=2
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Git
