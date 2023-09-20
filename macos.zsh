@@ -185,3 +185,9 @@ fi
 if ! command -v pgcli &> /dev/null; then
   brew install pgcli
 fi
+
+# https://fx.wtf/
+# CLI JSON viewer
+if ! command -v fx &> /dev/null; then
+  brew install fx
+fi
