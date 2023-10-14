@@ -132,10 +132,13 @@ if [[ ! -d ~/.rvm/ ]] then
   fi
 
   gem install solargraph ruby-debug-ide
-  brew install watchman # Required for solargraph
   # Required for pg gem
   brew install libpq
   brew install postgresql
+fi
+
+if ! command -v watchman &> /dev/null; then
+  brew install watchman # Required by solargraph and coc-tsserver
 fi
 
 if [[ ! -d /Applications/Docker.app ]]; then
@@ -191,3 +194,14 @@ fi
 if ! command -v fx &> /dev/null; then
   brew install fx
 fi
+
+if ! command -v terraform &> /dev/null; then
+  brew tap hashicorp/tap
+  brew install terraform
+fi
+
+# install prettier
+if ! command -v prettier &> /dev/null; then
+  npm install --global prettier
+fi
+
