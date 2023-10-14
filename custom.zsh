@@ -4,6 +4,8 @@
 # over any other customization.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+[ -f ~/.fzf.zsh  ] && source ~/.fzf.zsh
+
 # Shopify dev tool
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
 

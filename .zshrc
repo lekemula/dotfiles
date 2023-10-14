@@ -40,6 +40,5 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="/opt/homebrew/opt/postgresql@12/bin:$PATH"
 export GITHUB_TOKEN=$(gh auth token)
 
-
 # Load Angular CLI autocompletion.
 source <(ng completion script)
