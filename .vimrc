@@ -133,6 +133,7 @@ vnoremap g? y:execute "!open 'https://www.google.com/search?q=" . expand("<C-r>0
 " Workaround for URL navigation on Shopify spin remote instance
 nnoremap <leader>gx :execute "!open '" . shellescape("<cWORD>") . "'"<cr>
 vnoremap <leader>gx y:execute "!open '" . shellescape("<C-r>0") . "'"<cr>
+" Go copy path
 nnoremap <leader>gcp :let @"=join([expand('%'),  line(".")], ':')<CR>:OSCYankRegister "<CR>
 let g:which_key_map.s =
   \ {
@@ -141,13 +142,15 @@ let g:which_key_map.s =
   \   'iW' : 'inner-WORD',
   \   'd' : 'method-definition',
   \   'D' : 'method-definition-WORD',
-  \   'c' : 'class-definition'
+  \   'c' : 'class-definition',
+  \   'f' : 'factory-definition'
   \ }
 nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
 nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
 nnoremap <leader>sd :execute ":Ag def (self\.)?" . expand("<cword>") . "" <cr>
 nnoremap <leader>sD :execute ":Ag def (self\.)?" . expand("<cWORD>") . "" <cr>
 nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "" <CR>
+nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
 
 
 let g:which_key_map.c = { 'name' : '+quickfix' }
@@ -276,7 +279,7 @@ let g:coc_snippet_prev = '<S-TAB>'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :let ruby_spellcheck_strings = 1
 let g:autotagStartMethod='fork'
-let g:rails_ctags_arguments=['-f tmp/tags', '-R', '--exclude=tmp', '--exclude=log', '--exclude=.git','--languages=Ruby', '.', '$(bundle list --paths)']
+let g:rails_ctags_arguments=['-f tmp/tags', '-R', '--exclude=tmp', '--exclude=log', '--exclude=.git','--languages=Ruby', ' . ', '$(bundle list --paths)']
 "ctags -f tmp/tags -R --exclude=tmp --exclude=log --exclude=.git . $(bundle list --paths)
 vmap <leader>gt :call I18nTranslateString()<CR>
 vmap <leader>dt :call I18nDisplayTranslation()<CR>
