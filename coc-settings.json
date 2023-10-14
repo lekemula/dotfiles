@@ -5,6 +5,16 @@
   "solargraph.completion": true,
   "solargraph.diagnostics": true,
   "solargraph.formatting": true,
+  "angular.log":"verbose",
+  "angular.trace.server":"verbose",
+  "workspace.rootPatterns": [
+    ".git",
+    ".hg",
+    ".projections.json",
+    "tsconfig.json",
+    "project.json",
+    "package.json"
+  ],
   "html.format.templating": true,
   "html.filetypes": [
     "html",
@@ -54,6 +64,13 @@
       "filetypes": ["c", "cpp", "objc", "objcpp"],
       "rootPatterns": [".clangd", "compile_commands.json", ".git/", ".hg/"],
       "args": ["--compile-commands-dir=build", "--fallback-style=Google"]
+    },
+    "angular": {
+      "command": "ngserver",
+      "args": ["--stdio", "--tsProbeLocations", "/Users/lekemula/.nvm/versions/node/v20.5.1/lib/node_modules/typescript/lib", "--ngProbeLocations", "/Users/lekemula/.nvm/versions/node/v20.5.1/lib/node_modules/@angular/language-server/node_modules/@angular/language-service"],
+      "filetypes": [ "ts", "typescript", "html", "typescriptreact", "typescript.tsx" ],
+      "rootPatterns": ["project.json", "tsconfig.json", "tsconfig.base.json", "angular.json" ],
+      "trace.server": "verbose"
     }
   },
   "snippets.ultisnips.pythonPrompt": false
