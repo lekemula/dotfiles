@@ -39,3 +39,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"  ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 export PATH="/opt/homebrew/opt/postgresql@12/bin:$PATH"
 export GITHUB_TOKEN=$(gh auth token)
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
