@@ -1,7 +1,7 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => COC
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:coc_global_extensions = ['coc-json', 'coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver', 'coc-metals', 'coc-clangd', 'coc-go']
+let g:coc_global_extensions = ['coc-json', 'coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver', 'coc-metals', 'coc-clangd', 'coc-go', 'coc-db']
 
 " https://github.com/neoclide/coc.nvim#example-vim-configuration
 " Some servers have issues with backup files, see #649.

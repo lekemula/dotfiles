@@ -13,10 +13,14 @@ source ~/.vim/configs/plugins.vim
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "https://vimdoc.sourceforge.net/htmldoc/intro.html#key-notation
 autocmd StdinReadPre * let s:std_in=0
-autocmd VimLeave * NERDTreeClose
+autocmd VimLeave * NERDTreeClose, DBUIClose
 autocmd BufNewFile,BufRead *.erb set filetype=eruby.html
 " https://github.com/tpope/vim-liquid/blob/fd2f0017fbc50f214db2f57c207c34cda3aa1522/syntax/liquid.vim#L34C3-L34C49
 autocmd BufNewFile,BufRead *.liquid.erb let b:liquid_subtype='eruby' | set syntax=liquid
+
+if filereadable(expand("./.vim/.vimrc"))
+  source ./.vim/.vimrc
+endif
 
 " Fix paste indentation
 set pastetoggle=<F2>
@@ -106,6 +110,8 @@ set mouse=a
 let g:which_key_map.t = { 'name' : '+file-tree' }
 nnoremap <leader>tt :NERDTreeToggle<CR>
 let g:which_key_map.t.t = 'toggle-file-tree'
+nnoremap <leader>td :DBUIToggle<CR>
+let g:which_key_map.t.d = 'toggle-dbui'
 nnoremap <leader>tf :NERDTreeFind %<CR>zz
 let g:which_key_map.t.f = 'file-tree-find-file'
 nnoremap <leader><space> :Buffers<CR>
@@ -374,4 +380,5 @@ endif
 " Source the vimrc file after saving it
 if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
+  autocmd bufwritepost ~/.vim/configs/plugins.vim source $MYVIMRC
 endif
