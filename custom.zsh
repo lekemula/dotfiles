@@ -18,4 +18,6 @@ fi
 
 source ~/.aliases.zsh
 
+eval $(thefuck --alias)
+
 # source $HOME/.config/op/plugins.sh

@@ -205,3 +205,13 @@ if ! command -v prettier &> /dev/null; then
   npm install --global prettier
 fi
 
+# Command line correction
+if ! command -v thefuck &> /dev/null; then
+  brew install thefuck
+fi
+
+# Better git diff previews
+if ! command -v delta &> /dev/null; then
+  brew install git-delta
+fi
+
