@@ -24,12 +24,13 @@
 # Ignore master key for decrypting credentials and more.
 /
 
+.DS_Store
+
 # Vim
 *.swp
 *.swo
 .undodir/
-
-.DS_Store
-tags.*
+.vim/*
+tags*
 projections.json
 .projections.json
