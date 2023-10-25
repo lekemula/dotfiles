@@ -37,6 +37,7 @@ if [[ ! -d $HOME/.nvm ]] then
   [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"  ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
   nvm install node
   npm install --global yarn
+  npm install --global @angular/cli
 fi
 
 # https://github.com/ggreer/the_silver_searcher
