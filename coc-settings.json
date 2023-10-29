@@ -71,6 +71,11 @@
       "filetypes": [ "ts", "typescript", "html", "typescriptreact", "typescript.tsx" ],
       "rootPatterns": ["project.json", "tsconfig.json", "tsconfig.base.json", "angular.json" ],
       "trace.server": "verbose"
+    },
+    "stimulus": {
+      "command": "stimulus-language-server",
+      "args": ["--stdio"],
+      "filetypes": ["html", "ruby", "eruby", "blade", "php"]
     }
   },
   "snippets.ultisnips.pythonPrompt": false
