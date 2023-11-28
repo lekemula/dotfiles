@@ -25,6 +25,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.fzf.zsh ~/.fzf.zsh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.tmux.conf ~/.tmux.conf
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitconfig ~/.gitconfig
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitignore_global ~/.gitignore_global
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.pryrc ~/.pryrc
 
 [ ! -d ~/.vim ] && mkdir ~/.vim
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.vim/coc-settings.json
