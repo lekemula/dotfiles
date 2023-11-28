@@ -287,6 +287,10 @@ vnoremap ∆ :m '>+1<CR>gv=gv
 " Alt+k
 vnoremap ˚ :m '<-2<CR>gv=gv
 
+" Fast paste from clipboard
+" https://stackoverflow.com/questions/501332/why-is-pasting-a-long-one-liner-very-slow-in-vims-insert-mode
+nnoremap <Leader>p :read !pbpaste<CR>
+
 " Replace
 nmap <leader>R :%s/
 nmap <leader>' ysiw'
