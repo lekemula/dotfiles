@@ -35,3 +35,15 @@ snippet tattro "Typed Optional Dry::Struct attribute with Yardoc" b
 #   @return [${2:String}, nil]
 attribute :${1}?, Types::Coercible::${2}.optional
 endsnippet
+
+# YARDoc snippets for UltiSnips
+
+# Method Documentation
+snippet ym "Method Documentation" b
+# @param ${1:param_name} [${2:Type}] ${3:Description}
+# @return [${4:Type}] ${5:Description}
+endsnippet
+
+snippet yp "Param Documentation" b
+# @param ${1:param_name} [${2:Type}] ${3:Description}
+endsnippet
