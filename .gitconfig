@@ -24,6 +24,7 @@
 
 [rebase]
   autoStash = true
+  autoSquash = true
 
 [pull]
   rebase = true
