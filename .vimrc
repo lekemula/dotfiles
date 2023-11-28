@@ -145,7 +145,10 @@ let g:which_key_map.s =
   \   'd' : 'method-definition',
   \   'D' : 'method-definition-WORD',
   \   'c' : 'class-definition',
-  \   'f' : 'factory-definition'
+  \   'f' : 'factory-definition',
+  \   't' : 'method-test',
+  \   'e' : 'rspec-shared-example',
+  \   'ssr' : 'service-response'
   \ }
 nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
 nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
@@ -153,6 +156,9 @@ nnoremap <leader>sd :execute ":Ag def (self\.)?" . expand("<cword>") . "" <cr>
 nnoremap <leader>sD :execute ":Ag def (self\.)?" . expand("<cWORD>") . "" <cr>
 nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "" <CR>
 nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
+" https://github.com/collectiveidea/interactor gem
+nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cword>") . "" <cr>
+nnoremap <leader>se :execute ":AgIn spec/ shared_example.*" . expand("<cword>") . "" <cr>
 
 
 let g:which_key_map.c = { 'name' : '+quickfix' }
