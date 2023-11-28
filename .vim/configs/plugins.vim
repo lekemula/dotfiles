@@ -38,6 +38,7 @@ Plug 'godlygeek/tabular'
 Plug 'vim-test/vim-test'
 Plug 'github/copilot.vim'
 Plug 'vim-ruby/vim-ruby'
+Plug 'ngmy/vim-rubocop'
 " Error: "It seems your ruby installation is missing psych"
 " Plug 'stefanoverna/vim-i18n'
 Plug 'vim-scripts/ReplaceWithRegister'
