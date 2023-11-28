@@ -103,6 +103,8 @@ nnoremap <leader>sc :set complete+=kspell<CR>
 let g:which_key_map.s.c = 'enable-spell-completion'
 nnoremap <leader>sn :set complete-=kspell<CR>
 let g:which_key_map.s.n = 'disable-spell-completion'
+nnoremap <leader>sp z=
+let g:which_key_map.s.p = 'spell-suggestions'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Navigation
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
