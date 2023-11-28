@@ -161,6 +161,12 @@ nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cwor
 nnoremap <leader>se :execute ":AgIn spec/ shared_example.*" . expand("<cword>") . "" <cr>
 
 
+" Quickfix
+
+" https://www.reddit.com/r/vim/comments/i9eka7/comment/g1f0f8j/?utm_source=share&utm_medium=web2x&context=3
+" Allow adding list of files in quickfix eg. cexpr system('find "./spec/**/*_spec.rb')
+set errorformat+=%f
+
 let g:which_key_map.c = { 'name' : '+quickfix' }
 nnoremap <leader>cc :cc<CR>
 let g:which_key_map.c.c = 'fix-current'
