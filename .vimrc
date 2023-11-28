@@ -174,19 +174,34 @@ nnoremap <leader>cn :cnext<CR>
 let g:which_key_map.c.n = 'fix-next'
 nnoremap <leader>cp :cprevious<CR>
 let g:which_key_map.c.p = 'fix-previous'
+nnoremap <leader>cs :call LM_ChangedSpecs()<CR>
+let g:which_key_map.c.s = 'fix-git-changed-specs'
+nnoremap <leader>cf :call LM_ChangedFiles()<CR>
+let g:which_key_map.c.f = 'fix-git-changed-files'
+
+function! LM_ChangedSpecs()
+  cexpr system("git status -s | awk '{ print $2  }' | grep spec")
+endfunction
+
+function! LM_ChangedFiles()
+  cexpr system("git status -s | awk '{ print $2  }'")
+endfunction
 
 " Tests
 let test#strategy = "dispatch"
 let b:dispatch = ":0Spawn!"
-nmap <silent> <leader>TT :let test#strategy = "dispatch"<CR>:TestNearest<CR>
-nmap <silent> <leader>TD :let test#strategy = "basic"<CR>:TestNearest<CR>
-nmap <silent> <leader>T :TestFile<CR>
-nmap <silent> <leader>TS :TestSuite<CR>
-nmap <silent> <leader>TL :TestLast<CR>
-nmap <silent> <leader>TV :TestVisit<CR>
+nmap <silent> <leader>TT :let test#strategy = "dispatch"<CR>:TestNearest 2>./tmp/test_errors.txt<CR>
+nmap <silent> <leader>TD :let test#strategy = "basic"<CR>:TestNearest 2>./tmp/test_errors.txt<CR>
+nmap <silent> <leader>T :TestFile 2>./tmp/test_errors.txt<CR>
+nmap <silent> <leader>TS :TestSuite 2>./tmp/test_errors.txt<CR>
+nmap <silent> <leader>TL :TestLast 2>./tmp/test_errors.txt<CR>
+nmap <silent> <leader>TV :TestVisit 2>./tmp/test_errors.txt<CR>
 
 let g:nerdtree_sync_cursorline = 1
 
+" Project based projections are added in:
+"   - gems: lib/projections.json
+"   - rails: config/projections.json
 let g:projectionist_heuristics = {
 \  "*": {
 \    "include/*.h": {
