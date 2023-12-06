@@ -54,7 +54,8 @@ function! s:ag_in(bang, ...)
     throw 'not a valid directory: ' .. a:1
   endif
   " Press `?' to enable preview window.
-  call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'up:50%:hidden', '?'), a:bang)
+  " Second param specifies the preview window location
+  call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': a:1}, 'right:50%', '?'), a:bang)
 
   " If you don't want preview option, use this
   " call fzf#vim#ag(join(a:000[1:], ' '), {'dir': a:1}, a:bang)
