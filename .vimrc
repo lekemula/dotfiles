@@ -190,6 +190,7 @@ endfunction
 " Tests
 let test#strategy = "dispatch"
 let b:dispatch = ":0Spawn!"
+let g:test#ruby#rspec#executable = 'bundle exec rspec'
 nmap <silent> <leader>TT :let test#strategy = "dispatch"<CR>:TestNearest 2>./tmp/test_errors.txt<CR>
 nmap <silent> <leader>TD :let test#strategy = "basic"<CR>:TestNearest 2>./tmp/test_errors.txt<CR>
 nmap <silent> <leader>T :TestFile 2>./tmp/test_errors.txt<CR>
