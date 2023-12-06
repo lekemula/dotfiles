@@ -6,7 +6,7 @@
 " 	  - `brew install the_silver_searcher`
 "
 
-source ~/.vim/configs/plugins.vim
+source ~/vim/configs/plugins.vim
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Config
@@ -391,10 +391,10 @@ autocmd FileType markdown setlocal shiftwidth=2
 autocmd FileType markdown setlocal tabstop=2
 autocmd FileType markdown setlocal softtabstop=2
     
-source ~/.vim/configs/copilot.vim
-source ~/.vim/configs/git.vim
-source ~/.vim/configs/fzf.vim
-source ~/.vim/configs/coc.vim
+source ~/vim/configs/copilot.vim
+source ~/vim/configs/git.vim
+source ~/vim/configs/fzf.vim
+source ~/vim/configs/coc.vim
 
 " Pathogen plugins
 inoremap <C-p>r <C-r>=system('ls ~/.vim/bundle')<cr>

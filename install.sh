@@ -27,19 +27,19 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitconfig ~/.gitconfig
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitignore_global ~/.gitignore_global
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.pryrc ~/.pryrc
 
-[ ! -d ~/.vim ] && mkdir ~/.vim
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.vim/coc-settings.json
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vim/my-snippets ~/.vim/my-snippets
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vim/configs ~/.vim/configs
+[ ! -d ~/vim ] && mkdir ~/vim
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/vim/coc-settings.json
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/my-snippets ~/vim/my-snippets
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/configs ~/vim/configs
 
 NEOVIM_CONFIG_DIR=~/.config/nvim
 [ ! -d $NEOVIM_CONFIG_DIR ] && mkdir -p $NEOVIM_CONFIG_DIR
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/nvim/init.lua $NEOVIM_CONFIG_DIR/init.lua
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.config/nvim/coc-settings.json
 
-VIMSPECTOR_GADGETS_DIR=~/.vim/plugged/vimspector/gadgets/custom
+VIMSPECTOR_GADGETS_DIR=~/vim/plugged/vimspector/gadgets/custom
 [ ! -d $VIMSPECTOR_GADGETS_DIR ] && mkdir -p $VIMSPECTOR_GADGETS_DIR
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vim/vimspector/gadgets/custom/cust_vscode-ruby.json  $VIMSPECTOR_GADGETS_DIR/cust_vscode-ruby.json
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/vimspector/gadgets/custom/cust_vscode-ruby.json  $VIMSPECTOR_GADGETS_DIR/cust_vscode-ruby.json
 
 # https://iterm2.com/documentation-images.html
 sudo curl https://iterm2.com/utilities/imgcat -o /usr/local/bin/imgcat
