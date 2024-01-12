@@ -216,3 +216,6 @@ if ! command -v delta &> /dev/null; then
   brew install git-delta
 fi
 
+if ! command -v terraform-ls &> /dev/null; then
+  brew install hashicorp/tap/terraform-ls
+fi

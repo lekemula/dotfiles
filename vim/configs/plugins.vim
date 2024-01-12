@@ -82,6 +82,7 @@ Plug 'vhdirk/vim-cmake'
 Plug 'derekwyatt/vim-scala'
 Plug 'puremourning/vimspector'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'hashivim/vim-terraform'
 " Text Objects
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'kana/vim-textobj-entire'

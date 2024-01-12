@@ -5,6 +5,7 @@
   "solargraph.completion": true,
   "solargraph.diagnostics": true,
   "solargraph.formatting": true,
+  "solargraph.logLevel": "debug",
   "angular.log":"verbose",
   "angular.trace.server":"verbose",
   "workspace.rootPatterns": [
@@ -76,7 +77,17 @@
       "command": "stimulus-language-server",
       "args": ["--stdio"],
       "filetypes": ["html", "ruby", "eruby", "blade", "php"]
-    }
+    },
+		"terraform": {
+			"command": "terraform-ls",
+			"args": ["serve"],
+			"filetypes": [
+				"terraform",
+				"tf"
+			],
+			"initializationOptions": {},
+			"settings": {}
+		}
   },
   "snippets.ultisnips.pythonPrompt": false
 }
