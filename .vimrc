@@ -154,7 +154,7 @@ nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
 nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
 nnoremap <leader>sd :execute ":Ag def (self\.)?" . expand("<cword>") . "" <cr>
 nnoremap <leader>sD :execute ":Ag def (self\.)?" . expand("<cWORD>") . "" <cr>
-nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "" <CR>
+nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "[^a-zA-Z0-9_]" <CR>
 nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
 " https://github.com/collectiveidea/interactor gem
 nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cword>") . "" <cr>
