@@ -404,6 +404,7 @@ inoremap <C-p>r <C-r>=system('ls ~/.vim/bundle')<cr>
 syntax enable
 set encoding=UTF-8
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#branch#displayed_head_limit = 10
 filetype plugin indent on
 set autoindent
 set cindent
