@@ -152,9 +152,10 @@ let g:which_key_map.s =
   \ }
 nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
 nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
-nnoremap <leader>sd :execute ":Ag def (self\.)?" . expand("<cword>") . "" <cr>
-nnoremap <leader>sD :execute ":Ag def (self\.)?" . expand("<cWORD>") . "" <cr>
-nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "[^a-zA-Z0-9_]" <CR>
+nnoremap <leader>sd :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor) (self\.)?(:\w+,\s)*(:)?" . expand("<cword>") . "" <cr>
+nnoremap <leader>sD :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor) (self\.)?(:\w+,\s)*(:)?" . expand("<cWORD>") . "" <cr>
+
+nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "([^a-zA-Z0-9_\\n]\|\$)" <CR>
 nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
 " https://github.com/collectiveidea/interactor gem
 nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cword>") . "" <cr>
