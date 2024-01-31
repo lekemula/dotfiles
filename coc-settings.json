@@ -1,6 +1,4 @@
 {
-  "yaml.enable": true,
-  "yaml.format.enable": true,
   "codeLens.enable": true,
   "solargraph.completion": true,
   "solargraph.diagnostics": true,
@@ -89,5 +87,10 @@
 			"settings": {}
 		}
   },
-  "snippets.ultisnips.pythonPrompt": false
+  "snippets.ultisnips.pythonPrompt": false,
+  "yaml.enable": true,
+  "yaml.format.enable": true,
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/main/service-schema.json": ["**/.azure/**/*.yaml"]
+  }
 }

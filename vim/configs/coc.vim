@@ -1,7 +1,7 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => COC
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:coc_global_extensions = ['coc-json', 'coc-json', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver', 'coc-metals', 'coc-clangd', 'coc-go', 'coc-db']
+let g:coc_global_extensions = ['coc-json', 'coc-yaml', 'coc-git', 'coc-css', 'coc-html', 'coc-docker', 'coc-eslint', 'coc-snippets', 'coc-sql', 'coc-yank', 'coc-tsserver', 'coc-metals', 'coc-clangd', 'coc-go', 'coc-db']
 
 " https://github.com/neoclide/coc.nvim#example-vim-configuration
 " Some servers have issues with backup files, see #649.
@@ -38,6 +38,7 @@ function! CheckBackspace() abort
 endfunction
 
 " Use <c-space> to trigger completion.
+" NOTE: In MacOS you need to disable the default <c-space> mapping: https://stackoverflow.com/a/42668983
 if has('nvim')
   inoremap <silent><expr> <c-space> coc#refresh()
 else
