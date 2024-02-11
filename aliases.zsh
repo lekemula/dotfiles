@@ -12,6 +12,6 @@ alias lm_rspec_changed='bundle exec rspec $(git status -s | awk '\''{ print $2  
 
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")
-  dropbox=$(eval "echo ~/Dropbox/Documents/Logseq")
-  rsync -av "${icloud}/Personal" $dropbox
+  dropbox=$(eval "echo ~/Dropbox/Documents/Logseq/Personal\ \(read\ only\)")
+  rsync -av "${icloud}/Personal/" $dropbox # trailing slash means copy contents of dir
 }
