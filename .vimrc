@@ -372,7 +372,27 @@ noremap <silent> <C-r>l :vertical resize -15<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " https://github.com/ryanoasis/nerd-fonts#option-4-homebrew-fonts
 " Set theme
-colorscheme gruvbox
+" Important!!
+if has('termguicolors')
+  set termguicolors
+endif
+
+set background=light
+
+" Set contrast.
+" This configuration option should be placed before `colorscheme gruvbox-material`.
+" Available values: 'hard', 'medium'(default), 'soft'
+let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_foreground = 'material'
+let g:gruvbox_material_transparent_background = 0
+let g:gruvbox_material_disable_italic_comment = 1
+let g:gruvbox_material_enable_bold = 1
+
+" For better performance
+let g:gruvbox_material_better_performance = 1
+
+colorscheme gruvbox-material
+let g:airline_theme = 'gruvbox_material'
 " let g:gruvbox_transparent_bg = 0
 " autocmd VimEnter * hi Normal ctermbg=none
 set background=dark
