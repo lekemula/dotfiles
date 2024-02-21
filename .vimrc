@@ -118,6 +118,9 @@ let g:which_key_map.t.d = 'toggle-dbui'
 nnoremap <leader>tf :NERDTreeFind %<CR>zz
 let g:which_key_map.t.f = 'file-tree-find-file'
 nnoremap <leader><space> :Buffers<CR>
+" Delete all buffers except the current one
+nnoremap <leader>bd :%bd\|e#<CR>
+
 map ` :Marks<CR>
 
 " Multi Cursor
