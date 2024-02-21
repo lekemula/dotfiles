@@ -154,6 +154,7 @@ let g:which_key_map.s =
   \   'e' : 'rspec-shared-example',
   \   'ssr' : 'service-response'
   \ }
+vnoremap <leader>s y:execute ":Ag " . shellescape("<C-r>0") . "" <cr>
 nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
 nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
 nnoremap <leader>sd :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor) (self\.)?(:\w+,\s)*(:)?" . expand("<cword>") . "" <cr>
