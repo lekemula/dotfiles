@@ -7,6 +7,7 @@
 "
 
 source ~/vim/configs/plugins.vim
+source ~/vim/setcolors.vim
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Config

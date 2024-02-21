@@ -31,6 +31,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.pryrc ~/.pryrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/vim/coc-settings.json
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/my-snippets ~/vim/my-snippets
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/configs ~/vim/configs
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/setcolors.vim ~/vim/setcolors.vim
 
 NEOVIM_CONFIG_DIR=~/.config/nvim
 [ ! -d $NEOVIM_CONFIG_DIR ] && mkdir -p $NEOVIM_CONFIG_DIR
