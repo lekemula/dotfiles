@@ -4,8 +4,6 @@
   "solargraph.diagnostics": true,
   "solargraph.formatting": true,
   "solargraph.logLevel": "debug",
-  "angular.log":"verbose",
-  "angular.trace.server":"verbose",
   "workspace.rootPatterns": [
     ".git",
     ".hg",
@@ -62,14 +60,20 @@
       "command": "clangd",
       "filetypes": ["c", "cpp", "objc", "objcpp"],
       "rootPatterns": [".clangd", "compile_commands.json", ".git/", ".hg/"],
-      "args": ["--compile-commands-dir=build", "--fallback-style=Google"]
+      "args": ["--compile-commands-dir=build", "--fallback-style=Google"],
     },
     "angular": {
       "command": "ngserver",
-      "args": ["--stdio", "--tsProbeLocations", "/Users/lekemula/.nvm/versions/node/v20.5.1/lib/node_modules/typescript/lib", "--ngProbeLocations", "/Users/lekemula/.nvm/versions/node/v20.5.1/lib/node_modules/@angular/language-server/node_modules/@angular/language-service"],
+      "args": [
+        "--stdio",
+        "--tsProbeLocations",
+        "/Users/lekemula/.nvm/versions/node/v18.19.0/lib/node_modules/typescript/lib",
+        "--ngProbeLocations",
+        "/Users/lekemula/.nvm/versions/node/v18.19.0/lib/node_modules/@angular/language-server/node_modules/@angular/language-service"
+      ],
       "filetypes": [ "ts", "typescript", "html", "typescriptreact", "typescript.tsx" ],
-      "rootPatterns": ["project.json", "tsconfig.json", "tsconfig.base.json", "angular.json" ],
-      "trace.server": "verbose"
+      "rootPatterns": ["angular.json", "nx.json"],
+      "trace.server.verbosity": "verbose"
     },
     "stimulus": {
       "command": "stimulus-language-server",
