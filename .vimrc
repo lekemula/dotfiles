@@ -31,7 +31,7 @@ nnoremap <SPACE> <Nop>
 let mapleader=" "
 
 set shell=zsh
-set relativenumber
+set norelativenumber
 set number
 " https://github.com/prabirshrestha/vim-lsp/issues/786
 set re=0
