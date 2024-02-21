@@ -42,3 +42,4 @@ export GITHUB_TOKEN=$(gh auth token)
 
 # Load Angular CLI autocompletion.
 source <(ng completion script)
+export EDITOR="vim"
