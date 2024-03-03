@@ -39,6 +39,8 @@ Plug 'vim-test/vim-test'
 Plug 'github/copilot.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'ngmy/vim-rubocop'
+Plug 'vim-scripts/matchit.zip'
+Plug 'ecomba/vim-ruby-refactoring'
 " Error: "It seems your ruby installation is missing psych"
 " Plug 'stefanoverna/vim-i18n'
 Plug 'vim-scripts/ReplaceWithRegister'
