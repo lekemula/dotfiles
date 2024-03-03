@@ -383,11 +383,12 @@ if has('termguicolors')
 endif
 
 set background=light
+set cursorline " Highlight current line
 
 " Set contrast.
 " This configuration option should be placed before `colorscheme gruvbox-material`.
 " Available values: 'hard', 'medium'(default), 'soft'
-let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_background = 'medium'
 let g:gruvbox_material_foreground = 'material'
 let g:gruvbox_material_transparent_background = 0
 let g:gruvbox_material_disable_italic_comment = 1
