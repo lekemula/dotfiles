@@ -219,3 +219,9 @@ fi
 if ! command -v terraform-ls &> /dev/null; then
   brew install hashicorp/tap/terraform-ls
 fi
+
+# install fswatch
+
+if ! command -v fswatch &> /dev/null; then
+  brew install fswatch
+fi
