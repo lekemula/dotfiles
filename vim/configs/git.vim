@@ -22,7 +22,7 @@ nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 nnoremap <leader>gcu :let @" = execute('.GBrowse!')<CR>:OSCYankRegister "<CR>
 vnoremap <leader>gcu :GBrowse!<CR>
-nnoremap <leader>gbl :Git blame<CR>
+nnoremap <leader>gbl :Git blame -C -C -C<CR>
 nnoremap <leader>gbr v:GBrowse<CR>
 vnoremap <leader>gbr :GBrowse<CR>
 nnoremap <leader>gbc :execute "GBrowse " . expand("<cword>")<cr>

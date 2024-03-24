@@ -4,6 +4,8 @@
   excludesfile = ~/.gitignore_global
   pager = delta
 	editor = vim
+	attributesfile = ~/.gitattributes
+
 [user]
   name = Lekë Mula
   email = l.mula@finlink.de
@@ -31,3 +33,6 @@
 
 [push]
 	autoSetupRemote = false
+
+[rerere]
+	enabled = true

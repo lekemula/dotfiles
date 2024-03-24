@@ -7,6 +7,7 @@ alias res='omz reload' # reload zsh
 alias lsport='lsof -i -P -n' # list ports
 alias '??=gh copilot explain'
 alias '???=gh copilot suggest'
+alias gbl='git blame -w -b -C -C -C'
 
 alias lm_rspec_changed='bundle exec rspec $(git status -s | awk '\''{ print $2  }'\'' | grep spec | xargs echo)'
 
