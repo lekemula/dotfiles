@@ -184,6 +184,14 @@ nnoremap <leader>cs :call LM_ChangedSpecs()<CR>
 let g:which_key_map.c.s = 'fix-git-changed-specs'
 nnoremap <leader>cf :call LM_ChangedFiles()<CR>
 let g:which_key_map.c.f = 'fix-git-changed-files'
+nnoremap <leader>cs :cexpr system('find folder/**/*_files.rb')
+let g:which_key_map.c.s = 'fix-search-files'
+nnoremap <leader>cr :cexpr system("rubocop --format emacs")
+let g:which_key_map.c.r = 'fix-rubocop'
+
+function! LM_RuboCopAll()
+  cexpr system("rubocop --format emacs")
+endfunction
 
 function! LM_ChangedSpecs()
   cexpr system("git status -s | awk '{ print $2  }' | grep spec")
