@@ -253,6 +253,11 @@ let g:projectionist_heuristics = {
 " autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 let g:mkdp_auto_start = 0
 let g:vim_markdown_new_list_item_indent = 2
+set conceallevel=2 " for hiding links when not in insert mode
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_follow_anchor = 1
+let g:vim_markdown_math = 1
+let g:vim_markdown_strikethrough = 1
 
 nnoremap <leader>mp <Plug>MarkdownPreviewToggle
 
