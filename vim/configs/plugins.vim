@@ -56,7 +56,7 @@ Plug 'xuyuanp/nerdtree-git-plugin'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'flazz/vim-colorschemes'
-Plug 'sainnhe/gruvbox-material'
+Plug 'sainnhe/gruvbox-material', {'branch': 'master'}
 Plug 'joom/vim-commentary'
 Plug 'airblade/vim-gitgutter'
 Plug 'machakann/vim-highlightedyank'
