@@ -220,8 +220,14 @@ if ! command -v terraform-ls &> /dev/null; then
   brew install hashicorp/tap/terraform-ls
 fi
 
-# install fswatch
-
 if ! command -v fswatch &> /dev/null; then
   brew install fswatch
+fi
+
+if ! command -v kubectl &> /dev/null; then
+  brew install kubectl
+fi
+
+if ! command -v kubectx &> /dev/null; then
+  brew install kubectx
 fi

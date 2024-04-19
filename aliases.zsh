@@ -10,6 +10,9 @@ alias '???=gh copilot suggest'
 alias gbl='git blame -w -b -C -C -C'
 
 alias lm_rspec_changed='bundle exec rspec $(git status -s | awk '\''{ print $2  }'\'' | grep spec | xargs echo)'
+alias weather='curl wttr.in'
+alias kc='kubectx'
+alias kns='kubens'
 
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")

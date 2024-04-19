@@ -47,3 +47,5 @@ antigen bundle rails
 antigen bundle docker
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker-compose
 antigen bundle docker-compose
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/kubectl/kubectl.plugin.zsh
+antigen bundle kubectl
