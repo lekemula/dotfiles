@@ -118,6 +118,9 @@ let g:which_key_map.t.d = 'toggle-dbui'
 nnoremap <leader>tf :NERDTreeFind %<CR>zz
 let g:which_key_map.t.f = 'file-tree-find-file'
 nnoremap <leader><space> :Buffers<CR>
+let g:which_key_map.l = { 'name' : '+last' }
+let g:which_key_map.l.l = 'go-to-last-file'
+nnoremap <leader>ll :e #<CR>
 " Delete all buffers except the current one
 nnoremap <leader>bd :%bd\|e#<CR>
 
@@ -167,7 +170,9 @@ nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cwor
 nnoremap <leader>se :execute ":AgIn spec/ shared_example.*" . expand("<cword>") . "" <cr>
 
 
-" Quickfix
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Quickfix list
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " https://www.reddit.com/r/vim/comments/i9eka7/comment/g1f0f8j/?utm_source=share&utm_medium=web2x&context=3
 " Allow adding list of files in quickfix eg. cexpr system('find "./spec/**/*_spec.rb')
