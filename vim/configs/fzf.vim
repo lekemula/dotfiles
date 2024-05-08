@@ -32,6 +32,8 @@ let g:fzf_layout = { 'down': '40%' }
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 command! -bang -nargs=? Ag call fzf#vim#ag(<q-args>, "--hidden --ignore sorbet/rbi --ignore .git", fzf#vim#with_preview(), <bang>0)
+" Ag-all: Search all files in the project. Ignore VCS ignore files (.gitignore, .hgignore; still obey .ignore)
+command! -bang -nargs=? Aga call fzf#vim#ag(<q-args>, "--hidden --skip-vcs-ignores --ignore sorbet/rbi --ignore .git", fzf#vim#with_preview(), <bang>0)
 
 " https://github.com/junegunn/fzf.vim/issues/27#issuecomment-608294881
 " "Raw" version of ag; arguments directly passed to ag
