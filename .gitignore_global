@@ -35,3 +35,6 @@ tags*
 projections.json
 .projections.json
 config/projections.json
+# the_silver_searcher
+.ignore
+.hgignore
