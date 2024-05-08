@@ -352,13 +352,10 @@ command AC :execute "e " . eval('rails#buffer().alternate()')
 " => Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " https://stackoverflow.com/a/15087735
-autocmd BufNewFile,BufRead * set foldmethod=indent
-autocmd BufNewFile,BufRead *.rb set foldmethod=syntax
-autocmd BufNewFile,BufRead *.erb,*.html set foldmethod=indent
-autocmd BufWinLeave *.erb set foldmethod=syntax
+autocmd BufNewFile,BufRead * set foldmethod=indent " syntax causes performance issues!
 
 set foldlevel=99
-" :set foldmethod=indent
+set foldmethod=indent
 " :let ruby_fold = 0
 " set nofoldenable
 
