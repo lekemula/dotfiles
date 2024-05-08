@@ -43,3 +43,6 @@ export GITHUB_TOKEN=$(gh auth token)
 # Load Angular CLI autocompletion.
 source <(ng completion script)
 export EDITOR="vim"
+
+# Azure CLI completion
+source $(brew --prefix)/etc/bash_completion.d/az

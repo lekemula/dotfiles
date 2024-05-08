@@ -231,3 +231,7 @@ fi
 if ! command -v kubectx &> /dev/null; then
   brew install kubectx
 fi
+
+if ! command -v az &> /dev/null; then
+  brew install azure-cli
+fi

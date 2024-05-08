@@ -10,9 +10,14 @@ alias '???=gh copilot suggest'
 alias gbl='git blame -w -b -C -C -C'
 
 alias lm_rspec_changed='bundle exec rspec $(git status -s | awk '\''{ print $2  }'\'' | grep spec | xargs echo)'
+alias lm_rubocop_changed='bundle exec rubocop -A $(git status -s | awk '\''{ print $2  }'\'' | grep spec | xargs echo)'
 alias weather='curl wttr.in'
 alias kc='kubectx'
 alias kns='kubens'
+alias ks='kubectx && kubens'
+alias ke='keti'
+alias dcr='docker-compose run --rm'
+alias gstap='git stash push --patch -m'
 
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")
