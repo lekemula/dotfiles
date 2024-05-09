@@ -235,3 +235,16 @@ fi
 if ! command -v az &> /dev/null; then
   brew install azure-cli
 fi
+
+if ! command -v helm &> /dev/null; then
+  brew install helm
+fi
+
+if ! command -v helm_ls &> /dev/null; then
+  brew install helm-ls
+fi
+
+# Required for helm LSP to complete Kubernetes
+if ! command -v yaml-language-server &> /dev/null; then
+  npm install --global yaml-language-server 
+fi
