@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+
+# https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
+gui:
+  scrollHeight: 4
+keybinding:
+  universal:
+    prevPage: <c-u>
+    nextPage: <c-d>
+  commits:
+    moveDownCommit: K
+    moveUpCommit: J

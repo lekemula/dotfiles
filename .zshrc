@@ -46,3 +46,6 @@ export EDITOR="vim"
 
 # Azure CLI completion
 source $(brew --prefix)/etc/bash_completion.d/az
+
+# Change config dir for lazygit
+export XDG_CONFIG_HOME="$HOME/.config"

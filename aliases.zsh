@@ -19,6 +19,9 @@ alias ke='keti'
 alias dcr='docker-compose run --rm'
 alias gstap='git stash push --patch -m'
 
+alias lzd='lazydocker'
+alias lzg='lazygit'
+
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")
   dropbox=$(eval "echo ~/Dropbox/Documents/Logseq/Personal\ \(read\ only\)")
