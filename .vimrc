@@ -31,6 +31,8 @@ nnoremap <SPACE> <Nop>
 let mapleader=" "
 
 set shell=zsh
+" Toggle relative line numbers
+nnoremap <leader>ln :set relativenumber!<CR>
 set norelativenumber
 set number
 " https://github.com/prabirshrestha/vim-lsp/issues/786
