@@ -31,6 +31,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-cucumber'
 Plug 'tpope/vim-liquid'
 Plug 'tpope/vim-dadbod'
+Plug 'tpope/vim-eunuch'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 " http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
