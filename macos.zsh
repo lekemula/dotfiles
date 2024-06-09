@@ -256,3 +256,8 @@ fi
 if ! command -v lazygit &> /dev/null; then
   brew install lazygit
 fi
+
+if [ ! -e '/Applications/Loom.app' ]; then
+  brew install --cask loom
+fi
+
