@@ -41,6 +41,7 @@ NEOVIM_CONFIG_DIR=~/.config/nvim
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/nvim/init.lua $NEOVIM_CONFIG_DIR/init.lua
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.config/nvim/coc-settings.json
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/lazygit.yml ~/.config/lazygit/config.yml
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/lazydocker.yml ~/.config/lazydocker/config.yml
 
 VIMSPECTOR_GADGETS_DIR=~/vim/plugged/vimspector/gadgets/custom
 [ ! -d $VIMSPECTOR_GADGETS_DIR ] && mkdir -p $VIMSPECTOR_GADGETS_DIR
