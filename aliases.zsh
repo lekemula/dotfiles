@@ -27,3 +27,8 @@ function lm_logseq_sync_dropbox () {
   dropbox=$(eval "echo ~/Dropbox/Documents/Logseq/Personal\ \(read\ only\)")
   rsync -av "${icloud}/Personal/" $dropbox # trailing slash means copy contents of dir
 }
+
+# Set docker compoes profile
+function dcp(){
+  export COMPOSE_PROFILES=$1
+}
