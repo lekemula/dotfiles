@@ -175,6 +175,14 @@ nnoremap <leader>se :execute ":AgIn spec/ shared_example.*" . expand("<cword>") 
 let g:indentLine_char = '¦'
 let g:indentLine_enabled = 0 " Disable by default
 nnoremap <leader>ii :IndentLinesToggle<CR>
+
+" Expand visual selection up
+call expand_region#custom_text_objects('ruby', {
+      \ 'ir' :0,
+      \ 'ar' :0,
+      \ 'im' :0,
+      \ 'am' :0,
+      \ })
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Quickfix list
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
