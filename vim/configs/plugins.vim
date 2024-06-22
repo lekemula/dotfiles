@@ -30,8 +30,13 @@ Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-cucumber'
 Plug 'tpope/vim-liquid'
+" Manage databases
 Plug 'tpope/vim-dadbod'
+" :Mkdir, :Rename, :Delete, :Move
 Plug 'tpope/vim-eunuch'
+" Convert between snake_case, camelCase, and kebab-case
+Plug 'tpope/vim-abolish'
+" Manage databases UI
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 " http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
