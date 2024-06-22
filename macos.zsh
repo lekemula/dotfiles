@@ -17,6 +17,7 @@ fi
 
 # https://github.com/ryanoasis/vim-devicons/issues/215#issuecomment-346231411
 if [[ -z $(which vim) ]] || [[ -z $(vim --version | grep "\+conceal") ]]; then
+  brew install python3
   brew install vim
 fi
 
@@ -61,7 +62,14 @@ fi
 # https://www.geekbits.io/how-to-install-nerd-fonts-on-mac/
 if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
   brew tap homebrew/cask-fonts
-  brew install font-meslo-lg-nerd-font
+  brew install font-meslo-lg-nerd-font # my current favorite
+  # Other's to consider
+  brew install --cask font-roboto-mono-nerd-font
+  brew install --cask font-hack-nerd-font
+  brew brew install --cask font-fira-code-nerd-font
+  brew install --cask font-fira-mono-nerd-font
+  brew install --cask font-monaspace-nerd-font # github's
+  brew install --cask font-jetbrains-mono-nerd-font
   echo "Don't forget to set your font settings in Iterm2 to 'MesloLGS NF': https://webinstall.dev/nerdfont/"
   echo "Press Enter to continue..."
   read
