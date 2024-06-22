@@ -26,6 +26,8 @@
 
 .DS_Store
 
+.yardoc/
+
 # Vim
 *.swp
 *.swo
