@@ -171,7 +171,10 @@ nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
 nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cword>") . "" <cr>
 nnoremap <leader>se :execute ":AgIn spec/ shared_example.*" . expand("<cword>") . "" <cr>
 
-
+" Options: |, ¦, ┆, ┊
+let g:indentLine_char = '¦'
+let g:indentLine_enabled = 0 " Disable by default
+nnoremap <leader>ii :IndentLinesToggle<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Quickfix list
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
