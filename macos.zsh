@@ -64,12 +64,13 @@ if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
   brew tap homebrew/cask-fonts
   brew install font-meslo-lg-nerd-font # my current favorite
   # Other's to consider
-  brew install --cask font-roboto-mono-nerd-font
+  brew install --cask font-roboto-mono-nerd-font # google's
   brew install --cask font-hack-nerd-font
   brew brew install --cask font-fira-code-nerd-font
   brew install --cask font-fira-mono-nerd-font
   brew install --cask font-monaspace-nerd-font # github's
   brew install --cask font-jetbrains-mono-nerd-font
+  brew install --cask font-caskaydia-mono-nerd-font # microsoft
   echo "Don't forget to set your font settings in Iterm2 to 'MesloLGS NF': https://webinstall.dev/nerdfont/"
   echo "Press Enter to continue..."
   read
