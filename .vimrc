@@ -352,6 +352,16 @@ let g:coc_snippet_prev = '<S-TAB>'
 let g:autotagStartMethod='fork'
 let g:rails_ctags_arguments=['-f tmp/tags', '-R', '--exclude=tmp', '--exclude=log', '--exclude=.git','--languages=Ruby', ' . ', '$(bundle list --paths)']
 "ctags -f tmp/tags -R --exclude=tmp --exclude=log --exclude=.git . $(bundle list --paths)
+let g:gutentags_ctags_tagfile='tmp/tags'
+set statusline+=%{gutentags#statusline()}
+let g:gutentags_ctags_extra_args = ['--ignore-unsupported-options', '--recursive', '--languages=ruby', '--exclude=tmp', '--exclude=log', '--exclude=.git']
+" Configure gutentags to include the current project's gems in the ctags
+" let g:gutentags_file_list_command = '{ find .; bundle list --paths;  } | sort | uniq'
+let g:gutentags_define_advanced_commands = 1
+
+" Project config file: .gutctags
+let g:gutentags_ctags_executable_ruby = 'ripper-tags'
+set tags+=tmp/tags
 vmap <leader>gt :call I18nTranslateString()<CR>
 vmap <leader>dt :call I18nDisplayTranslation()<CR>
 

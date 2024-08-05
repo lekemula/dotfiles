@@ -103,6 +103,7 @@ Plug 'prettier/vim-prettier', {
 Plug 'towolf/vim-helm'
 Plug 'Yggdroot/indentLine'
 Plug 'terryma/vim-expand-region'
+Plug 'ludovicchabant/vim-gutentags'
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()

@@ -40,3 +40,4 @@ config/projections.json
 # the_silver_searcher
 .ignore
 .hgignore
+.gutctags
