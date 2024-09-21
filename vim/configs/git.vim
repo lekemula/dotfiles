@@ -20,6 +20,10 @@ let g:which_key_map.g = {
 let g:gitgutter_preview_win_location='bel'
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
+omap ih <Plug>(GitGutterTextObjectInnerPending)
+omap ah <Plug>(GitGutterTextObjectOuterPending)
+xmap ih <Plug>(GitGutterTextObjectInnerVisual)
+xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 nnoremap <leader>gcu :let @" = execute('.GBrowse!')<CR>:OSCYankRegister "<CR>
 vnoremap <leader>gcu :GBrowse!<CR>
 nnoremap <leader>gbl :Git blame -C -C -C<CR>
