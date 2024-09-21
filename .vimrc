@@ -528,3 +528,5 @@ function! SyntaxGroupStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
+
+set runtimepath^=~/Projects/vscode-css-peek 
