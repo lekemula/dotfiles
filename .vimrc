@@ -390,6 +390,21 @@ nmap <leader>gcc :call YankFQN()<CR>:OSCYankRegister "<CR>
 
 " https://github.com/tpope/vim-rails/issues/503#issuecomment-1158877143
 command AC :execute "e " . eval('rails#buffer().alternate()')
+
+" Convert hash styles
+
+" 'string' => value to string: value
+nmap <leader>hsa :s/'\([^']\+\)'\s*=>\s*\([^,}]\+\)/\1: \2/g<CR>
+vmap <leader>hsa :s/'\([^']\+\)'\s*=>\s*\([^,}]\+\)/\1: \2/<CR>
+" string: value to 'string' => value
+nmap <leader>has :s/\([^: ]\+\)\s*:\s*\([^,}]\+\)/'\1' => \2/g<CR>
+vmap <leader>has :s/\([^: ]\+\)\s*:\s*\([^,}]\+\)/'\1' => \2/<CR>
+" string: value to :string => value
+nmap <leader>ha :s/\([^: ]\+\)\s*:\s*\([^,}]\+\)/:\1 => \2/g<CR>
+vmap <leader>ha :s/\([^: ]\+\)\s*:\s*\([^,}]\+\)/:\1 => \2/<CR>
+" :string => value to string: values
+nmap <leader>hs :s/:\([^ ]\+\)\s*=>\s*\([^,}]\+\)/\1: \2/g<CR>
+vmap <leader>hs :s/:\([^ ]\+\)\s*=>\s*\([^,}]\+\)/\1: \2/<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
