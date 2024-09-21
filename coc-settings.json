@@ -171,6 +171,14 @@
   "yaml.completion": true,
   "yaml.format.enable": true,
   "yaml.schemas": {
-    "https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/main/service-schema.json": ["**/.azure/**/*.yaml"]
-  }
+    "https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/main/service-schema.json": [
+      "**/.azure/**/*.yaml"
+    ]
+  },
+  "html-css-support.enable": false,
+  "html-css-support.styleSheets": [
+    "libs/**/*.scss"
+  ],
+  "cssPeek.enable": true,
+  "cssPeek.trace.server": "verbose",
 }
