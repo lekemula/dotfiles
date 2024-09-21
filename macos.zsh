@@ -270,3 +270,10 @@ if [ ! -e '/Applications/Loom.app' ]; then
   brew install --cask loom
 fi
 
+if ! command -v btop &> /dev/null; then
+  brew install btop
+fi
+
+if ! command -v tldr &> /dev/null; then
+  brew install tldr
+fi

@@ -29,6 +29,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitattributes ~/.gitattributes
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.pryrc ~/.pryrc
 [ ! -d ~/.config/solargraph ] && mkdir -p ~/.config/solargraph
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml ~/.config/solargraph/config.yml
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/btop.conf ~/.config/btop/btop.conf
 
 [ ! -d ~/vim ] && mkdir ~/vim
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/vim/coc-settings.json
