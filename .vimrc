@@ -507,7 +507,8 @@ filetype plugin indent on
 set autoindent
 set cindent
 set smartindent
-set omnifunc=syntaxcomplete#Completesss
+set omnifunc=syntaxcomplete#Complete
+let g:context_buftype_blacklist = ['nofile']
 " after a re-source, fix syntax matching issues (concealing brackets):
 " https://github.com/ryanoasis/vim-devicons/issues/154#issuecomment-222032236
 if exists('g:loaded_webdevicons')
