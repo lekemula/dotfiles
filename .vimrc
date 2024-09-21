@@ -127,6 +127,8 @@ nnoremap <leader>ll :e #<CR>
 nnoremap <leader>bd :%bd\|e#<CR>
 
 map ` :Marks<CR>
+" Search
+map <leader>S :Ag<Space>
 
 " Multi Cursor
 let g:VM_maps = {}
