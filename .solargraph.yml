@@ -2,6 +2,7 @@
 include:
   - "**/*.rb"
 exclude:
+  - "**/spec/**/*"
   - test/**/*
   - vendor/**/*
   - ".bundle/**/*"
@@ -10,7 +11,12 @@ domains: []
 plugins:
   - solargraph-rspec
   - solargraph-rails
+rspec:
+  let_methods:
+    - let_it_be
+  example_methods:
+    - my_example
 reporters:
   - rubocop
   - require_not_found
-max_files: 10000
+max_files: 20000
