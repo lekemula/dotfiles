@@ -520,3 +520,11 @@ if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
   autocmd bufwritepost ~/.vim/configs/plugins.vim source $MYVIMRC
 endif
+
+" Output the current syntax group - helpful for debugging syntax highlighting
+function! SyntaxGroupStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
