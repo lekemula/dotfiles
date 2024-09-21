@@ -284,7 +284,7 @@ nnoremap <leader>mp <Plug>MarkdownPreviewToggle
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Debugging
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:vimspector_install_gadgets = ['CodeLLDB']
+let g:vimspector_install_gadgets = ['CodeLLDB', 'vscode-js-debug']
 let g:vimspector_configurations = {
 \   "configurations": {
 \     "ruby - launch current file": {
@@ -294,6 +294,23 @@ let g:vimspector_configurations = {
 \         "request": "launch",
 \         "program": "${file}",
 \         "args": [ "*${args}"  ]
+\       }
+\     },
+\     "run - js-debug": {
+\       "adapter": "js-debug",
+\       "filetypes": [ "javascript", "typescript" ],
+\       "configuration": {
+\         "request": "launch",
+\         "program": "${file}",
+\         "cwd": "${workspaceRoot}",
+\         "stopOnEntry": "false",
+\         "type": "pwa-node"
+\       },
+\       "breakpoints": {
+\         "exception": {
+\           "all": "N",
+\           "uncaught": "N"
+\         }
 \       }
 \     }
 \   }
