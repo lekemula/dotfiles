@@ -34,7 +34,7 @@ Plug 'tpope/vim-liquid'
 Plug 'tpope/vim-dadbod'
 " :Mkdir, :Rename, :Delete, :Move
 Plug 'tpope/vim-eunuch'
-" Convert between snake_case, camelCase, and kebab-case
+" Coerce between snake_case, camelCase, and kebab-case: crs, crc, crk
 Plug 'tpope/vim-abolish'
 " Manage databases UI
 Plug 'kristijanhusak/vim-dadbod-ui'
@@ -104,6 +104,7 @@ Plug 'towolf/vim-helm'
 Plug 'Yggdroot/indentLine'
 Plug 'terryma/vim-expand-region'
 Plug 'psliwka/vim-smoothie'
+Plug 'wellle/context.vim'
 Plug 'ludovicchabant/vim-gutentags'
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
