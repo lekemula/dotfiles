@@ -21,6 +21,7 @@ alias gstap='git stash push --patch -m'
 
 alias lzd='lazydocker'
 alias lzg='lazygit'
+alias tf='thefuck'
 
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")
@@ -30,5 +31,10 @@ function lm_logseq_sync_dropbox () {
 
 # Set docker compoes profile
 function dcp(){
+  if [ -z "$1" ]; then
+    echo "Usage: dcp <profile>"
+    echo "Current profiles: $COMPOSE_PROFILES"
+    return 1
+  fi
   export COMPOSE_PROFILES=$1
 }
