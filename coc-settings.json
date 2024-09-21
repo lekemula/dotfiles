@@ -24,11 +24,13 @@
   "coc.preferences.formatOnType": true,
   "languageserver": {
     "ruby-lsp": {
-      "command": "bundle",
-      "args": ["exec", "ruby-lsp"],
+      "command": "ruby-lsp",
       "initializationOptions": {
         "enabledFeatures": [
           "codeActions",
+          "codeLens",
+          "completion",
+          //"definition",
           "diagnostics",
           "documentHighlights",
           "documentLink",
@@ -37,30 +39,64 @@
           "formatting",
           "hover",
           "inlayHint",
-          "selectionRanges"
+          "onTypeFormatting",
+          "selectionRanges",
+          "semanticHighlighting",
+          "signatureHelp",
+          "typeHierarchy",
+          "workspaceSymbol",
         ],
         "formatter": "auto"
       },
-      "filetypes": ["ruby"]
+      "filetypes": [
+        "ruby"
+      ]
     },
     "sorbet": {
       "command": "bundle",
-      "args": ["exec", "srb","typecheck", "--lsp"],
-      "filetypes": ["ruby"],
-      "rootPatterns": ["sorbet/config"],
+      "args": [
+        "exec",
+        "srb",
+        "typecheck",
+        "--lsp"
+      ],
+      "filetypes": [
+        "ruby"
+      ],
+      "rootPatterns": [
+        "sorbet/config"
+      ],
       "initializationOptions": {},
       "settings": {}
     },
     "metals": {
       "command": "metals-vim",
-      "rootPatterns": ["build.sbt"],
-      "filetypes": ["scala", "sbt"]
+      "rootPatterns": [
+        "build.sbt"
+      ],
+      "filetypes": [
+        "scala",
+        "sbt"
+      ]
     },
     "clangd": {
       "command": "clangd",
-      "filetypes": ["c", "cpp", "objc", "objcpp"],
-      "rootPatterns": [".clangd", "compile_commands.json", ".git/", ".hg/"],
-      "args": ["--compile-commands-dir=build", "--fallback-style=Google"],
+      "filetypes": [
+        "c",
+        "cpp",
+        "objc",
+        "objcpp"
+      ],
+      "rootPatterns": [
+        ".clangd",
+        "compile_commands.json",
+        ".git/",
+        ".hg/"
+      ],
+      "args": [
+        "--compile-commands-dir=build",
+        "--fallback-style=Google"
+      ],
     },
     "angular": {
       "command": "ngserver",
@@ -71,30 +107,56 @@
         "--ngProbeLocations",
         "/Users/lekemula/.nvm/versions/node/v18.19.0/lib/node_modules/@angular/language-server/node_modules/@angular/language-service"
       ],
-      "filetypes": [ "ts", "typescript", "html", "typescriptreact", "typescript.tsx" ],
-      "rootPatterns": ["angular.json", "nx.json"],
+      "filetypes": [
+        "ts",
+        "typescript",
+        "html",
+        "typescriptreact",
+        "typescript.tsx"
+      ],
+      "rootPatterns": [
+        "angular.json",
+        "nx.json"
+      ],
       "trace.server.verbosity": "verbose"
     },
     "stimulus": {
       "command": "stimulus-language-server",
-      "args": ["--stdio"],
-      "filetypes": ["html", "ruby", "eruby", "blade", "php"]
+      "args": [
+        "--stdio"
+      ],
+      "filetypes": [
+        "html",
+        "ruby",
+        "eruby",
+        "blade",
+        "php"
+      ]
     },
-		"terraform": {
-			"command": "terraform-ls",
-			"args": ["serve"],
-			"filetypes": [
-				"terraform",
-				"tf"
-			],
-			"initializationOptions": {},
-			"settings": {}
-		},
+    "terraform": {
+      "command": "terraform-ls",
+      "args": [
+        "serve"
+      ],
+      "filetypes": [
+        "terraform",
+        "tf"
+      ],
+      "initializationOptions": {},
+      "settings": {}
+    },
     "helm": {
       "command": "helm_ls",
-      "args": ["serve"],
-      "filetypes": ["helm", "helmfile"],
-      "rootPatterns": ["Chart.yaml"],
+      "args": [
+        "serve"
+      ],
+      "filetypes": [
+        "helm",
+        "helmfile"
+      ],
+      "rootPatterns": [
+        "Chart.yaml"
+      ],
       "settings": {
         "helm-ls": {
           "yamlls": {
