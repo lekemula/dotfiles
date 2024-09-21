@@ -51,3 +51,4 @@ source $(brew --prefix)/etc/bash_completion.d/az
 export XDG_CONFIG_HOME="$HOME/.config"
 
 export BAT_THEME="gruvbox-dark"
+# export JIRA_API_TOKEN=${op read "op://vpqefcys2zayxb3ojzxxux3wpe/DevPal - Jira API Key/API Key" --account=baufi24.1password.eu}
