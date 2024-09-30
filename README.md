@@ -16,5 +16,11 @@ After packages get installed you need also:
 * Set Iterm2 font config:
     * ![image](https://github.com/lekemula/dotfiles/assets/9197495/da769f84-806a-4561-b491-7a25791135f1)
 
+## Update dependencies
+
+```
+cd ~/dotfiles
+./update.zsh
+```
 ## Other
 Great tutorials on how to setup dotfiles: https://digitalfortress.tech/tutorial/create-global-gitconfig-git-alias/

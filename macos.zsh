@@ -38,6 +38,9 @@ if [[ ! -d $HOME/.nvm ]] then
   [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"  ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
   nvm install node
   npm install --global yarn
+fi
+
+if ! command -v ng &> /dev/null; then
   npm install --global @angular/cli
 fi
 
@@ -143,7 +146,7 @@ if [[ ! -d ~/.rvm/ ]] then
     rvm install ruby --latest -C --with-openssl-dir=/opt/local/libexec/openssl11
   fi
 
-  gem install solargraph ruby-debug-ide ripper-tags gem-ripper-tags
+  gem install solargraph solargraph-rspec ruby-debug-ide ripper-tags gem-ripper-tags
   # Required for pg gem
   brew install libpq
   brew install postgresql
