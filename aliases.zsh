@@ -1,13 +1,15 @@
 alias gcofzf='git checkout $(git branch --all | fzf)'
 alias gcobfzf='git checkout -b $(git branch --all | fzf)'
 alias gcob='git checkout -b'
+alias glot='glo --tags --no-walk --tags --no-walk'
 alias mkdir='mkdir -p' # create dir recursively
 alias gdb='git diff origin/main..HEAD'
 alias res='omz reload' # reload zsh
 alias lsport='lsof -i -P -n' # list ports
 alias '??=gh copilot explain'
 alias '???=gh copilot suggest'
-alias gbl='git blame -w -b -C -C -C'
+alias gbl='git blame -w -b -C -C'
+alias gbL='git blame -w -b -C -C -C'
 
 alias lm_rspec_changed='bundle exec rspec $(git status -s | awk '\''{ print $2  }'\'' | grep spec | xargs echo)'
 alias lm_rubocop_changed='bundle exec rubocop -A $(git status -s | awk '\''{ print $2  }'\'' | grep spec | xargs echo)'
@@ -22,6 +24,7 @@ alias gstap='git stash push --patch -m'
 alias lzd='lazydocker'
 alias lzg='lazygit'
 alias tf='thefuck'
+alias diff='diff -c'
 
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")
