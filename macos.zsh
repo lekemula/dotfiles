@@ -97,10 +97,12 @@ fi
 # Github CLI
 if ! command -v gh &> /dev/null; then
   brew install gh
+  brew install --cask git-credential-manager
   gh auth login
   gh auth setup-git
   eval "$(gh completion -s zsh)"
   compdef _gh gh
+  gh extension install github/gh-copilot
 fi
 
 if ! command -v bat &> /dev/null; then

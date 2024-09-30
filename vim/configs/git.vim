@@ -26,7 +26,8 @@ xmap ih <Plug>(GitGutterTextObjectInnerVisual)
 xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 nnoremap <leader>gcu :let @" = execute('.GBrowse!')<CR>:OSCYankRegister "<CR>
 vnoremap <leader>gcu :GBrowse!<CR>
-nnoremap <leader>gbl :Git blame -C -C -C<CR>
+nnoremap <leader>gbl :Git blame -C -C<CR>
+nnoremap <leader>gbL :Git blame -C -C -C<CR>
 nnoremap <leader>gbr v:GBrowse<CR>
 vnoremap <leader>gbr :GBrowse<CR>
 nnoremap <leader>gbc :execute "GBrowse " . expand("<cword>")<cr>
