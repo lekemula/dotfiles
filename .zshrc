@@ -50,4 +50,22 @@ source $(brew --prefix)/etc/bash_completion.d/az
 export XDG_CONFIG_HOME="$HOME/.config"
 
 export BAT_THEME="gruvbox-dark"
-# export JIRA_API_TOKEN=${op read "op://vpqefcys2zayxb3ojzxxux3wpe/DevPal - Jira API Key/API Key" --account=baufi24.1password.eu}
+
+if [ -f ~/.zshrc.secrets ]; then
+  # This file is not checked into source control
+  source ~/.zshrc.secrets 
+
+  if [ -z $JIRA_API_TOKEN ]; then
+    echo "${fg[red]}JIRA_API_TOKEN is not set. Please set it in ~/.zshrc.secrets${reset_color}"
+    echo "${fg[red]}You can get the value by running 'op read \"op://vpqefcys2zayxb3ojzxxux3wpe/DevPal - Jira API Key/API Key\" --account=baufi24.1password.eu'${reset_color}"
+  fi
+
+  if [ -z $BUNDLE_RUBYGEMS__PKG__GITHUB__COM ]; then
+    echo "${fg[red]}BUNDLE_RUBYGEMS__PKG__GITHUB__COM is not set. Please set it in ~/.zshrc.secrets${reset_color}"
+    echo "${fg[red]}You can get the value by running 'gh auth status --show-token'${reset_color}"
+  fi
+else
+  echo "${fg[red]}No ~/.zshrc.secrets file found. Please create one.${reset_color}"
+  echo "${fg[red]}You can copy the template from ~/.zshrc.secrets.example${reset_color}"
+  echo "${fg[red]}Run: cp ~/dotfiles/.zshrc.secrets.example ~/.zshrc.secrets${reset_color}"
+fi

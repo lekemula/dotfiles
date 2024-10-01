@@ -28,6 +28,8 @@
 
 .yardoc/
 
+.zshrc.secrets
+
 # Vim
 *.swp
 *.swo
