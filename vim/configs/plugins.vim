@@ -100,6 +100,7 @@ Plug 'vim-scripts/argtextobj.vim'
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+Plug 'pedrohdz/vim-yaml-folds'
 Plug 'towolf/vim-helm'
 Plug 'Yggdroot/indentLine'
 Plug 'terryma/vim-expand-region'
