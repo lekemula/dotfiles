@@ -106,6 +106,7 @@ if ! command -v gh &> /dev/null; then
   eval "$(gh completion -s zsh)"
   compdef _gh gh
   gh extension install github/gh-copilot
+  gh extension install dlvhdr/gh-dash
 fi
 
 if ! command -v bat &> /dev/null; then
