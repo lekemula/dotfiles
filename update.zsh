@@ -6,3 +6,4 @@ gh extension upgrade --all
 gem update --system
 gem update solargraph solargraph-rspec solargraph-rails ruby-debug-ide ripper-tags gem-ripper-tags
 npm update -g
+curl https://raw.githubusercontent.com/junegunn/fzf-git.sh/main/fzf-git.sh > fzf-git.sh

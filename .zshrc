@@ -8,6 +8,8 @@ colors
 
 # Set up custom environment variables
 source $DF_HOME/environment.zsh
+# Fuzzy git object searching
+source $DF_HOME/fzf-git.sh
 
 # Load configs for MacOS. Does nothing if not on MacOS
 if [ "$ZSH_HOST_OS" = "darwin" ]; then
