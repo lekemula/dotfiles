@@ -71,3 +71,5 @@ else
   echo "${fg[red]}You can copy the template from ~/.zshrc.secrets.example${reset_color}"
   echo "${fg[red]}Run: cp ~/dotfiles/.zshrc.secrets.example ~/.zshrc.secrets${reset_color}"
 fi
+
+eval "$(zoxide init zsh)"
