@@ -101,6 +101,8 @@ Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 Plug 'pedrohdz/vim-yaml-folds'
+" https://stackoverflow.com/a/15087735
+Plug 'konfekt/fastfold'
 Plug 'towolf/vim-helm'
 Plug 'Yggdroot/indentLine'
 Plug 'terryma/vim-expand-region'

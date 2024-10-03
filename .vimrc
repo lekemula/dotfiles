@@ -408,12 +408,9 @@ vmap <leader>hs :s/:\([^ ]\+\)\s*=>\s*\([^,}]\+\)/\1: \2/<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Folding
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" https://stackoverflow.com/a/15087735
-autocmd BufNewFile,BufRead * set foldmethod=indent " syntax causes performance issues!
-
 set foldlevel=99
-set foldmethod=indent
-" :let ruby_fold = 0
+set foldmethod=syntax
+" let ruby_fold = 1
 " set nofoldenable
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
