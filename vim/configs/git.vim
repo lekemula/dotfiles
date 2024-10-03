@@ -31,6 +31,7 @@ nnoremap <leader>gbL :Git blame -C -C -C<CR>
 nnoremap <leader>gbr v:GBrowse<CR>
 vnoremap <leader>gbr :GBrowse<CR>
 nnoremap <leader>gbc :execute "GBrowse " . expand("<cword>")<cr>
+nnoremap <leader>grv :execute "Git revert " . expand("<cword>")<cr>
 nnoremap <leader>gbpr :!gh pr view --web<cr>
 nnoremap <leader>glf :Git log --follow --oneline --decorate -- %<CR>
 nnoremap <leader>gll :execute ":!git log -L " . line(".") . "," . line(".") . ":" . expand("%")<CR>
