@@ -287,3 +287,7 @@ fi
 if ! command -v zoxide &> /dev/null; then
   brew install zoxide
 fi
+
+if ! command -v eza &> /dev/null; then
+  brew install eza
+fi
