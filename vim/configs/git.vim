@@ -2,20 +2,23 @@
 " => Git
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:which_key_map.g = {
-      \   'name': '+go/git',
-      \   'cgp':  'go-copy-path',
-      \   't':    'go-view-translate',
-      \   'cu':   'git-copy-url',
-      \   'bl':   'git-blame',
-      \   'br':   'git-browse',
-      \   'brc':  'git-browse-current',
-      \   'bpr':  'git-browse-pull-requst',
-      \   'lf':   'git-log-file',
-      \   'll':   'git-log-line',
-      \   'lm':   'git-log-method',
-      \   'd':    'git-diff',
-      \   'dh':   'git-diff-left',
-      \   'dl':   'git-diff-right',
+      \   'name':  '+go/git',
+      \   'cgp':   'go-copy-path',
+      \   't':     'go-view-translate',
+      \   'cu':    'git-copy-url',
+      \   'ccu':   'git-copy-class-url',
+      \   'cmu':   'git-copy-method-url',
+      \   'cwu':   'git-copy-word-url',
+      \   'bl':    'git-blame',
+      \   'br':    'git-browse',
+      \   'brc':   'git-browse-current',
+      \   'bpr':   'git-browse-pull-requst',
+      \   'lf':    'git-log-file',
+      \   'll':    'git-log-line',
+      \   'lm':    'git-log-method',
+      \   'd':     'git-diff',
+      \   'dh':    'git-diff-left',
+      \   'dl':    'git-diff-right',
       \ }
 let g:gitgutter_preview_win_location='bel'
 nmap ]h <Plug>(GitGutterNextHunk)
@@ -25,6 +28,9 @@ omap ah <Plug>(GitGutterTextObjectOuterPending)
 xmap ih <Plug>(GitGutterTextObjectInnerVisual)
 xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 nnoremap <leader>gcu :let @" = execute('.GBrowse!')<CR>:OSCYankRegister "<CR>
+nnoremap <leader>gccu :call GitCopyClassUrl()<CR>
+nnoremap <leader>gcmu :call GitCopyMethodUrl()<CR>
+nnoremap <leader>gcwu :call GitCopyWordUrl()<CR>
 vnoremap <leader>gcu :GBrowse!<CR>
 nnoremap <leader>gbl :Git blame -C -C<CR>
 nnoremap <leader>gbL :Git blame -C -C -C<CR>
@@ -41,3 +47,22 @@ nnoremap <leader>gdb :Gvdiffsplit origin/main<CR>
 nnoremap <leader>gdg :diffget<CR>
 nnoremap <leader>gdh :diffget //2<CR>:diffupdate<CR>
 nnoremap <leader>gdl :diffget //3<CR>:diffupdate<CR>
+
+function GitCopyClassUrl()
+  call YankFQN()
+  let @" = "[" . execute('echon trim(@0)') . "](" . trim(execute('.GBrowse!')) . ")"
+  call OSCYankRegister('"')
+endfunction
+
+function GitCopyMethodUrl()
+  call YankFQN()
+  normal "cyiw
+  let @" = "[" . execute('echon trim(@0)') . "#" . execute('echon trim(@c)') . "](" . trim(execute('.GBrowse!')) . ")"
+  call OSCYankRegister('"')
+endfunction
+
+function GitCopyWordUrl()
+  normal "cyiw
+  let @" = "[" . execute('echon trim(@c)') . "](" . trim(execute('.GBrowse!')) . ")"
+  call OSCYankRegister('"')
+endfunction
