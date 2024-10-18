@@ -129,6 +129,8 @@ nnoremap <leader>bd :%bd\|e#<CR>
 map ` :Marks<CR>
 " Search
 map <leader>S :Ag<Space>
+" Explore local directory
+map <leader>E :Explore<CR>
 
 " Multi Cursor
 let g:VM_maps = {}
@@ -172,6 +174,9 @@ nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
 " https://github.com/collectiveidea/interactor gem
 nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cword>") . "" <cr>
 nnoremap <leader>se :execute ":AgIn spec/ shared_example.*" . expand("<cword>") . "" <cr>
+" Search escaped string eg. with slashes or dots
+command! -nargs=1 Ss let @/ = <q-args>
+command! -nargs=1 SS let @/ = '\V'.escape(<q-args>, '\')
 
 " Options: |, ¦, ┆, ┊
 let g:indentLine_char = '¦'
