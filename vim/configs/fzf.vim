@@ -21,7 +21,7 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:preview-down,ctrl-u:preview-up'
 
 " - down / up / left / right
 let g:fzf_layout = { 'down': '40%' }
