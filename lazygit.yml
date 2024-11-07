@@ -8,5 +8,5 @@ keybinding:
     prevPage: <c-u>
     nextPage: <c-d>
   commits:
-    moveDownCommit: K
-    moveUpCommit: J
+    moveDownCommit: J
+    moveUpCommit: K
