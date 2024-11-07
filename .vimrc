@@ -159,8 +159,9 @@ let g:which_key_map.s =
   \   'D' : 'method-definition-WORD',
   \   'c' : 'class-definition',
   \   'f' : 'factory-definition',
-  \   't' : 'method-test',
+  \   't' : 'factory-trait',
   \   'e' : 'rspec-shared-example',
+  \   'x' : 'rspec-shared-context',
   \   'ssr' : 'service-response'
   \ }
 vnoremap <leader>s y:execute ":Ag " . shellescape("<C-r>0") . "" <cr>
@@ -172,8 +173,10 @@ nnoremap <leader>sD :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_acce
 nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "([^a-zA-Z0-9_\\n]\|\$)" <CR>
 nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
 " https://github.com/collectiveidea/interactor gem
-nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cword>") . "" <cr>
+" nnoremap <leader>st :execute ":AgIn spec/ (describe\|context).*" . expand("<cword>") . "" <cr>
+nnoremap <leader>st :execute ":AgIn spec/ (trait).*" . expand("<cword>") . "" <cr>
 nnoremap <leader>se :execute ":AgIn spec/ shared_example.*" . expand("<cword>") . "" <cr>
+nnoremap <leader>sC :execute ":AgIn spec/ shared_context.*" . expand("<cword>") . "" <cr>
 " Search escaped string eg. with slashes or dots
 command! -nargs=1 Ss let @/ = <q-args>
 command! -nargs=1 SS let @/ = '\V'.escape(<q-args>, '\')
@@ -415,7 +418,7 @@ vmap <leader>hs :s/:\([^ ]\+\)\s*=>\s*\([^,}]\+\)/\1: \2/<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set foldlevel=99
 set foldmethod=syntax
-" let ruby_fold = 1
+let ruby_fold = 1
 " set nofoldenable
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
