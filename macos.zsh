@@ -291,3 +291,7 @@ fi
 if ! command -v eza &> /dev/null; then
   brew install eza
 fi
+
+if ! command -v k9s &> /dev/null; then
+  brew install k9s
+fi
