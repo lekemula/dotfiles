@@ -3,6 +3,8 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:which_key_map.g = {
       \   'name':  '+go/git',
+      \   'ap':    'git-add-patch-current-file',
+      \   'cf':    'git-changed-files-from-main',
       \   'cgp':   'go-copy-path',
       \   't':     'go-view-translate',
       \   'cu':    'git-copy-url',
@@ -15,6 +17,7 @@ let g:which_key_map.g = {
       \   'bpr':   'git-browse-pull-requst',
       \   'lf':    'git-log-file',
       \   'll':    'git-log-line',
+      \   'lo':     'git-log',
       \   'lm':    'git-log-method',
       \   'd':     'git-diff',
       \   'dh':    'git-diff-left',
@@ -39,11 +42,14 @@ vnoremap <leader>gbr :GBrowse<CR>
 nnoremap <leader>gbc :execute "GBrowse " . expand("<cword>")<cr>
 nnoremap <leader>grv :execute "Git revert " . expand("<cword>")<cr>
 nnoremap <leader>gbpr :!gh pr view --web<cr>
+nnoremap <leader>glo :Gclog<CR>
 nnoremap <leader>glf :Git log --follow --oneline --decorate -- %<CR>
 nnoremap <leader>gll :execute ":!git log -L " . line(".") . "," . line(".") . ":" . expand("%")<CR>
 nnoremap <leader>glm :execute ":!git log -L " . ":" . expand("<cword>") . ":" . expand("%")<CR>
 nnoremap <leader>gd :Gvdiffsplit!<CR>
-nnoremap <leader>gdb :Gvdiffsplit origin/main<CR>
+nnoremap <leader>gdb :Gvdiffsplit origin/main
+nnoremap <leader>gcf :Git diff --name-only origin/main
+nnoremap <leader>gap :Git add --patch %<CR>
 nnoremap <leader>gdg :diffget<CR>
 nnoremap <leader>gdh :diffget //2<CR>:diffupdate<CR>
 nnoremap <leader>gdl :diffget //3<CR>:diffupdate<CR>
