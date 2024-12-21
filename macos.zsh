@@ -295,3 +295,7 @@ fi
 if ! command -v k9s &> /dev/null; then
   brew install k9s
 fi
+
+if ! command -v git-absorb &> /dev/null; then
+  brew install git-absorb
+fi
