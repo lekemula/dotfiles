@@ -362,10 +362,23 @@ nnoremap <Leader>p :read !pbpaste<CR>
 
 " Replace
 nmap <leader>R :%s/
+" Surround
 nmap <leader>' ysiw'
 nmap <leader>" ysiw"
+nmap <leader>) ysiw)
+nmap <leader>( ysiw(
+nmap <leader>} ysiw}
+nmap <leader>{ ysiw{
+nmap <leader>< ysiw<
+nmap <leader>> ysiw>
 vmap <leader>' S'
 vmap <leader>" S"
+vmap <leader>) S)
+vmap <leader>( S(
+vmap <leader>} S}
+vmap <leader>{ S{
+vmap <leader>< S<
+vmap <leader>> S>
 
 nnoremap <leader>ws :setlocal list!<cr>
 
