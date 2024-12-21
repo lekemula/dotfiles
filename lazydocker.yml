@@ -3,3 +3,4 @@
 # https://github.com/jesseduffield/lazydocker/blob/master/docs/Config.md
 gui:
   language: 'en'
+  returnImmediately: true
