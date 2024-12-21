@@ -167,8 +167,8 @@ let g:which_key_map.s =
 vnoremap <leader>s y:execute ":Ag " . shellescape("<C-r>0") . "" <cr>
 nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
 nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
-nnoremap <leader>sd :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor) (self\.)?(:\w+,\s)*(:)?" . expand("<cword>") . "" <cr>
-nnoremap <leader>sD :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor) (self\.)?(:\w+,\s)*(:)?" . expand("<cWORD>") . "" <cr>
+nnoremap <leader>sd :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor\|scope\|has_one\|has_many\|belongs_to\|has_and_belongs_to_many) (self\.)?(:\w+,\s)*(:)?" . expand("<cword>") . "" <cr>
+nnoremap <leader>sD :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor\|scope\|has_one\|has_many\|belongs_to\|has_and_belongs_to_many) (self\.)?(:\w+,\s)*(:)?" . expand("<cWORD>") . "" <cr>
 
 nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "([^a-zA-Z0-9_\\n]\|\$)" <CR>
 nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
