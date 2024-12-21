@@ -203,6 +203,8 @@ set errorformat+=%f
 
 let g:which_key_map.c = { 'name' : '+quickfix' }
 nnoremap <leader>cc :cc<CR>
+let g:which_key_map.c.o = 'fix-open-list'
+nnoremap <leader>co :copen<CR>
 let g:which_key_map.c.c = 'fix-current'
 nnoremap <leader>cn :cnext<CR>
 let g:which_key_map.c.n = 'fix-next'
@@ -216,6 +218,8 @@ nnoremap <leader>cs :cexpr system('find folder/**/*_files.rb')
 let g:which_key_map.c.s = 'fix-search-files'
 nnoremap <leader>cr :cexpr system("rubocop --format emacs")
 let g:which_key_map.c.r = 'fix-rubocop'
+nnoremap <leader>cb :cexpr getline(1, '$') \| copen <CR>
+let g:which_key_map.c.b = 'fix-current-buffer'
 
 function! LM_RuboCopAll()
   cexpr system("rubocop --format emacs")
