@@ -36,6 +36,10 @@ function lm_logseq_sync_dropbox () {
   rsync -av "${icloud}/Personal/" $dropbox # trailing slash means copy contents of dir
 }
 
+function lm_ruby_hash_to_json () {
+  ruby -r 'active_support/all' -ne 'puts binding.eval($_).to_json'
+}
+
 # Set docker compoes profile
 function dcp(){
   if [ -z "$1" ]; then
