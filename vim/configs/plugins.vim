@@ -51,7 +51,6 @@ Plug 'ecomba/vim-ruby-refactoring'
 " Plug 'stefanoverna/vim-i18n'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'chun-yang/auto-pairs'
-Plug 'craigemery/vim-autotag'
 " Ensure to checkout to release branch manually
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'junegunn/fzf'

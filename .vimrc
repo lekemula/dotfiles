@@ -393,7 +393,6 @@ let g:coc_snippet_prev = '<S-TAB>'
 " => Ruby/Rails
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :let ruby_spellcheck_strings = 1
-let g:autotagStartMethod='fork'
 let g:rails_ctags_arguments=['-f tmp/tags', '-R', '--exclude=tmp', '--exclude=log', '--exclude=.git','--languages=Ruby', ' . ', '$(bundle list --paths)']
 "ctags -f tmp/tags -R --exclude=tmp --exclude=log --exclude=.git . $(bundle list --paths)
 let g:gutentags_ctags_tagfile='tmp/tags'
