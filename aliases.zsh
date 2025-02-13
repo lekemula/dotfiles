@@ -8,6 +8,7 @@ alias glot='glo --tags --no-walk --tags --no-walk'
 alias mkdir='mkdir -p' # create dir recursively
 alias gdb='git diff origin/main..HEAD'
 alias res='omz reload' # reload zsh
+alias upd='~/dotfiles/update.zsh'
 alias lsport='lsof -i -P -n' # list ports
 alias '??=gh copilot explain'
 alias '???=gh copilot suggest'
