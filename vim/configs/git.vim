@@ -24,6 +24,7 @@ let g:which_key_map.g = {
       \   'dl':    'git-diff-right',
       \ }
 let g:gitgutter_preview_win_location='bel'
+let g:gitgutter_update_interval = 1000
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 omap ih <Plug>(GitGutterTextObjectInnerPending)
