@@ -27,6 +27,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitconfig ~/.gitconfig
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitignore_global ~/.gitignore_global
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitattributes ~/.gitattributes
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.pryrc ~/.pryrc
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.rdbgrc ~/.rdbgrc
 [ ! -d ~/.config/solargraph ] && mkdir -p ~/.config/solargraph
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml ~/.config/solargraph/config.yml
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/btop.conf ~/.config/btop/btop.conf
