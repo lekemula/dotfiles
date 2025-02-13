@@ -147,7 +147,7 @@ if [[ ! -d ~/.rvm/ ]] then
     rvm install ruby --latest -C --with-openssl-dir=/opt/local/libexec/openssl11
   fi
 
-  gem install solargraph solargraph-rspec ruby-debug-ide ripper-tags gem-ripper-tags vernier profile-viewer
+  gem install solargraph solargraph-rspec ruby-debug-ide ripper-tags gem-ripper-tags vernier profile-viewer bundle_update_interactive
   # Required for pg gem
   brew install libpq
   brew install postgresql
