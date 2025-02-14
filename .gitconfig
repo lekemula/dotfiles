@@ -47,3 +47,4 @@
 
 [absorb]
     maxStack=30
+    oneFixupPerCommit = true
