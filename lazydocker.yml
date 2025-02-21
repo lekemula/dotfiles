@@ -4,3 +4,15 @@
 gui:
   language: 'en'
   returnImmediately: true
+stats:
+  graphs:
+    - caption: CPU (%)
+      statPath: DerivedStats.CPUPercentage
+      color: blue
+    - caption: Memory (%)
+      statPath: DerivedStats.MemoryPercentage
+      color: green
+    - caption: Memory (total)
+      statPath: ClientStats.MemoryStats.Usage
+      color: green
+
