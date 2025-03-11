@@ -12,6 +12,8 @@ source ~/vim/setcolors.vim
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Config
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Gitgutter update
+set updatetime=300
 "https://vimdoc.sourceforge.net/htmldoc/intro.html#key-notation
 autocmd StdinReadPre * let s:std_in=0
 autocmd VimLeave * NERDTreeClose | NERDTreeClose
@@ -187,12 +189,14 @@ let g:indentLine_enabled = 0 " Disable by default
 nnoremap <leader>ii :IndentLinesToggle<CR>
 
 " Expand visual selection up
-call expand_region#custom_text_objects('ruby', {
-      \ 'ir' :0,
-      \ 'ar' :0,
-      \ 'im' :0,
-      \ 'am' :0,
-      \ })
+if !has('nvim')
+  call expand_region#custom_text_objects('ruby', {
+        \ 'ir' :0,
+        \ 'ar' :0,
+        \ 'im' :0,
+        \ 'am' :0,
+        \ })
+endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Quickfix list
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -204,7 +208,9 @@ set errorformat+=%f
 let g:which_key_map.c = { 'name' : '+quickfix' }
 nnoremap <leader>cc :cc<CR>
 let g:which_key_map.c.o = 'fix-open-list'
+let g:which_key_map.c.l = 'fix-open-list'
 nnoremap <leader>co :copen<CR>
+nnoremap <leader>cl :copen<CR>
 let g:which_key_map.c.c = 'fix-current'
 nnoremap <leader>cn :cnext<CR>
 let g:which_key_map.c.n = 'fix-next'
@@ -475,6 +481,9 @@ if has('termguicolors')
   set termguicolors
 endif
 
+" Clear search highlights
+nnoremap <Leader>/ :noh<cr> 
+
 set background=light
 set cursorline " Highlight current line
 
@@ -514,7 +523,9 @@ autocmd FileType markdown setlocal softtabstop=2
 source ~/vim/configs/copilot.vim
 source ~/vim/configs/git.vim
 source ~/vim/configs/fzf.vim
-source ~/vim/configs/coc.vim
+if !has('nvim')
+  source ~/vim/configs/coc.vim
+end
 
 " Pathogen plugins
 inoremap <C-p>r <C-r>=system('ls ~/.vim/bundle')<cr>

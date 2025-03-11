@@ -299,3 +299,7 @@ fi
 if ! command -v git-absorb &> /dev/null; then
   brew install git-absorb
 fi
+
+if ! command -v lua-language-server &> /dev/null; then
+  brew install lua-language-server
+fi

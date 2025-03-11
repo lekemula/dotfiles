@@ -17,6 +17,38 @@ call plug#begin()
 "   - e.g. `call plug#begin('~/.vim/plugged')`
 "   - Avoid using standard Vim directory names like 'plugin'
 
+" Vim-only Plugins
+if !has('nvim')
+" TODO Review ChatGPT suggested vim-only plugins and find replacements for neovim
+"   Plug 'tpope/vim-sensible'
+"   Plug 'vim-airline/vim-airline'
+"   Plug 'vim-airline/vim-airline-themes'
+"   Plug 'vim-scripts/matchit.zip'
+"   Plug 'airblade/vim-gitgutter'
+"   Plug 'chun-yang/auto-pairs'
+"   Plug 'liuchengxu/vim-which-key'
+"   Plug 'michaeljsmith/vim-indent-object'
+"   Plug 'konfekt/fastfold'
+"   Plug 'Yggdroot/indentLine'
+"   Plug 'terryma/vim-expand-region'
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+endif
+
+if has('nvim')
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-cmdline'
+  Plug 'hrsh7th/nvim-cmp'
+
+  " TODO: Make snippets work with nvim
+  " For vsnip users.
+  " Plug 'hrsh7th/cmp-vsnip'
+  " Plug 'hrsh7th/vim-vsnip'
+endif
+
 " Make sure you use single quotes
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
@@ -51,8 +83,6 @@ Plug 'ecomba/vim-ruby-refactoring'
 " Plug 'stefanoverna/vim-i18n'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'chun-yang/auto-pairs'
-" Ensure to checkout to release branch manually
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree'

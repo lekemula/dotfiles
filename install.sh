@@ -18,6 +18,9 @@ if [[ -z "$WITHOUT_ZSHRC_SYMLINK" ]]; then
   ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.zshrc ~/.zshrc
 fi
 
+CONFIG_DIR=~/.config
+[ ! -d $CONFIG_DIR ] && mkdir -p $CONFIG_DIR
+
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/aliases.zsh ~/.aliases.zsh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.vimrc ~/.vimrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.p10k.zsh ~/.p10k.zsh
@@ -28,9 +31,9 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitignore_global ~/.gitignore_glob
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitattributes ~/.gitattributes
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.pryrc ~/.pryrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.rdbgrc ~/.rdbgrc
-[ ! -d ~/.config/solargraph ] && mkdir -p ~/.config/solargraph
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml ~/.config/solargraph/config.yml
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/btop.conf ~/.config/btop/btop.conf
+[ ! -d $CONFIG_DIR/solargraph ] && mkdir -p $CONFIG_DIR/solargraph
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml $CONFIG_DIR/solargraph/config.yml
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/btop.conf $CONFIG_DIR/btop/btop.conf
 
 [ ! -d ~/vim ] && mkdir ~/vim
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/vim/coc-settings.json
@@ -38,12 +41,12 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/my-snippets ~/vim/my-snippets
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/configs ~/vim/configs
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/setcolors.vim ~/vim/setcolors.vim
 
-NEOVIM_CONFIG_DIR=~/.config/nvim
+NEOVIM_CONFIG_DIR=$CONFIG_DIR/nvim
 [ ! -d $NEOVIM_CONFIG_DIR ] && mkdir -p $NEOVIM_CONFIG_DIR
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/nvim/init.lua $NEOVIM_CONFIG_DIR/init.lua
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/.config/nvim/coc-settings.json
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/lazygit.yml ~/.config/lazygit/config.yml
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/lazydocker.yml ~/.config/lazydocker/config.yml
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/nvim/* $NEOVIM_CONFIG_DIR
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json $NEOVIM_CONFIG_DIR/coc-settings.json
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/lazygit.yml $CONFIG_DIR/lazygit/config.yml
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/lazydocker.yml $CONFIG_DIR/lazydocker/config.yml
 
 VIMSPECTOR_GADGETS_DIR=~/vim/plugged/vimspector/gadgets/custom
 [ ! -d $VIMSPECTOR_GADGETS_DIR ] && mkdir -p $VIMSPECTOR_GADGETS_DIR
