@@ -31,7 +31,7 @@ omap ih <Plug>(GitGutterTextObjectInnerPending)
 omap ah <Plug>(GitGutterTextObjectOuterPending)
 xmap ih <Plug>(GitGutterTextObjectInnerVisual)
 xmap ah <Plug>(GitGutterTextObjectOuterVisual)
-nmap ghs <Plug>(GitGutterStageHunk)
+nmap <leader>ghs <Plug>(GitGutterStageHunk)
 nnoremap <leader>gcu :let @" = execute('.GBrowse!')<CR>:OSCYankRegister "<CR>
 nnoremap <leader>gccu :call GitCopyClassUrl()<CR>
 nnoremap <leader>gcmu :call GitCopyMethodUrl()<CR>
