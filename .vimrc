@@ -64,6 +64,7 @@ let g:workspace_autocreate = 1
 let g:workspace_session_directory = $HOME . '/.vim/sessions/'
 " Manual Autosave config
 let g:workspace_autosave = 0
+let g:workspace_undodir='tmp/.undodir'
 set noswapfile
 au BufLeave * if(getbufinfo('%')[0].changed) | do BufWritePre | sil! up | do BufWritePost | endif
 
