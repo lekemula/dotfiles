@@ -27,7 +27,7 @@ fi
 
 # check if exuberant-ctags is installed and install it if not
 if [[ -z $(which ctags) ]]; then
-  brew install ctags
+  brew install universal-ctags
 fi
 
 if [[ ! -d $HOME/.nvm ]] then
