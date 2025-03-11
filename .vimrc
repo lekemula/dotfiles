@@ -130,7 +130,7 @@ nnoremap <leader>ll :e #<CR>
 " Delete all buffers except the current one
 nnoremap <leader>bd :%bd\|e#<CR>
 
-map ` :Marks<CR>
+map <leader>m :Marks<CR>
 " Search
 map <leader>S :Ag<Space>
 " Explore local directory
