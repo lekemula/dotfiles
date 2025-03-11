@@ -462,13 +462,11 @@ let g:rubycomplete_use_bundler = 1
 set splitbelow splitright
 
 " Tab navigation
-nnoremap <C-t>h :tabprevious<CR>
-nnoremap <C-t>l :tabnext<CR>
-nnoremap <C-t>t :tabnew<CR>
-nnoremap <C-t>h <Esc>:tabprevious<CR>
-nnoremap <C-t>l <Esc>:tabnext<CR>
-nnoremap <C-t>t <Esc>:tabnew<CR>
-nnoremap <C-t>q <Esc>:tabclose<CR>
+nnoremap <leader>th :tabprevious<CR>
+nnoremap <leader>tn :tabprevious<CR>
+nnoremap <leader>tl :tabnext<CR>
+nnoremap <leader>tp :tabnext<CR>
+nnoremap <leader>tN :tabnew<CR>
 
 " Make adjusing split ssdizes a bit more friendly
 noremap <silent> <C-r>j :resize +15<CR>
