@@ -3,3 +3,4 @@ vim.cmd('let &packpath = &runtimepath')
 vim.cmd('source ~/.vimrc')
 
 require('lsp_settings')
+require('copilot_settings')
