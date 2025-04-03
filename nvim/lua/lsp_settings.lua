@@ -6,6 +6,9 @@ require('nvim_cmp_settings')
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 -- Set up lspconfig.
+-- https://github.com/j-hui/fidget.nvim#options
+require("fidget").setup {} -- LSP progress indicator
+
 -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 lspconfig.solargraph.setup{

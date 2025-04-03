@@ -38,6 +38,7 @@ if has('nvim')
   Plug 'neovim/nvim-lspconfig'
   Plug 'neovim/nvim-lspconfig'
   Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'j-hui/fidget.nvim' " LSP progress
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-cmdline'
