@@ -51,3 +51,5 @@ antigen bundle docker-compose
 antigen bundle kubectl
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/helm
 antigen bundle helm
+# https://github.com/jeffreytse/zsh-vi-mode
+antigen bundle jeffreytse/zsh-vi-mode

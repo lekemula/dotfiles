@@ -8,8 +8,6 @@ colors
 
 # Set up custom environment variables
 source $DF_HOME/environment.zsh
-# Fuzzy git object searching
-source $DF_HOME/fzf-git.sh
 
 # Load configs for MacOS. Does nothing if not on MacOS
 if [ "$ZSH_HOST_OS" = "darwin" ]; then
@@ -18,12 +16,20 @@ if [ "$ZSH_HOST_OS" = "darwin" ]; then
   fi
 fi
 
+export ZVM_VI_ESCAPE_BINDKEY=jj # zsh-vi-mode
 # Load zsh plugins via Antigen
 source ~/antigen/antigen.zsh
 source $DF_HOME/antigen_bundles.zsh
 # remove comment for line below to update antigen bundles
 # bat $DF_HOME/antigen_bundles.zsh
 antigen apply
+
+function zvm_after_init() {
+  # https://github.com/junegunn/fzf-git.sh/issues/23#issuecomment-2130793362
+  bindkey -r '^G'  
+  # Fuzzy git object searching
+  source $DF_HOME/fzf-git.sh
+}
 
 source $DF_HOME/custom.zsh
 
