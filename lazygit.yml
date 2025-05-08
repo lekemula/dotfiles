@@ -3,6 +3,7 @@
 # https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md
 gui:
   scrollHeight: 4
+  nerdFontsVersion: 3
 keybinding:
   universal:
     prevPage: <c-u>
