@@ -44,6 +44,10 @@ if ! command -v ng &> /dev/null; then
   npm install --global @angular/cli
 fi
 
+if ! command yaml-language-server &> /dev/null; then
+  npm install --global yaml-language-server
+fi
+
 # https://github.com/ggreer/the_silver_searcher
 if ! command -v ag &> /dev/null; then
   brew install the_silver_searcher

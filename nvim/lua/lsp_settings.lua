@@ -28,6 +28,10 @@ lspconfig.solargraph.setup{
     }
   }
 }
+
+-- yaml
+lspconfig.yamlls.setup{}
+
 -- lua
 lspconfig.lua_ls.setup{
   on_init = function(client)
