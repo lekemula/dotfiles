@@ -25,8 +25,10 @@ if filereadable(expand("./.vim/.vimrc"))
   source ./.vim/.vimrc
 endif
 
-" Fix paste indentation
-set pastetoggle=<F2>
+if !has('nvim')
+  " Fix paste indentation
+  set pastetoggle=<F2>
+endif
 
 " Set leader key
 nnoremap <SPACE> <Nop>
