@@ -545,6 +545,11 @@ set cindent
 set smartindent
 set omnifunc=syntaxcomplete#Complete
 let g:context_buftype_blacklist = ['nofile']
+" Disable by default due to performance degradation especially on large files
+" particularly rspec files.
+" Use :ContextPeek to enable it temporarily
+let g:context_enabled = 0
+nnoremap <leader>cp :ContextPeek<CR>
 " after a re-source, fix syntax matching issues (concealing brackets):
 " https://github.com/ryanoasis/vim-devicons/issues/154#issuecomment-222032236
 if exists('g:loaded_webdevicons')
