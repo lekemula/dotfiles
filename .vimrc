@@ -241,6 +241,9 @@ nnoremap <leader>cb :cexpr getline(1, '$') \| copen <CR>
 let g:which_key_map.c.b = 'fix-current-buffer'
 noremap <leader>ca :call setqflist(getqflist() + [{'bufnr': bufnr('%'), 'lnum': line('.'), 'end_lnum': line('.'), 'col': col('.'), 'vcol': 0, 'nr': 0, 'module': '', 'type': '', 'valid': 1, 'pattern': '', 'text': escape(getline('.'), '\|\"') }])<CR>
 let g:which_key_map.c.a = 'fix-add-current-line'
+" clear quickfix list
+nnoremap <leader>cC :call setqflist([])<CR>
+let g:which_key_map.c.C = 'fix-clear-list'
 
 function! LM_RuboCopAll()
   cexpr system("rubocop --format emacs")
