@@ -8,6 +8,8 @@ require('nvim_cmp_settings')
 -- https://github.com/j-hui/fidget.nvim#options
 require("fidget").setup {} -- LSP progress indicator
 
+lspconfig.ts_ls.setup{} -- TypeScript
+
 -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
 lspconfig.solargraph.setup{
   settings = {

@@ -46,6 +46,10 @@ if ! command -v ng &> /dev/null; then
   npm install --global @angular/cli
 fi
 
+if ! command -v typescript-language-server &> /dev/null; then
+  npm install --global typescript-language-server
+fi
+
 if ! command yaml-language-server &> /dev/null; then
   npm install --global yaml-language-server
 fi
