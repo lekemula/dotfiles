@@ -1,5 +1,6 @@
 alias cd='z' # zoxide
 alias ls='eza --all --grid --icons=always --group-directories-first'
+alias lso='eza -1 --all --grid --icons=always --group-directories-first' # oneline
 alias lst='eza --all --tree --level=1 --icons=always --group-directories-first --long --no-permissions --no-user --no-time'
 alias gcofzf='git checkout $(git branch --all | fzf)'
 alias gcobfzf='git checkout -b $(git branch --all | fzf)'
