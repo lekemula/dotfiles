@@ -6,6 +6,10 @@
 " 	  - `brew install the_silver_searcher`
 "
 
+" Reset autocommands registered in this file
+autocmd!
+
+" Source settings
 source ~/vim/configs/plugins.vim
 source ~/vim/setcolors.vim
 
@@ -20,10 +24,6 @@ autocmd VimLeave * NERDTreeClose | NERDTreeClose
 autocmd BufNewFile,BufRead *.erb set filetype=eruby.html
 " https://github.com/tpope/vim-liquid/blob/fd2f0017fbc50f214db2f57c207c34cda3aa1522/syntax/liquid.vim#L34C3-L34C49
 autocmd BufNewFile,BufRead *.liquid.erb let b:liquid_subtype='eruby' | set syntax=liquid
-
-if filereadable(expand("./.vim/.vimrc"))
-  source ./.vim/.vimrc
-endif
 
 if !has('nvim')
   " Fix paste indentation
@@ -146,7 +146,11 @@ let g:VM_maps["Add Cursor Up"]   = '' " ALT + K
 imap jj <Esc>
 nnoremap H ^
 nnoremap L $
-nnoremap <F5> :source ~/.vimrc<CR>
+if !has('nvim') 
+  nnoremap <F5> :source ~/.vimrc<CR>
+else
+  nnoremap <F5> :source ~/.config/nvim/init.lua<CR>
+endif
 nnoremap <F12> :edit ~/.vimrc<CR>
 nnoremap <leader>fs :Files <CR>
 nnoremap g? :execute "!open 'https://www.google.com/search?q=" . expand("<cword>") . "'"<cr>
@@ -412,7 +416,8 @@ set statusline+=%{gutentags#statusline()}
 let g:gutentags_ctags_extra_args = ['--ignore-unsupported-options', '--recursive', '--languages=ruby', '--exclude=tmp', '--exclude=log', '--exclude=.git']
 " Configure gutentags to include the current project's gems in the ctags
 " let g:gutentags_file_list_command = '{ find .; bundle list --paths;  } | sort | uniq'
-let g:gutentags_define_advanced_commands = 1
+let g:gutentags_exclude_filetypes = ['vim']
+
 
 " Project config file: .gutctags
 let g:gutentags_ctags_executable_ruby = 'ripper-tags'
@@ -425,7 +430,7 @@ let g:yankfqn_register = '"'
 nmap <leader>gcc :call YankFQN()<CR>:OSCYankRegister "<CR>
 
 " https://github.com/tpope/vim-rails/issues/503#issuecomment-1158877143
-command AC :execute "e " . eval('rails#buffer().alternate()')
+command! AC :execute "e " . eval('rails#buffer().alternate()')
 
 " Convert hash styles
 
@@ -558,8 +563,12 @@ endif
 
 " Source the vimrc file after saving it
 if has("autocmd")
-  autocmd bufwritepost .vimrc source $MYVIMRC
-  autocmd bufwritepost ~/.vim/configs/plugins.vim source $MYVIMRC
+  if !has("nvim")
+    autocmd BufWritePost .vimrc source $MYVIMRC
+  else
+    autocmd BufWritePost init.lua source $MYVIMRC
+    autocmd BufWritePost .vimrc source $HOME/.vimrc
+  endif
 endif
 
 " Output the current syntax group - helpful for debugging syntax highlighting
