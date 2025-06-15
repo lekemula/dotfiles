@@ -44,11 +44,8 @@ if has('nvim')
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/nvim-cmp'
   Plug 'CopilotC-Nvim/CopilotChat.nvim'
-
-  " TODO: Make snippets work with nvim
-  " For vsnip users.
-  " Plug 'hrsh7th/cmp-vsnip'
-  " Plug 'hrsh7th/vim-vsnip'
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
 endif
 
 " Make sure you use single quotes
