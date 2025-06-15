@@ -17,6 +17,10 @@ rspec:
   example_methods:
     - my_example
 reporters:
+  - typecheck:strict
   - rubocop
   - require_not_found
+formatter:
+  rubocop:
+    cops: all
 max_files: 20000
