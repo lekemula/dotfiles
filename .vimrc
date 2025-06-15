@@ -12,6 +12,11 @@ autocmd!
 " Source settings
 source ~/vim/configs/plugins.vim
 source ~/vim/setcolors.vim
+source ~/vim/configs/copilot.vim
+source ~/vim/configs/fzf.vim
+if !has('nvim')
+  source ~/vim/configs/coc.vim
+end
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Config
@@ -529,13 +534,7 @@ autocmd FileType markdown setlocal shiftwidth=2
 autocmd FileType markdown setlocal tabstop=2
 autocmd FileType markdown setlocal softtabstop=2
     
-source ~/vim/configs/copilot.vim
 source ~/vim/configs/git.vim
-source ~/vim/configs/fzf.vim
-if !has('nvim')
-  source ~/vim/configs/coc.vim
-end
-
 " Pathogen plugins
 inoremap <C-p>r <C-r>=system('ls ~/.vim/bundle')<cr>
 
