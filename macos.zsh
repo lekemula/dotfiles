@@ -23,6 +23,8 @@ fi
 
 if ! command -v nvim &> /dev/null; then
   brew install neovim
+  # Install pynvim for neovim python support
+  pip3 install --user pynvim --break-system-packages
 fi
 
 # check if exuberant-ctags is installed and install it if not
