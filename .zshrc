@@ -49,7 +49,7 @@ export PATH="/opt/homebrew/opt/postgresql@12/bin:$PATH"
 
 # Load Angular CLI autocompletion.
 source <(ng completion script)
-export EDITOR="vim"
+export EDITOR="nvim"
 
 # Azure CLI completion
 source $(brew --prefix)/etc/bash_completion.d/az
