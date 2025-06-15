@@ -32,6 +32,15 @@ alias lzg='lazygit'
 alias tf='thefuck'
 alias diff='diff -c'
 
+# Finlink
+alias flb='dcb loanlink-api-finlink'
+alias fla='dcupd loanlink-api-finlink'
+alias flrspec='dcr rails-test rspec'
+alias flrspecd='dcupd rails-test'
+alias fltest='flrspec'
+alias fltestd='flrspecd'
+alias flp="yq '.services[].profiles' docker-compose.yml | sort | uniq"
+
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")
   dropbox=$(eval "echo ~/Dropbox/Documents/Logseq/Personal\ \(read\ only\)")
