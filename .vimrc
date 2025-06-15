@@ -441,6 +441,7 @@ nmap <leader>gcc :call YankFQN()<CR>:OSCYankRegister "<CR>
 command! AC :execute "e " . eval('rails#buffer().alternate()')
 
 " Convert hash styles
+nnoremap <leader>sw :Switch<CR>
 
 " 'string' => value to string: value
 nmap <leader>hsa :s/'\([^']\+\)'\s*=>\s*\([^,}]\+\)/\1: \2/g<CR>

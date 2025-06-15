@@ -138,6 +138,7 @@ Plug 'terryma/vim-expand-region'
 Plug 'psliwka/vim-smoothie'
 Plug 'wellle/context.vim'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'AndrewRadev/switch.vim'
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()
