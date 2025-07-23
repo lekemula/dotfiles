@@ -12,6 +12,7 @@ lspconfig.ts_ls.setup{} -- TypeScript
 
 -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
 lspconfig.solargraph.setup{
+  -- cmd = { "vernier", "run", "--output", "/tmp/solargraph_verier_profile.json.gz", "--", "solargraph", "stdio" },
   settings = {
     solargraph = {
       diagnostics = true,
