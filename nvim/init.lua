@@ -5,7 +5,12 @@ vim.cmd('source ~/.vimrc')
 require('lsp_settings')
 require('copilot_settings')
 require('avante').setup({
-  provider = "copilot"
+  provider = "copilot",
+  providers = {
+    copilot = {
+      model = "claude-sonnet-4",
+    }
+  }
 })
 
 -- Remove default keybinding for 'gri' for textDocument/implementation - conflicts with vim-scripts/ReplaceWithRegister

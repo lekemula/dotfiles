@@ -317,3 +317,7 @@ fi
 if ! command -v cargo &> /dev/null; then
   brew install rust
 fi
+
+if ! command -v claude  &> /dev/null; then
+  npm install -g @anthropic-ai/claude-code
+fi
