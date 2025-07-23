@@ -313,3 +313,7 @@ fi
 if ! command -v lua-language-server &> /dev/null; then
   brew install lua-language-server
 fi
+
+if ! command -v cargo &> /dev/null; then
+  brew install rust
+fi

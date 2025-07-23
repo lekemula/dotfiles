@@ -32,10 +32,14 @@ if !has('nvim')
 "   Plug 'Yggdroot/indentLine'
 "   Plug 'terryma/vim-expand-region'
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+  " fastfold messes up with avante in neovim
+  Plug 'konfekt/fastfold'
+  " copilot.lua is used for neovim
+  Plug 'github/copilot.vim'
+  " test autocompletion 
 endif
 
 if has('nvim')
-  Plug 'neovim/nvim-lspconfig'
   Plug 'neovim/nvim-lspconfig'
   Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'j-hui/fidget.nvim' " LSP progress
@@ -47,6 +51,13 @@ if has('nvim')
   Plug 'CopilotC-Nvim/CopilotChat.nvim'
   Plug 'SirVer/ultisnips'
   Plug 'honza/vim-snippets'
+  " Avante Deps
+  " Plug 'nvim-lua/plenary.nvim'
+  Plug 'MunifTanjim/nui.nvim'
+  Plug 'MeanderingProgrammer/render-markdown.nvim'
+  Plug 'stevearc/dressing.nvim' " for enhanced input UI
+  Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+  Plug 'zbirenbaum/copilot.lua'
 endif
 
 " Make sure you use single quotes
@@ -74,7 +85,6 @@ Plug 'kristijanhusak/vim-dadbod-completion'
 " http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
 Plug 'godlygeek/tabular'
 Plug 'vim-test/vim-test'
-Plug 'github/copilot.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'ngmy/vim-rubocop'
 Plug 'vim-scripts/matchit.zip'
@@ -131,7 +141,6 @@ Plug 'prettier/vim-prettier', {
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 Plug 'pedrohdz/vim-yaml-folds'
 " https://stackoverflow.com/a/15087735
-Plug 'konfekt/fastfold'
 Plug 'towolf/vim-helm'
 Plug 'Yggdroot/indentLine'
 Plug 'terryma/vim-expand-region'
