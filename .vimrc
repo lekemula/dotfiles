@@ -184,6 +184,7 @@ nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
 nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
 nnoremap <leader>sd :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor\|scope\|has_one\|has_many\|belongs_to\|has_and_belongs_to_many) (self\.)?(:\w+,\s)*(:)?" . expand("<cword>") . "" <cr>
 nnoremap <leader>sD :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor\|scope\|has_one\|has_many\|belongs_to\|has_and_belongs_to_many) (self\.)?(:\w+,\s)*(:)?" . expand("<cWORD>") . "" <cr>
+nnoremap <leader>sl :execute ":/let\(:" . expand("<cword>") . "\)" <cr>
 
 nnoremap <leader>sc :execute ":Ag (class\|module) (.*::)*" . expand("<cword>") . "([^a-zA-Z0-9_\\n]\|\$)" <CR>
 nnoremap <leader>sf :execute ":Ag factory :" . expand("<cword>") . "" <cr>
@@ -460,7 +461,6 @@ vmap <leader>hs :s/:\([^ ]\+\)\s*=>\s*\([^,}]\+\)/\1: \2/<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set foldlevel=99
 set foldmethod=syntax
-let ruby_fold = 1
 " set nofoldenable
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -537,7 +537,7 @@ set shiftwidth=2
 autocmd FileType markdown setlocal shiftwidth=2
 autocmd FileType markdown setlocal tabstop=2
 autocmd FileType markdown setlocal softtabstop=2
-    
+  
 source ~/vim/configs/git.vim
 " Pathogen plugins
 inoremap <C-p>r <C-r>=system('ls ~/.vim/bundle')<cr>
@@ -557,7 +557,7 @@ let g:context_buftype_blacklist = ['nofile']
 " particularly rspec files.
 " Use :ContextPeek to enable it temporarily
 let g:context_enabled = 0
-nnoremap <leader>cp :ContextPeek<CR>
+nnoremap <leader>cP :ContextPeek<CR>
 " after a re-source, fix syntax matching issues (concealing brackets):
 " https://github.com/ryanoasis/vim-devicons/issues/154#issuecomment-222032236
 if exists('g:loaded_webdevicons')
