@@ -29,6 +29,7 @@
 .yardoc/
 
 .zshrc.secrets
+.claude
 
 # Vim
 *.swp

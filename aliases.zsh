@@ -31,6 +31,7 @@ alias lzd='lazydocker'
 alias lzg='lazygit'
 alias tf='thefuck'
 alias diff='diff -c'
+alias dcpl="yq '.services[].profiles' docker-compose.yml | sort | uniq"
 
 # Finlink
 alias flb='dcb loanlink-api-finlink'
@@ -39,7 +40,6 @@ alias flrspec='dcr rails-test rspec'
 alias flrspecd='dcupd rails-test'
 alias fltest='flrspec'
 alias fltestd='flrspecd'
-alias flp="yq '.services[].profiles' docker-compose.yml | sort | uniq"
 
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")
@@ -60,3 +60,13 @@ function dcp(){
   fi
   export COMPOSE_PROFILES=$1
 }
+
+lm_docker_compose_services_with_profile() {
+  profile=$1
+  if [ -z "$profile" ]; then
+    profile=$COMPOSE_PROFILES
+  fi
+
+  yq e ".services | with_entries(select(.value.profiles[] == \"$profile\")) | keys" docker-compose.yml
+}
+alias 'dcps=lm_docker_compose_services_with_profile'
