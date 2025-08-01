@@ -4,6 +4,9 @@ vim.cmd('source ~/.vimrc')
 
 require('lsp_settings')
 require('copilot_settings')
+require('render-markdown').setup({
+  file_types = { "markdown", "Avante" }
+})
 require('avante').setup({
   provider = "copilot",
 })
