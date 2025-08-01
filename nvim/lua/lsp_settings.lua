@@ -16,7 +16,7 @@ lspconfig.solargraph.setup{
   settings = {
     solargraph = {
       diagnostics = true,
-      logLevel = "debug"
+      logLevel = os.getenv("SOLARGRAPH_LOG_LEVEL") or "warn"
     }
   }
 }
