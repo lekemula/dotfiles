@@ -48,9 +48,10 @@ fi
 
 if ! command -v typescript-language-server &> /dev/null; then
   npm install --global typescript-language-server
+  npm install --global angular/language-service
 fi
 
-if ! command yaml-language-server &> /dev/null; then
+if ! command -v yaml-language-server &> /dev/null; then
   npm install --global yaml-language-server
 fi
 
@@ -75,7 +76,7 @@ fi
 # https://www.geekbits.io/how-to-install-nerd-fonts-on-mac/
 if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
   brew tap homebrew/cask-fonts
-  brew install font-meslo-lg-nerd-font # my current favorite
+  brew install --cask font-meslo-lg-nerd-font # my current favorite
   # Other's to consider
   brew install --cask font-roboto-mono-nerd-font # google's
   brew install --cask font-hack-nerd-font
@@ -320,4 +321,9 @@ fi
 
 if ! command -v claude  &> /dev/null; then
   npm install -g @anthropic-ai/claude-code
+fi
+
+# zsh-autocomplete via brew
+if [[ ! -d "$HOMEBREW_PREFIX/opt/zsh-autocomplete" ]]; then
+  brew install zsh-autocomplete
 fi

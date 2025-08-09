@@ -22,11 +22,30 @@ source ~/antigen/antigen.zsh
 # Use antigen init for better performance
 antigen init ~/.antigenrc
 
+# Plugins conflicting with zsh-vi-mode
 function zvm_after_init() {
+  # Fix fzf tab completion with zsh-vi-mode
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
   # https://github.com/junegunn/fzf-git.sh/issues/23#issuecomment-2130793362
   bindkey -r '^G'  
   # Fuzzy git object searching
   source $DF_HOME/fzf-git.sh
+  
+  # Configure zsh-autocomplete before loading to prevent conflicts
+  zstyle ':autocomplete:*' fzf-completion no
+  zstyle ':autocomplete:*' recent-dirs no
+  zstyle ':autocomplete:*' widget-style menu-select
+   
+  # Fix zsh-autocomplete tab navigation with vi-mode
+  bindkey '^N' menu-select
+  bindkey '^P' reverse-menu-complete
+  bindkey -M menuselect '^N' menu-complete
+  bindkey -M menuselect '^P' reverse-menu-complete
+  
+  # Use Ctrl-F for fzf file completion instead of **<tab>
+  bindkey '^F' fzf-file-widget
+  bindkey '^T' fzf-file-widget
+  bindkey '^R' fzf-history-widget
 }
 
 source $DF_HOME/custom.zsh
@@ -83,3 +102,4 @@ eval "$(zoxide init zsh)"
 
 ASYNCAPI_AC_ZSH_SETUP_PATH=/Users/lekemula/Library/Caches/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
 
+source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
