@@ -53,3 +53,6 @@ antigen bundle kubectl
 antigen bundle helm
 # https://github.com/jeffreytse/zsh-vi-mode
 antigen bundle jeffreytse/zsh-vi-mode
+
+# Tell Antigen that you're done.
+antigen apply

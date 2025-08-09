@@ -19,10 +19,8 @@ fi
 export ZVM_VI_ESCAPE_BINDKEY=jj # zsh-vi-mode
 # Load zsh plugins via Antigen
 source ~/antigen/antigen.zsh
-source $DF_HOME/antigen_bundles.zsh
-# remove comment for line below to update antigen bundles
-# bat $DF_HOME/antigen_bundles.zsh
-antigen apply
+# Use antigen init for better performance
+antigen init ~/.antigenrc
 
 function zvm_after_init() {
   # https://github.com/junegunn/fzf-git.sh/issues/23#issuecomment-2130793362
@@ -84,5 +82,4 @@ eval "$(zoxide init zsh)"
 # AsyncAPI CLI Autocomplete
 
 ASYNCAPI_AC_ZSH_SETUP_PATH=/Users/lekemula/Library/Caches/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
-
 

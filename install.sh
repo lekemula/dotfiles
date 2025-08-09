@@ -31,6 +31,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitignore_global ~/.gitignore_glob
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.gitattributes ~/.gitattributes
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.pryrc ~/.pryrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.rdbgrc ~/.rdbgrc
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.antigenrc ~/.antigenrc
 [ ! -d ~/.claude ] && mkdir -p ~/.claude
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude.json ~/.claude/settings.json
 [ ! -d $CONFIG_DIR/solargraph ] && mkdir -p $CONFIG_DIR/solargraph
