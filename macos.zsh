@@ -323,6 +323,14 @@ if ! command -v claude  &> /dev/null; then
   npm install -g @anthropic-ai/claude-code
 fi
 
+if ! command -v tree &> /dev/null; then
+  brew install tree
+fi
+
+if ! command -v dive &> /dev/null; then
+  brew install dive
+fi
+
 # zsh-autocomplete via brew
 if [[ ! -d "$HOMEBREW_PREFIX/opt/zsh-autocomplete" ]]; then
   brew install zsh-autocomplete

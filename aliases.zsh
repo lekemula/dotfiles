@@ -25,6 +25,7 @@ alias kns='kubens'
 alias ks='kubectx && kubens'
 alias ke='keti'
 alias dcr='docker-compose run --rm'
+alias did='dive' # dive into docker image
 alias gstap='git stash push --patch -m'
 
 alias lzd='lazydocker'
