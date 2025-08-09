@@ -53,6 +53,8 @@ antigen bundle kubectl
 antigen bundle helm
 # https://github.com/jeffreytse/zsh-vi-mode
 antigen bundle jeffreytse/zsh-vi-mode
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/rake-fast
+antigen bundle rake-fast
 
 # Tell Antigen that you're done.
 antigen apply
