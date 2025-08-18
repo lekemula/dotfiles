@@ -20,6 +20,18 @@ lspconfig.ts_ls.setup{
   root_dir = require("lspconfig")["util"].root_pattern("tsconfig.json", "tsconfig.base.json", "tsconfig.lib.json", "package.json", ".git")
 }
 
+-- AngularLSP
+-- use globally installed ngserver
+local node_path = os.getenv("NPM_PATH") or os.execute("npm root -g")
+local tsProbeLocations = node_path .. "/typescript/lib"
+local ngProbeLocations = node_path .. "/@angular/language-server/bin"
+local cmd = {"ngserver", "--stdio", "--tsProbeLocations", tsProbeLocations , "--ngProbeLocations", ngProbeLocations}
+
+lspconfig.angularls.setup{
+  cmd = cmd,
+  root_dir = require("lspconfig")["util"].root_pattern("tsconfig.json", "tsconfig.base.json", "tsconfig.lib.json", "package.json", ".git")
+}
+
 -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
 lspconfig.solargraph.setup{
   -- cmd = { "vernier", "run", "--output", "/tmp/solargraph_verier_profile.json.gz", "--", "solargraph", "stdio" },
