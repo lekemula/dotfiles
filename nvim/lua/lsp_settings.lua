@@ -49,8 +49,20 @@ lspconfig.angularls.setup{
 }
 
 -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local timestamped_output_file = "/tmp/solargraph_vernier_profile_" .. os.date("%Y%m%d%H%M%S") .. ".json.gz"
+
+if os.getenv("SOLARGRAPH_PROFILE") then
+  -- cmd = { "vernier", "run", "--allocation-interval", "10", "--output", timestamped_output_file, "--", "solargraph", "stdio" }
+  cmd = { "vernier", "run", "--output", timestamped_output_file, "--", "solargraph", "stdio" }
+elseif os.getenv("SOLARGRAPH_PROFILE_MEMORY") then
+  -- ruby-memory-profiler run --pretty --output solargraph_memory_profile.json.gz -- solargraph stdio
+  cmd = { "ruby-memory-profiler", "run", "--pretty", "--output", timestamped_output_file, "--", "solargraph", "stdio" }
+else
+  cmd = { "solargraph", "stdio" }
+end
+
 lspconfig.solargraph.setup{
-  -- cmd = { "vernier", "run", "--output", "/tmp/solargraph_verier_profile.json.gz", "--", "solargraph", "stdio" },
+  cmd = cmd,
   settings = {
     solargraph = {
       diagnostics = true,
