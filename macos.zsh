@@ -49,6 +49,7 @@ fi
 if ! command -v typescript-language-server &> /dev/null; then
   npm install --global typescript-language-server
   npm install --global angular/language-service
+  npm install --global vscode-langservers-extracted
 fi
 
 if ! command -v yaml-language-server &> /dev/null; then

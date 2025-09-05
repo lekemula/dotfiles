@@ -20,6 +20,22 @@ lspconfig.ts_ls.setup{
   root_dir = require("lspconfig")["util"].root_pattern("tsconfig.json", "tsconfig.base.json", "tsconfig.lib.json", "package.json", ".git")
 }
 
+-- Javascript/Typescript ESLint
+local base_on_attach = vim.lsp.config.eslint.on_attach
+vim.lsp.config("eslint", {
+  on_attach = function(client, bufnr)
+    if not base_on_attach then return end
+
+    base_on_attach(client, bufnr)
+    -- Format on save
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      command = "LspEslintFixAll",
+    })
+  end,
+})
+vim.lsp.enable('eslint')
+
 -- AngularLSP
 -- use globally installed ngserver
 local node_path = os.getenv("NPM_PATH") or os.execute("npm root -g")
@@ -87,10 +103,11 @@ vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap 
 vim.api.nvim_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'gtd', '<cmd>lua vim.lsp.buf.type_definition()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'grf', '<cmd>lua vim.lsp.buf.references()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ar', '<cmd>lua vim.lsp.codelens.run()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fa', '<cmd>lua vim.lsp.buf.code_action()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fr', '<cmd>lua vim.lsp.codelens.run()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>O', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', { noremap = true, silent = true })
 vim.keymap.set("n", "[e", vim.diagnostic.goto_prev, { noremap = true, silent = true })
 vim.keymap.set("n", "]e", vim.diagnostic.goto_next, { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fd', '<cmd>lua vim.lsp.buf.format()<CR>', { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>e", vim.diagnostic.setqflist, { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fd', '<cmd>lua vim.lsp.buf.format({timeout_ms = 10000})<CR>', { noremap = true, silent = true })
