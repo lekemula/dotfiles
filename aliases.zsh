@@ -68,6 +68,24 @@ function dcp(){
   export COMPOSE_PROFILES=$1
 }
 
+# docker compose profiles switch
+function dcpsw() {
+  if [ -z "$1" ]; then
+    echo "Usage: dcp_switch <profile>"
+    echo "Current profiles: $COMPOSE_PROFILES"
+    return 1
+  fi
+
+  if [[ ":$COMPOSE_PROFILES:" != *":$1:"* ]]; then
+    docker-compose down
+    export COMPOSE_PROFILES="$1"
+    docker-compose up --detach
+    echo "Switched to profile: $COMPOSE_PROFILES"
+  else
+    echo "Profile '$1' is already active."
+  fi
+}
+
 lm_docker_compose_services_with_profile() {
   profile=$1
   if [ -z "$profile" ]; then
