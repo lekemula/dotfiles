@@ -452,6 +452,9 @@ nmap <leader>gcc :call YankFQN()<CR>:OSCYankRegister "<CR>
 " https://github.com/tpope/vim-rails/issues/503#issuecomment-1158877143
 command! AC :execute "e " . eval('rails#buffer().alternate()')
 
+command! RubocopAll :call LM_RuboCopAll()
+command! Rubocop :silent !rubocop --autocorrect %
+
 " Convert hash styles
 nnoremap <leader>sw :Switch<CR>
 

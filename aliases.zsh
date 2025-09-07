@@ -58,7 +58,7 @@ function lm_ruby_hash_to_json () {
   ruby -r 'active_support/all' -ne 'puts binding.eval($_).to_json'
 }
 
-# Set docker compoes profile
+# Set docker compose profile
 function dcp(){
   if [ -z "$1" ]; then
     echo "Usage: dcp <profile>"
