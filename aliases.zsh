@@ -17,6 +17,12 @@ alias ghd='gh dash'
 alias gbl='git blame -w -b -C -C'
 alias gbL='git blame -w -b -C -C -C'
 
+# git-jump aliases
+alias gjd='git jump diff'
+alias gjm='git jump merge'
+alias gjg='git jump grep'
+alias gjs='git jump staged'
+
 alias lm_rspec_changed='bundle exec rspec $(git status -s | awk '\''{ print $2  }'\'' | grep spec | xargs echo)'
 alias lm_rubocop_changed='bundle exec rubocop -A $(git status -s | awk '\''{ print $2  }'\'' | grep spec | xargs echo)'
 alias weather='curl wttr.in'

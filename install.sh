@@ -60,3 +60,14 @@ if ! command -v imgcat &> /dev/null; then
   sudo curl https://iterm2.com/utilities/imgcat -o /usr/local/bin/imgcat
   sudo chmod +x /usr/local/bin/imgcat
 fi
+
+# Create symlinks for custom scripts in bin directory
+BIN_DIR=~/$PERSONAL_DOTFILES_DIRECTORY_NAME/bin
+if [ -d $BIN_DIR ]; then
+  for script in $BIN_DIR/*; do
+    if [ -f "$script" ] && [ -x "$script" ]; then
+      script_name=$(basename "$script")
+      sudo ln -vsfn "$script" "/usr/local/bin/$script_name"
+    fi
+  done
+fi

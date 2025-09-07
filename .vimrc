@@ -237,8 +237,16 @@ nnoremap <leader>cs :call LM_ChangedSpecs()<CR>
 let g:which_key_map.c.s = 'fix-git-changed-specs'
 nnoremap <leader>cf :call LM_ChangedFiles()<CR>
 let g:which_key_map.c.f = 'fix-git-changed-files'
-nnoremap <leader>cs :cexpr system('find folder/**/*_files.rb')
+nnoremap <leader>cs :cexpr system('find replace-me/**/*_some_files.rb')
 let g:which_key_map.c.s = 'fix-search-files'
+" HACK: `cat --` is a way to hack around `-c` flag that git jump diff uses to open editor
+let g:which_key_map.c.g = {
+      \ 'd': 'fix-git-changed-diffs',
+      \ 'm': 'fix-git-merge-conflicts'
+      \ }
+nnoremap <leader>cgd :cexpr system("git jump --stdout diff")<CR>
+nnoremap <leader>cgc :cexpr system("git jump --stdout merge")<CR>
+
 nnoremap <leader>cr :cexpr system("rubocop --format emacs")
 let g:which_key_map.c.r = 'fix-rubocop'
 nnoremap <leader>cb :cexpr getline(1, '$') \| copen <CR>
