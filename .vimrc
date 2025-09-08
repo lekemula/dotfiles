@@ -249,6 +249,8 @@ nnoremap <leader>cgc :cexpr system("git jump --stdout merge")<CR>
 
 nnoremap <leader>cr :cexpr system("rubocop --format emacs")
 let g:which_key_map.c.r = 'fix-rubocop'
+nnoremap <leader>ct :cexpr system("bundle exec solargraph typecheck --level strict")
+let g:which_key_map.c.t = 'fix-solargraph-typecheck'
 nnoremap <leader>cb :cexpr getline(1, '$') \| copen <CR>
 let g:which_key_map.c.b = 'fix-current-buffer'
 noremap <leader>ca :call setqflist(getqflist() + [{'bufnr': bufnr('%'), 'lnum': line('.'), 'end_lnum': line('.'), 'col': col('.'), 'vcol': 0, 'nr': 0, 'module': '', 'type': '', 'valid': 1, 'pattern': '', 'text': escape(getline('.'), '\|\"') }])<CR>
