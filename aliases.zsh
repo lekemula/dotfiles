@@ -95,3 +95,8 @@ lm_docker_compose_services_with_profile() {
   yq e ".services | with_entries(select(.value.profiles[] == \"$profile\")) | keys" docker-compose.yml
 }
 alias 'dcps=lm_docker_compose_services_with_profile'
+
+lm_rubocop_on_vim(){
+  rubocop --format emacs $@ -o tmp/rubocop_failures || nvim -q tmp/rubocop_failures
+}
+alias vrubocop='lm_rubocop_on_vim'
