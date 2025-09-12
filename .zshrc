@@ -103,3 +103,5 @@ eval "$(zoxide init zsh)"
 ASYNCAPI_AC_ZSH_SETUP_PATH=/Users/lekemula/Library/Caches/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
 
 source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
+source $DF_HOME/tmux-nvim-click.zsh
