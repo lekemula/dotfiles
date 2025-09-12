@@ -37,7 +37,7 @@ alias gstap='git stash push --patch -m'
 alias lzd='lazydocker'
 alias lzg='lazygit'
 alias tf='thefuck'
-alias diff='diff -c'
+alias diff='diff -u'
 alias dcpl="yq '.services[].profiles' docker-compose.yml | sort | uniq"
 
 # Finlink
