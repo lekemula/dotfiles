@@ -242,7 +242,7 @@ let g:which_key_map.c.s = 'fix-search-files'
 " HACK: `cat --` is a way to hack around `-c` flag that git jump diff uses to open editor
 let g:which_key_map.c.g = {
       \ 'd': 'fix-git-changed-diffs',
-      \ 'm': 'fix-git-merge-conflicts'
+      \ 'c': 'fix-git-merge-conflicts'
       \ }
 nnoremap <leader>cgd :cexpr system("git jump --stdout diff")<CR>
 nnoremap <leader>cgc :cexpr system("git jump --stdout merge")<CR>
