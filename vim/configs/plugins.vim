@@ -55,7 +55,8 @@ if has('nvim')
   Plug 'MunifTanjim/nui.nvim'
   Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'stevearc/dressing.nvim' " for enhanced input UI
-  Plug 'yetone/avante.nvim', { 'branch': 'main', 'do': 'make' }
+  " https://github.com/yetone/avante.nvim/issues/2689#issuecomment-3288641336
+  Plug 'yetone/avante.nvim', { 'tag': 'v0.0.27', 'do': 'make' }
   Plug 'zbirenbaum/copilot.lua'
 endif
 
