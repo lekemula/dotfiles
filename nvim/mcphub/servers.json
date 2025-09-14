@@ -1,5 +1,14 @@
 {
   "servers": {
+    "fetch": {
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "mcp/fetch"
+      ],
+      "command": "docker"
+    },
     "github": {
       "headers": {
         "Authorization": "Bearer ${cmd: gh auth token}"
