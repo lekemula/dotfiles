@@ -1,0 +1,10 @@
+{
+  "servers": {
+    "github": {
+      "headers": {
+        "Authorization": "Bearer ${cmd: gh auth token}"
+      },
+      "url": "https://api.githubcopilot.com/mcp/"
+    }
+  }
+}

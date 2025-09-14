@@ -58,6 +58,7 @@ if has('nvim')
   Plug 'stevearc/dressing.nvim' " for enhanced input UI
   " https://github.com/yetone/avante.nvim/issues/2689#issuecomment-3288641336
   Plug 'yetone/avante.nvim', { 'tag': 'v0.0.27', 'do': 'make' }
+  Plug 'ravitemer/mcphub.nvim', { 'do': 'npm install -g mcp-hub@latest' }
   Plug 'zbirenbaum/copilot.lua'
 endif
 
