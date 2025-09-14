@@ -36,7 +36,7 @@
 *.swo
 .undodir/
 .vim/*
-tags*
+**/tags
 projections.json
 .projections.json
 config/projections.json
