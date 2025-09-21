@@ -10,5 +10,9 @@ require("copilot").setup({
       prev = "<M-k>",
       dismiss = "<C-h>",
     },
+  },
+  filetypes = {
+    yaml = true,
+    yml = true,
   }
 })
