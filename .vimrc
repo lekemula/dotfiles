@@ -259,8 +259,9 @@ let g:which_key_map.c.g = {
       \ }
 nnoremap <leader>cgd :cexpr system("git jump --stdout diff")<CR>
 nnoremap <leader>cgc :cexpr system("git jump --stdout merge")<CR>
-nnoremap <leader>cr :cexpr system("bundle exec rubocop -A $(git status -s \| awk '{ print $2 }' \| grep spec \| xargs echo) --format emacs")
-let g:which_key_map.c.r = 'fix-rubocop'
+nnoremap <leader>cR :cexpr system("bundle exec rubocop -A $(git status -s \| awk '{ print $2 }' \| grep spec \| xargs echo) --format emacs")
+" NOTE: cr conflicts with vim-abolish CoeRce
+let g:which_key_map.c.R = 'fix-rubocop'
 nnoremap <leader>ct :cexpr system("bundle exec solargraph typecheck --level strict")
 let g:which_key_map.c.t = 'fix-solargraph-typecheck'
 nnoremap <leader>cb :cexpr getline(1, '$') \| copen <CR>
