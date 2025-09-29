@@ -214,6 +214,19 @@ if !has('nvim')
         \ 'am' :0,
         \ })
 endif
+
+" Code outline
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+set statusline+=%{NearestMethodOrFunction()}
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+if has('nvim')
+  let g:vista_default_executive = 'nvim_lsp'
+else
+  let g:vista_default_executive = 'coc'
+endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Quickfix list
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -150,6 +150,8 @@ Plug 'psliwka/vim-smoothie'
 Plug 'wellle/context.vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'AndrewRadev/switch.vim'
+" Vista - Symbol navigator for LSP symbols and tags
+Plug 'liuchengxu/vista.vim'
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
 call plug#end()

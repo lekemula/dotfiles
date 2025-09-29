@@ -35,6 +35,7 @@ function zvm_after_init() {
   zstyle ':autocomplete:*' fzf-completion no
   zstyle ':autocomplete:*' recent-dirs no
   zstyle ':autocomplete:*' widget-style menu-select
+  zstyle ':autocomplete:*' delay 0.2  # seconds (float)
    
   # Fix zsh-autocomplete tab navigation with vi-mode
   bindkey '^N' menu-select
