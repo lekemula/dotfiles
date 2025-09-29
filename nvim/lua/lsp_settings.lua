@@ -111,6 +111,19 @@ lspconfig.lua_ls.setup{
 
 -- Keymaps for LSP actions
 vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
+
+-- Automatically fetch workspace symbols (silently) for Ruby files
+-- Symbols are fetched but not displayed in quickfix, in order to pre-cache Solargraph symbols for faster subsequent searches
+-- Mimics the same behaviour as VScode's Solargraph extension with `"solargraph.symbols": true` (default)
+-- See: https://github.com/castwide/solargraph/pull/1029#issuecomment-3229874738
+vim.api.nvim_create_autocmd("BufReadPost", {
+  pattern = "*.rb",
+  callback = function()
+    vim.lsp.buf_request(0, 'textDocument/documentSymbol', vim.lsp.util.make_position_params(), function(err, result)
+      -- do nothing, just fetch symbols to warm up the cache
+    end)
+  end,
+})
 vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', 'gtd', '<cmd>lua vim.lsp.buf.type_definition()<CR>', { noremap = true, silent = true })
