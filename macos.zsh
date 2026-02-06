@@ -336,3 +336,8 @@ fi
 if [[ ! -d "$HOMEBREW_PREFIX/opt/zsh-autocomplete" ]]; then
   brew install zsh-autocomplete
 fi
+
+# Install OpenCode for macOS
+if ! command -v opencode &> /dev/null; then
+  brew install opencode
+fi
