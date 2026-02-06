@@ -130,7 +130,6 @@ vim.api.nvim_set_keymap('n', 'gtd', '<cmd>lua vim.lsp.buf.type_definition()<CR>'
 vim.api.nvim_set_keymap('n', 'grf', '<cmd>lua vim.lsp.buf.references()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fa', '<cmd>lua vim.lsp.buf.code_action()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fr', '<cmd>lua vim.lsp.codelens.run()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>o', '<cmd>Vista<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>O', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', { noremap = true, silent = true })
 vim.keymap.set("n", "[e", vim.diagnostic.goto_prev, { noremap = true, silent = true })
 vim.keymap.set("n", "]e", vim.diagnostic.goto_next, { noremap = true, silent = true })

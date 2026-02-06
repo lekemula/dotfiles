@@ -57,6 +57,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/vimspector/gadgets/custom/cust_
 
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/bin/tmux-nvim-click.sh /usr/local/bin/tmux-nvim-click.sh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/nvim/mcphub/servers.json $CONFIG_DIR/mcphub/servers.json
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/opencode.json ~/.opencode.json
 
 if ! command -v imgcat &> /dev/null; then
   # https://iterm2.com/documentation-images.html
