@@ -1,0 +1,19 @@
+{
+  "solargraph": {
+    "command": "solargraph",
+    "args": ["stdio"],
+    "extensionToLanguage": {
+      ".rb": "ruby",
+      ".rake": "ruby",
+      ".gemspec": "ruby"
+    },
+    "initializationOptions": {},
+    "settings": {
+      "solargraph": {
+        "diagnostics": true,
+        "completion": true,
+        "hover": true
+      }
+    }
+  }
+}

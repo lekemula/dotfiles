@@ -1,0 +1,15 @@
+{
+  "name": "local-plugins",
+  "description": "Local custom plugins",
+  "owner": {
+    "name": "lekemula"
+  },
+  "plugins": [
+    {
+      "name": "solargraph",
+      "description": "Solargraph LSP for Ruby",
+      "version": "1.0.0",
+      "source": "./solargraph"
+    }
+  ]
+}
