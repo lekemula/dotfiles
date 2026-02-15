@@ -276,6 +276,10 @@ if ! command -v yaml-language-server &> /dev/null; then
   npm install --global yaml-language-server 
 fi
 
+if ! command -v vscode-json-language-server &> /dev/null; then
+  npm install --global vscode-langservers-extracted
+fi
+
 if ! command -v lazydocker &> /dev/null; then
   brew install lazydocker
 fi
