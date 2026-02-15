@@ -39,6 +39,9 @@ alias lzg='lazygit'
 alias tf='thefuck'
 alias diff='diff -u'
 alias dcpl="yq '.services[].profiles' docker-compose.yml | sort | uniq"
+alias co='claude'
+alias coc='claude -c'
+alias occ='opencode -c'
 
 # Finlink
 alias flb='dcb loanlink-api-finlink'
@@ -100,3 +103,4 @@ lm_rubocop_on_vim(){
   rubocop --format emacs $@ -o tmp/rubocop_failures || nvim -q tmp/rubocop_failures
 }
 alias vrubocop='lm_rubocop_on_vim'
+
