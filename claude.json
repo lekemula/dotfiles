@@ -4,14 +4,24 @@
     "allow": [
       "Bash(find:*)",
       "Bash(read:*)",
-      "Bash(rspec:*)",
+      "Bash(rspec:*)"
     ],
     "deny": []
   },
-  "feedbackSurveyState": {
-    "lastShownTime": 1754072297712
   "statusLine": {
     "type": "command",
     "command": "input=$(cat); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); session=$(echo \"$input\" | jq -r '.session_name // empty'); dir=$(basename \"$cwd\"); s=''; [ -n \"$session\" ] && s+=\"\\033[38;5;141m󰭹 $session\\033[0m \"; s+=\"\\033[38;5;39m \\033[0m \\033[38;5;45m$dir\\033[0m \"; if git -C \"$cwd\" rev-parse --git-dir >/dev/null 2>&1; then branch=$(git -C \"$cwd\" --no-optional-locks branch --show-current 2>/dev/null || echo detached); if ! git -C \"$cwd\" --no-optional-locks diff --quiet 2>/dev/null || ! git -C \"$cwd\" --no-optional-locks diff --cached --quiet 2>/dev/null; then s+=\"\\033[38;5;220m $branch±\\033[0m\"; else s+=\"\\033[38;5;76m $branch\\033[0m\"; fi; fi; echo -e \"$s\""
-  }
+  },
+  "enabledPlugins": {
+    "playwright@claude-plugins-official": true,
+    "layered-rails@palkan-skills": true,
+    "solargraph@local-plugins": true,
+    "github@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true,
+  "mcpServers": {},
+  "feedbackSurveyState": {
+    "lastShownTime": 1754072297712
+  },
+  "model": "sonnet"
 }
