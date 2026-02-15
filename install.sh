@@ -34,6 +34,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.rdbgrc ~/.rdbgrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.antigenrc ~/.antigenrc
 [ ! -d ~/.claude ] && mkdir -p ~/.claude
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude.json ~/.claude/settings.json
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/skills ~/.claude/skills
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/CLAUDE.md ~/.claude/CLAUDE.md
 [ ! -d $CONFIG_DIR/solargraph ] && mkdir -p $CONFIG_DIR/solargraph
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml $CONFIG_DIR/solargraph/config.yml
