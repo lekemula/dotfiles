@@ -41,6 +41,7 @@ alias diff='diff -u'
 alias dcpl="yq '.services[].profiles' docker-compose.yml | sort | uniq"
 alias co='claude'
 alias coc='claude -c'
+alias oc='opencode'
 alias occ='opencode -c'
 
 # Finlink
