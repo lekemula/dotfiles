@@ -16,6 +16,16 @@ if [ "$ZSH_HOST_OS" = "darwin" ]; then
   fi
 fi
 
+# zsh-autocomplete must be sourced before zsh-vi-mode (antigen), otherwise
+# zsh-vi-mode resets all widgets and Tab breaks.
+zstyle ':autocomplete:*' async yes
+zstyle ':completion:*' use-cache yes
+zstyle ':autocomplete:*' fzf-completion no
+zstyle ':autocomplete:*' recent-dirs no
+zstyle ':autocomplete:*' widget-style menu-select
+zstyle ':autocomplete:*' delay 0.2
+source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
 export ZVM_VI_ESCAPE_BINDKEY=jj # zsh-vi-mode
 # Load zsh plugins via Antigen
 source ~/antigen/antigen.zsh
@@ -27,22 +37,17 @@ function zvm_after_init() {
   # Fix fzf tab completion with zsh-vi-mode
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
   # https://github.com/junegunn/fzf-git.sh/issues/23#issuecomment-2130793362
-  bindkey -r '^G'  
+  bindkey -r '^G'
   # Fuzzy git object searching
   source $DF_HOME/fzf-git.sh
-  
-  # Configure zsh-autocomplete before loading to prevent conflicts
-  zstyle ':autocomplete:*' fzf-completion no
-  zstyle ':autocomplete:*' recent-dirs no
-  zstyle ':autocomplete:*' widget-style menu-select
-  zstyle ':autocomplete:*' delay 0.2  # seconds (float)
-   
-  # Fix zsh-autocomplete tab navigation with vi-mode
-  bindkey '^N' menu-select
-  bindkey '^P' reverse-menu-complete
+
+  # Restore keybindings that zsh-vi-mode resets
+  bindkey '^I' autosuggest-accept     # Tab → zsh-autosuggestions
+  bindkey '^N' menu-select            # Ctrl+N → open/navigate autocomplete menu
+  bindkey '^P' reverse-menu-complete  # Ctrl+P → reverse navigate
   bindkey -M menuselect '^N' menu-complete
   bindkey -M menuselect '^P' reverse-menu-complete
-  
+
   # Use Ctrl-F for fzf file completion instead of **<tab>
   bindkey '^F' fzf-file-widget
   bindkey '^T' fzf-file-widget
@@ -93,10 +98,14 @@ fi
 
 eval "$(zoxide init zsh)"
 
+
 # AsyncAPI CLI Autocomplete
 
 ASYNCAPI_AC_ZSH_SETUP_PATH=/Users/lekemula/Library/Caches/@asyncapi/cli/autocomplete/zsh_setup && test -f $ASYNCAPI_AC_ZSH_SETUP_PATH && source $ASYNCAPI_AC_ZSH_SETUP_PATH; # asyncapi autocomplete setup
 
-source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-
 source $DF_HOME/tmux-nvim-click.zsh
+
+export PATH="/Users/lekemula/Projects/finlink/dev-pal/exe:$PATH"
+
+# Primarily for Claude Github Plugin
+export GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token)
