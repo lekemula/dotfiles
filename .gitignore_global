@@ -44,3 +44,4 @@ config/projections.json
 .hgignore
 .gutctags
 .rake_tasks
+.claude/
