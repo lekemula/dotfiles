@@ -51,18 +51,12 @@ function zvm_after_init() {
 
 source $DF_HOME/custom.zsh
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
 fpath=(~/.zsh/Completion $fpath)
 fpath=($(brew --prefix)/share/zsh/site-functions ${fpath})
 
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
-[ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"  ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 export PATH="/opt/homebrew/opt/postgresql@12/bin:$PATH"
 export NODE_PATH=`npm root -g`
 

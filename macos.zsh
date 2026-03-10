@@ -32,14 +32,19 @@ if [[ -z $(which ctags) ]]; then
   brew install universal-ctags
 fi
 
-if [[ ! -d $HOME/.nvm ]] then
-  brew install nvm
-  mkdir $HOME/.nvm
+if ! command -v mise &> /dev/null; then
+  brew install mise
+fi
 
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"  ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" # This loads nvm
-  nvm install node
-  npm install --global yarn
+# Install Node.js via mise (includes npm)
+if command -v mise &> /dev/null && ! mise list node 2>/dev/null | grep -q node; then
+  mise install node@lts
+  mise use --global node@lts
+
+  # Verify npm is available before using it
+  if command -v npm &> /dev/null; then
+    npm install --global yarn
+  fi
 fi
 
 if ! command -v ng &> /dev/null; then
@@ -143,26 +148,8 @@ if ! command -v ccls &> /dev/null; then
   brew install ccls
 fi
 
-if [[ ! -d ~/.rvm/ ]] then
-  curl -sSL https://get.rvm.io | bash
-  # https://rvm.io/workflow/completion
-  source ~/.rvm/scripts/rvm
-  mkdir -p $HOME/.zsh/Completion
-  cp $rvm_path/scripts/zsh/Completion/_rvm $HOME/.zsh/Completion
-  chmod +x $rvm_path/scripts/zsh/Completion/_rvm
-
-  if [[ $is_apple_silicon_chip == "true" ]]; then
-    rvm install ruby --latest
-  else
-    # Make sure to install ruby before tmux due to issues with openssl@3
-    # https://github.com/rvm/rvm/issues/5254#issuecomment-1635288856
-    rvm install ruby --latest -C --with-openssl-dir=/opt/local/libexec/openssl11
-  fi
-
-  gem install solargraph solargraph-rspec ruby-debug-ide ripper-tags gem-ripper-tags vernier profile-viewer bundle_update_interactive churn
-  # Required for pg gem
-  brew install libpq
-  brew install postgresql
+if ! command -v clangd &> /dev/null; then
+  brew install llvm
 fi
 
 if ! command -v watchman &> /dev/null; then
@@ -339,6 +326,19 @@ fi
 # zsh-autocomplete via brew
 if [[ ! -d "$HOMEBREW_PREFIX/opt/zsh-autocomplete" ]]; then
   brew install zsh-autocomplete
+fi
+
+if ! command -v stimulus-language-server &> /dev/null; then
+  npm install --global stimulus-language-server
+fi
+
+if ! command -v herb-language-server &> /dev/null; then
+  npm install --global @herb-tools/language-server
+fi
+
+# Install mcp-hub for Neovim plugin
+if ! command -v mcp-hub &> /dev/null; then
+  npm install --global mcp-hub@latest
 fi
 
 # Install OpenCode for macOS

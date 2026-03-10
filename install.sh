@@ -42,6 +42,8 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/plugins ~/.claude/local-plug
 [ ! -d $CONFIG_DIR/solargraph ] && mkdir -p $CONFIG_DIR/solargraph
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml $CONFIG_DIR/solargraph/config.yml
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/btop.conf $CONFIG_DIR/btop/btop.conf
+[ ! -d $CONFIG_DIR/mise ] && mkdir -p $CONFIG_DIR/mise
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/mise.config.toml $CONFIG_DIR/mise/config.toml
 
 [ ! -d ~/vim ] && mkdir ~/vim
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/vim/coc-settings.json

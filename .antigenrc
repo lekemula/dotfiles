@@ -37,10 +37,10 @@ antigen bundle dotenv
 antigen bundle macos
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/rake
 antigen bundle rake
-# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/rbenv
-antigen bundle rbenv
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ruby
 antigen bundle ruby
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/mise
+antigen bundle mise
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/rails
 antigen bundle rails
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/docker
