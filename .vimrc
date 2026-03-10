@@ -184,8 +184,8 @@ let g:which_key_map.s =
 vnoremap <leader>s y:execute ":Ag " . shellescape("<C-r>0") . "" <cr>
 nnoremap <leader>siw :execute ":Ag " . expand("<cword>") . "" <cr>
 nnoremap <leader>siW :execute ":Ag " . expand("<cWORD>") . "" <cr>
-nnoremap <leader>sd :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor\|scope\|has_one\|has_many\|belongs_to\|has_and_belongs_to_many) (self\.)?(:\w+,\s)*(:)?" . expand("<cword>") . "" <cr>
-nnoremap <leader>sD :execute ":Ag (def\|attribute\|field\|attr_reader\|attr_accessor\|scope\|has_one\|has_many\|belongs_to\|has_and_belongs_to_many) (self\.)?(:\w+,\s)*(:)?" . expand("<cWORD>") . "" <cr>
+nnoremap <leader>sd :execute ":Ag (def\|alias\|attribute\|field\|attr_reader\|attr_accessor\|scope\|has_one\|has_many\|belongs_to\|has_and_belongs_to_many) (self\.)?(:\w+,\s)*(:)?" . expand("<cword>") . "" <cr>
+nnoremap <leader>sD :execute ":Ag (def\|alias\|attribute\|field\|attr_reader\|attr_accessor\|scope\|has_one\|has_many\|belongs_to\|has_and_belongs_to_many) (self\.)?(:\w+,\s)*(:)?" . expand("<cWORD>") . "" <cr>
 nnoremap <leader>sa :execute ":Ag (\\." . expand("<cword>") . " ?=(?!=)\|" . expand("<cword>") . ":(?!:))" <CR>
 nnoremap <leader>sl :execute ":/let\(:" . expand("<cword>") . "\)" <cr>
 
