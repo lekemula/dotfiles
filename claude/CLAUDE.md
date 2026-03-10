@@ -3,11 +3,12 @@
 ## General
 - Be concise. Skip obvious explanations.
 - Don't add method comments unnecessarily. Only add comments for non-obvious code.
+- Run tests/specs/linters after making changes to ensure nothing is broken.
 - Don't commit or push unless I ask.
 
 ## Ruby / Rails
 - Primary stack: Ruby on Rails
-- Ruby version manager: RVM
+- Version manager: mise (handles Ruby, Node, and other tools)
 - Testing: RSpec
 - Debugging: debugger
 - Linting: RuboCop - run after changes to Ruby files
