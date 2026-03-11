@@ -54,7 +54,7 @@ local timestamped_output_file = "/tmp/solargraph_vernier_profile_" .. os.date("%
 local solargraph_cmd
 if os.getenv("SOLARGRAPH_PROFILE") then
   -- solargraph_cmd = { "vernier", "run", "--allocation-interval", "10", "--output", timestamped_output_file, "--", "solargraph", "stdio" }
-  solargraph_cmd = { "vernier", "run", "--output", timestamped_output_file, "--", "solargraph", "stdio" }
+  solargraph_cmd = { "vernier", "run", "--out", timestamped_output_file, "--", "solargraph", "stdio" }
 elseif os.getenv("SOLARGRAPH_PROFILE_MEMORY") then
   -- ruby-memory-profiler run --pretty --output solargraph_memory_profile.json.gz -- solargraph stdio
   solargraph_cmd = { "ruby-memory-profiler", "run", "--pretty", "--output", timestamped_output_file, "--", "solargraph", "stdio" }

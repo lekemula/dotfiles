@@ -109,3 +109,6 @@ export PATH="/Users/lekemula/Projects/finlink/dev-pal/exe:$PATH"
 
 # Primarily for Claude Github Plugin
 export GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token)
+
+# https://github.com/anomalyco/opencode/issues/7405#issuecomment-4018473781
+export OPENCODE_EXPERIMENTAL_LSP_TOOL=true

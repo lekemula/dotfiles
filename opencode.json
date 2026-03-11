@@ -27,9 +27,9 @@
   },
   "lsp": {
     "solargraph": {
-      "command": [ "solargraph stdio" ],
-      "extensions": ["rb", "ruby", "erb", "rake", "gemspec", "ru", "pryrc"],
-      "settings": {
+      "command": ["solargraph", "stdio"],
+      "extensions": [".rb", ".erb", ".rake", ".gemspec", ".ru", ".pryrc"],
+      "initialization": {
         "solargraph": {
           "diagnostics": true,
           "completion": true,
