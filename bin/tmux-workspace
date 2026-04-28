@@ -1,0 +1,197 @@
+#!/usr/bin/env zsh
+# Restore personal tmux workspace sessions.
+# Usage: tmux-workspace [--force|-f] [session]
+#   --force, -f   Kill the existing tmux server first to start fresh
+#   session       finlink|solargraph|all (default: all)
+
+set -e
+
+FORCE=0
+while [[ ${1:-} == -* ]]; do
+  case "$1" in
+    --force|-f) FORCE=1; shift ;;
+    -h|--help)
+      echo "Usage: $(basename $0) [--force|-f] [finlink|solargraph|all]"
+      exit 0
+      ;;
+    *) echo "Unknown option: $1" >&2; exit 1 ;;
+  esac
+done
+
+if (( FORCE )); then
+  echo "Killing existing tmux server..."
+  tmux kill-server 2>/dev/null || true
+fi
+
+# Suppress continuum's auto-restore via its halt file. This must be in place
+# *before* the server starts: continuum's restore script reads @continuum-restore
+# synchronously the moment the plugin loads, so toggling the option after
+# start-server races with the bg script. The halt file is checked at the same
+# point and is race-free.
+HALT_FILE="$HOME/tmux_no_auto_restore"
+HALT_PREEXISTING=0
+[[ -f "$HALT_FILE" ]] && HALT_PREEXISTING=1
+touch "$HALT_FILE"
+
+# Keep the server alive between tmux calls. Without a session, the server
+# exits immediately after start-server and the next tmux call fails with
+# "no server running".
+BOOTSTRAP_CREATED=0
+if ! tmux has-session 2>/dev/null; then
+  tmux start-server \; new-session -d -s _ws_bootstrap
+  BOOTSTRAP_CREATED=1
+fi
+
+cleanup() {
+  if (( ! HALT_PREEXISTING )); then
+    rm -f "$HALT_FILE"
+  fi
+  if (( BOOTSTRAP_CREATED )); then
+    tmux kill-session -t _ws_bootstrap 2>/dev/null || true
+  fi
+}
+trap cleanup EXIT
+
+# Returns 0 (created) or 1 (already exists).
+new_session() {
+  local session=$1 window=$2 dir=$3
+  if tmux has-session -t "$session" 2>/dev/null; then
+    echo "  session '$session' already exists"
+    return 1
+  fi
+  tmux new-session -d -s "$session" -n "$window" -c "$dir"
+  echo "  session '$session' created"
+}
+
+# Returns 0 (created) or 1 (already exists).
+new_window() {
+  local session=$1 name=$2 dir=$3
+  if tmux list-windows -t "$session" -F "#{window_name}" 2>/dev/null | grep -qx "$name"; then
+    echo "    window '$name' already exists"
+    return 1
+  fi
+  tmux new-window -t "${session}:" -n "$name" -c "$dir"
+  echo "    window '$name' created"
+}
+
+split_h() { tmux split-window -t "$1" -h -c "$2"; }
+split_v() { tmux split-window -t "$1" -v -c "$2"; }
+
+# Layout: nvim (top-left) | claude (full right) | zsh (bottom-left).
+layout() {
+  local target=$1 dir=$2
+  split_h "${target}.0" "$dir"  # claude: full right
+  split_v "${target}.0" "$dir"  # zsh: below nvim (left only)
+}
+
+# ── finlink ───────────────────────────────────────────────────────────────────
+FINLINK=~/Projects/finlink
+
+setup_finlink() {
+  if new_session finlink dotfiles ~/dotfiles; then
+    layout "finlink:0" ~/dotfiles
+  fi
+
+  if new_window "finlink" api "$FINLINK/loanlink-api"; then
+    layout "finlink:api" "$FINLINK/loanlink-api"
+  fi
+
+  if new_window "finlink" console "$FINLINK/loanlink-api"; then
+    layout "finlink:console" "$FINLINK/loanlink-api"
+  fi
+
+  if new_window "finlink" ehyp "$FINLINK/ehyp-integrations"; then
+    layout "finlink:ehyp" "$FINLINK/ehyp-integrations"
+  fi
+
+  if new_window "finlink" web "$FINLINK/loanlink-web"; then
+    layout "finlink:web" "$FINLINK/loanlink-web"
+  fi
+
+  if new_window "finlink" coba-integrations "$FINLINK/coba-integrations"; then
+    layout "finlink:coba-integrations" "$FINLINK/coba-integrations"
+  fi
+
+  if new_window "finlink" postman ~; then
+    layout "finlink:postman" ~
+  fi
+
+  if new_window "finlink" dev-pal "$FINLINK/dev-pal"; then
+    layout "finlink:dev-pal" "$FINLINK/dev-pal"
+  fi
+
+  if new_window "finlink" azure ~; then
+    layout "finlink:azure" ~
+  fi
+
+  if new_window "finlink" stubs-api "$FINLINK/stubs-api"; then
+    layout "finlink:stubs-api" "$FINLINK/stubs-api"
+  fi
+
+  tmux select-window -t "finlink:api"
+}
+
+# ── solargraph ────────────────────────────────────────────────────────────────
+SOLARGRAPH=~/Projects/open_source/solargraph
+SOLARGRAPH_RSPEC=~/Projects/open_source/solargraph-rspec
+RUBOCOP=~/Projects/open_source/rubocop
+RUBOCOP_AST=~/Projects/open_source/rubocop-ast
+
+setup_solargraph() {
+  if new_session solargraph dotfiles ~/dotfiles; then
+    layout "solargraph:0" ~/dotfiles
+  fi
+
+  if new_window "solargraph" solargraph "$SOLARGRAPH"; then
+    layout "solargraph:solargraph" "$SOLARGRAPH"
+  fi
+
+  if new_window "solargraph" solargraph-rspec "$SOLARGRAPH_RSPEC"; then
+    layout "solargraph:solargraph-rspec" "$SOLARGRAPH_RSPEC"
+  fi
+
+  if new_window "solargraph" yard ~; then
+    layout "solargraph:yard" ~
+  fi
+
+  if new_window "solargraph" rspec ~; then
+    layout "solargraph:rspec" ~
+  fi
+
+  if new_window "solargraph" test ~; then
+    layout "solargraph:test" ~
+  fi
+
+  if new_window "solargraph" solargraph-rails ~; then
+    layout "solargraph:solargraph-rails" ~
+  fi
+
+  if new_window "solargraph" rubocop "$RUBOCOP"; then
+    layout "solargraph:rubocop" "$RUBOCOP"
+  fi
+
+  if new_window "solargraph" rubocop-ast "$RUBOCOP_AST"; then
+    layout "solargraph:rubocop-ast" "$RUBOCOP_AST"
+  fi
+
+  if new_window "solargraph" overcommit ~; then
+    layout "solargraph:overcommit" ~
+  fi
+
+  tmux select-window -t "solargraph:dotfiles"
+}
+
+# ── dispatch ──────────────────────────────────────────────────────────────────
+case "${1:-all}" in
+  finlink)     setup_finlink ;;
+  solargraph)  setup_solargraph ;;
+  all)
+    setup_finlink
+    setup_solargraph
+    echo "Done. Attach with: tmux attach -t <session>"
+    ;;
+  *)
+    echo "Usage: $(basename $0) [finlink|solargraph|all]"
+    exit 1
+    ;;
+esac
