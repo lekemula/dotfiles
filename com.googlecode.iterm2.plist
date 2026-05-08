@@ -38,6 +38,8 @@
 	<string>5783ECC9-39BA-451C-93BC-F0391A477633</string>
 	<key>Default Browser Profile Guid</key>
 	<string>5783ECC9-39BA-451C-93BC-F0391A477633</string>
+	<key>EnableAPIServer</key>
+	<false/>
 	<key>HapticFeedbackForEsc</key>
 	<false/>
 	<key>HotkeyMigratedFromSingleToMulti</key>
