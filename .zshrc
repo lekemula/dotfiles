@@ -105,7 +105,6 @@ ASYNCAPI_AC_ZSH_SETUP_PATH=/Users/lekemula/Library/Caches/@asyncapi/cli/autocomp
 
 source $DF_HOME/tmux-nvim-click.zsh
 
-export PATH="/Users/lekemula/Projects/finlink/dev-pal/exe:$PATH"
 
 # Primarily for Claude Github Plugin
 export GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token)
