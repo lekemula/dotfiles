@@ -54,3 +54,9 @@ Document generic classes via `@generic` and `@param` tags:
      end
    end
    ```
+
+### Resources 
+
+- [YARD Cheat sheet](https://gist.github.com/chetan/1827484)
+- [YARD Tags documentation](https://www.rubydoc.info/gems/yard/file/docs/Tags.md)
+- [Solargraph YARD documentation](https://solargraph.org/guides/yard)

@@ -35,3 +35,39 @@ Steps:
 - Prefer VCR whenever available
     - Use explicit cassette names that reflect the scenario being tested (e.g., `vcr.use_cassette('github_api_user_fetch')` instead of `vcr.use_cassette('github_api')`)
     - Ensure secrets are filtered out of cassettes and that recorded interactions are realistic and cover edge cases
+
+## Matchers and Assertions
+
+- Use `have_attributes`, `hash_including`, or custom matchers for complex assertions instead of multiple `expect` statements
+  ```ruby
+  # good
+  expect(user).to have_attributes(name: 'Alice', email: 'some@email.com')
+
+  # bad
+  expect(user.name).to eq('Alice')
+  expect(user.email).to eq('some@email.com')
+
+  # good
+  expect(response).to have_attributes(status: 200, body: hash_including('id' => 123))
+
+  # bad
+  expect(response.status).to eq(200)
+  expect(response.body['id']).to eq(123)
+
+
+  # good
+  expect(response_body).to include('id' => 123, 'name' => 'Alice')
+
+  # bad
+  expect(response_body['id']).to eq(123)
+  expect(response_body['name']).to eq('Alice')
+  ```
+
+- Hardcode expected values
+
+  ```ruby
+  # good
+  expect(user.name).to eq('Alice')
+  # bad
+  expect(user.name).to eq(name)
+  ```

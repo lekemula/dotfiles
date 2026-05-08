@@ -22,9 +22,11 @@
 
 ## Git
 - Commit messages: short, imperative, lowercase (e.g., "fix login redirect")
+- Follow repository format .github/PULL_REQUEST_TEMPLATE.md
 - Add detailed descriptions in the body of the commit message when necessary
 - Rebase workflow (pull.rebase = true, autoSquash, updateRefs)
 - Push sets up remote tracking automatically (autoSetupRemote)
+- Wait for confirmation before commiting and pushing to remote branches
 
 ## Environment
 - macOS, zsh, Neovim, tmux, iTerm2
