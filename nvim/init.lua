@@ -4,6 +4,14 @@ vim.cmd('source ~/.vimrc')
 
 require('lsp_settings')
 require('copilot_settings')
+require('diffview_settings')
+
+local function soften_diff_highlights()
+  vim.api.nvim_set_hl(0, 'DiffText', { bg = '#3a5050', bold = true })
+  vim.api.nvim_set_hl(0, 'DiffChange', { bg = 'NONE' })
+end
+soften_diff_highlights()
+vim.api.nvim_create_autocmd('ColorScheme', { callback = soften_diff_highlights })
 require('render-markdown').setup({
   file_types = { "markdown", "Avante" }
 })

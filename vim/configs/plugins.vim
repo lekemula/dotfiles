@@ -60,6 +60,7 @@ if has('nvim')
   Plug 'yetone/avante.nvim', { 'tag': 'v0.0.27', 'do': 'make' }
   Plug 'ravitemer/mcphub.nvim', { 'do': 'npm install -g mcp-hub@latest' }
   Plug 'zbirenbaum/copilot.lua'
+  Plug 'sindrets/diffview.nvim'
 endif
 
 " Make sure you use single quotes
