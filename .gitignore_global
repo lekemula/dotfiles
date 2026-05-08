@@ -45,3 +45,7 @@ config/projections.json
 .gutctags
 .rake_tasks
 .claude/
+
+# opencode
+.opencode/
+opencode.json
