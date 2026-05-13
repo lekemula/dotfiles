@@ -55,6 +55,7 @@ alias flrspec='dcr rails-test rspec'
 alias flrspecd='dcupd rails-test'
 alias fltest='flrspec'
 alias fltestd='flrspecd'
+alias fl='mise exec ruby@3.4.7 -- fl'
 
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")
