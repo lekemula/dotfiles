@@ -37,6 +37,19 @@ Use the following annotation for ruby Data/Struct classes
    Foo = Struct.new(:bar, :baz)
    ```
 
+Disable the `rubocop:disable YARD/MeaninglessTag` if necessary.
+
+If constructor is defined then prefer the following style:
+   ```
+   Foo = Struct.new(:bar, :baz) do
+     # @param bar [String]
+     # @param baz [Integer]
+     def initialize(bar, baz)
+       super(bar, baz)
+     end
+   end
+   ```
+
 ### Generics
 
 Document generic classes via `@generic` and `@param` tags:

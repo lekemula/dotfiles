@@ -76,18 +76,21 @@ git diff <base-branch>...HEAD --name-only
 ### 5. Draft PR title and body
 
 - **Title**: Short, imperative, lowercase (e.g., "add user export feature"). Under 70 characters.
+    - Include the Jira ticket key if applicable (e.g., "LL-1234 add user export feature").
 - **Body**: Fill in the PR template if present, or use this default structure:
 
 ```markdown
-## Summary
+## Purpose
 
-- [bullet points describing what changed and why]
+- [bullet points describing the problem and why we need the changes]
+
+## Approach
+
+- [bullet points describing how the change was implemented, key design decisions, and any trade-offs]
 
 ## Test plan
 
 - [ ] [what was tested / how to verify]
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
 ```
 
 ### 6. Identify reviewers
@@ -132,12 +135,6 @@ gh pr create \
 <body>
 EOF
 )"
-```
-
-Then add reviewers:
-
-```bash
-gh pr edit --add-reviewer <comma-separated-github-usernames>
 ```
 
 Report the PR URL when done.
