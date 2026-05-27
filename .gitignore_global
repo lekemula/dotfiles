@@ -44,7 +44,7 @@ config/projections.json
 .hgignore
 .gutctags
 .rake_tasks
-.claude/
+.claude/settings.local.json
 
 # opencode
 .opencode/
