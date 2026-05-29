@@ -7,6 +7,13 @@ else
   is_apple_silicon_chip="false"
 fi
 
+# Antigen's oh-my-zsh bundle expects this completions cache dir to exist before
+# plugins like mise, helm, and docker source their completion files. Create it
+# unconditionally — $ZSH_CACHE_DIR isn't set until oh-my-zsh loads later, so we
+# hardcode the antigen bundle path here.
+ANTIGEN_OMZ_CACHE="$HOME/.antigen/bundles/robbyrussell/oh-my-zsh/cache/completions"
+[[ ! -d "$ANTIGEN_OMZ_CACHE" ]] && mkdir -p "$ANTIGEN_OMZ_CACHE"
+
 # Install homebrew if not installed
 if ! command -v brew &> /dev/null; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -15,15 +22,37 @@ if ! command -v brew &> /dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# Install a Homebrew cask, self-healing if brew's metadata is stale (i.e. the app
+# bundle was deleted/moved but the cask is still tracked). Plain `brew install`
+# refuses to re-place a missing app in that case, so fall back to `reinstall`.
+# Returns 0 only when it performed an (re)install, so callers can gate post-steps.
+install_cask() {
+  local app_path="$1" cask="$2"
+  [[ -e "$app_path" ]] && return 1
+  if brew list --cask "$cask" &> /dev/null; then
+    brew reinstall --cask "$cask"
+  else
+    brew install --cask "$cask"
+  fi
+}
+
+# macOS system vim ships with +conceal but -python3, which Vimspector requires.
+# Check for +python3 so Homebrew's vim (has both) gets installed and takes PATH priority.
 # https://github.com/ryanoasis/vim-devicons/issues/215#issuecomment-346231411
-if [[ -z $(which vim) ]] || [[ -z $(vim --version | grep "\+conceal") ]]; then
+if [[ -z $(which vim) ]] || [[ -z $(vim --version | grep "\+python3") ]]; then
   brew install python3
   brew install vim
 fi
 
 if ! command -v nvim &> /dev/null; then
   brew install neovim
-  # Install pynvim for neovim python support
+fi
+
+# pynvim must be installed for the same python3 nvim uses, otherwise
+# has('python3') is 0 and plugins like UltiSnips fail to load. Guard
+# independently from nvim so it self-heals if pynvim is missing for any
+# reason (fresh Python, reinstalled brew formulae, etc.).
+if ! python3 -c "import pynvim" &> /dev/null; then
   pip3 install --user pynvim --break-system-packages
 fi
 
@@ -40,11 +69,17 @@ fi
 if command -v mise &> /dev/null && ! mise list node 2>/dev/null | grep -q node; then
   mise install node@lts
   mise use --global node@lts
+fi
 
-  # Verify npm is available before using it
-  if command -v npm &> /dev/null; then
-    npm install --global yarn
-  fi
+# The mise antigen plugin loads after macos.zsh, so npm/node shims aren't on PATH
+# yet during a fresh install. Activate shims here so the rest of this script can
+# run `npm install --global ...` without "npm: command not found".
+if command -v mise &> /dev/null; then
+  eval "$(mise activate zsh --shims)"
+fi
+
+if command -v npm &> /dev/null && ! command -v yarn &> /dev/null; then
+  npm install --global yarn
 fi
 
 if ! command -v ng &> /dev/null; then
@@ -67,16 +102,25 @@ if ! command -v ag &> /dev/null; then
 fi
 
 # https://github.com/junegunn/fzf
-if [[ ! -e "$HOME/.fzf.zsh" ]]; then
+# Guard on the binary, not ~/.fzf.zsh — install.sh symlinks ~/.fzf.zsh before this
+# script runs, so a path check would always be true and skip the brew install.
+if ! command -v fzf &> /dev/null; then
   brew install fzf
 
   # To install useful key bindings and fuzzy completion:
   $(brew --prefix)/opt/fzf/install
 fi
 
-if [[ ! -e "/Applications/iTerm.app" ]]; then
-  brew install --cask iterm2
+if install_cask "/Applications/iTerm.app" iterm2; then
   defaults write com.googlecode.iterm2 ApplePressAndHoldEnabled -bool false
+fi
+
+# Faster key repeat for navigation/editing. Skip the write if already set so this
+# doesn't run on every shell startup. Requires logout/restart to take effect.
+if [[ $(defaults read NSGlobalDomain KeyRepeat 2>/dev/null) != "2" ]]; then
+  defaults write NSGlobalDomain KeyRepeat -int 2          # repeat rate (min 1)
+  defaults write NSGlobalDomain InitialKeyRepeat -int 15  # delay before repeat (min 15)
+  echo "Set faster key repeat — log out and back in for it to take effect."
 fi
 
 # https://www.geekbits.io/how-to-install-nerd-fonts-on-mac/
@@ -86,7 +130,7 @@ if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
   # Other's to consider
   brew install --cask font-roboto-mono-nerd-font # google's
   brew install --cask font-hack-nerd-font
-  brew brew install --cask font-fira-code-nerd-font
+  brew install --cask font-fira-code-nerd-font
   brew install --cask font-fira-mono-nerd-font
   brew install --cask font-monaspace-nerd-font # github's
   brew install --cask font-jetbrains-mono-nerd-font
@@ -97,13 +141,9 @@ if [[ -z $(brew list font-meslo-lg-nerd-font) ]]; then
 fi
 
 # Install google chrome if not installed
-if [[ ! -e "/Applications/Google Chrome.app" ]]; then
-  brew install --cask google-chrome
-fi
+install_cask "/Applications/Google Chrome.app" google-chrome
 
-if [[ ! -e "/Applications/1Password.app" ]]; then
-  brew install --cask 1password
-fi
+install_cask "/Applications/1Password.app" 1password
 
 # 1Passord CLI
 if ! command -v op &> /dev/null; then
@@ -156,44 +196,44 @@ if ! command -v watchman &> /dev/null; then
   brew install watchman # Required by solargraph and coc-tsserver
 fi
 
-if [[ ! -d /Applications/Docker.app ]]; then
-  brew install --cask docker
-
-
-  # Antigen docker plugin experts this directory to be present
-  if [[ ! -d "$ZSH_CACHE_DIR/completions/"  ]]; then
-    mkdir -p $ZSH_CACHE_DIR/completions
-  fi
-fi
+install_cask "/Applications/Docker.app" docker
 
 if ! command -v tmux &> /dev/null; then
   brew install tmux
+fi
 
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-  echo "Don't forget to install tmux plugins \"<C-b> + I\" after starting a new tmux session: \"tmux start-session\""
-  echo "Press Enter to continue..."
-  read
+
+  # Install tmux plugins non-interactively: tpm's install_plugins script needs a
+  # running tmux server with the config sourced so it can read the @plugin list.
+  if [[ -f ~/.tmux.conf ]]; then
+    tmux start-server \; new-session -d \; source-file ~/.tmux.conf
+    ~/.tmux/plugins/tpm/bin/install_plugins
+    tmux kill-server
+  else
+    echo "~/.tmux.conf not found yet — run install.sh first, then re-run this script to install tmux plugins."
+  fi
 fi
 
 if ! command -v go &> /dev/null; then
   brew install go
 fi
 
-if [[ ! -e "/Applications/logioptionsplus.app" ]]; then
-  brew install --cask logi-options-plus
-fi
+install_cask "/Applications/logioptionsplus.app" logi-options-plus
+
+# https://www.caffeine-app.net/ — keeps the Mac awake
+install_cask "/Applications/Caffeine.app" caffeine
 
 # https://rectangleapp.com/
-if [[ ! -e "/Applications/Rectangle.app" ]]; then
-  brew install --cask rectangle
+if install_cask "/Applications/Rectangle.app" rectangle; then
   echo "Import Rectangle settings from RectangleConfig.json"
   echo "Press Enter to continue..."
   read
 fi
 
 # https://www.raycast.com/
-if [[ ! -e "/Applications/Raycast.app" ]]; then
-  brew install --cask raycast
+if install_cask "/Applications/Raycast.app" raycast; then
   echo "Import Raycast settings from RaycastConfig.json"
   echo "Press Enter to continue..."
   read
@@ -275,8 +315,12 @@ if ! command -v lazygit &> /dev/null; then
   brew install lazygit
 fi
 
-if [ ! -e '/Applications/Loom.app' ]; then
-  brew install --cask loom
+install_cask "/Applications/Loom.app" loom
+
+# Monosnap — not on Homebrew (removed due to download issues).
+# Install manually from https://monosnap.com/ or the Mac App Store.
+if [[ ! -e "/Applications/Monosnap.app" ]]; then
+  echo "Install Monosnap manually from https://monosnap.com/ or the Mac App Store."
 fi
 
 if ! command -v btop &> /dev/null; then
@@ -315,12 +359,20 @@ if ! command -v claude  &> /dev/null; then
   npm install -g @anthropic-ai/claude-code
 fi
 
+# https://claude.ai/download — Claude desktop app
+install_cask "/Applications/Claude.app" claude
+
 if ! command -v tree &> /dev/null; then
   brew install tree
 fi
 
 if ! command -v dive &> /dev/null; then
   brew install dive
+fi
+
+# agrind: slice/aggregate logs with a SQL-ish DSL. https://github.com/rcoh/angle-grinder
+if ! command -v agrind &> /dev/null; then
+  brew install angle-grinder
 fi
 
 # zsh-autocomplete via brew

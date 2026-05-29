@@ -55,6 +55,7 @@ nnoremap <leader>gap :Git add --patch %<CR>
 nnoremap <leader>gdg :diffget<CR>
 nnoremap <leader>gdh :diffget //2<CR>:diffupdate<CR>
 nnoremap <leader>gdl :diffget //3<CR>:diffupdate<CR>
+nnoremap <silent> <leader>gg :LazyGit<CR>
 
 function GitCopyClassUrl()
   call YankFQN()

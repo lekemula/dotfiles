@@ -54,18 +54,24 @@
   "enabledPlugins": {
     "playwright@claude-plugins-official": true,
     "layered-rails@palkan-skills": true,
-    "solargraph@local-plugins": true,
     "github@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "warp@claude-code-warp": true,
-    "ruby-lsp@claude-plugins-official": true
+    "ruby-lsp@claude-plugins-official": true,
+    "solargraph@local-plugins": true
   },
   "extraKnownMarketplaces": {
     "claude-code-warp": {
       "source": {
         "source": "github",
         "repo": "warpdotdev/claude-code-warp"
+      }
+    },
+    "local-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/lekemula/.claude/local-plugins"
       }
     }
   },

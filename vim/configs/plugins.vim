@@ -36,7 +36,6 @@ if !has('nvim')
   Plug 'konfekt/fastfold'
   " copilot.lua is used for neovim
   Plug 'github/copilot.vim'
-  " test autocompletion 
 endif
 
 if has('nvim')
@@ -61,6 +60,7 @@ if has('nvim')
   Plug 'ravitemer/mcphub.nvim', { 'do': 'npm install -g mcp-hub@latest' }
   Plug 'zbirenbaum/copilot.lua'
   Plug 'sindrets/diffview.nvim'
+  Plug 'kdheepak/lazygit.nvim'
 endif
 
 " Make sure you use single quotes

@@ -42,7 +42,19 @@ function zvm_after_init() {
   source $DF_HOME/fzf-git.sh
 
   # Restore keybindings that zsh-vi-mode resets
-  bindkey '^I' autosuggest-accept     # Tab → zsh-autosuggestions
+  # Tab: accept zsh-autosuggestion if one is showing, else fall through to
+  # fzf-completion so the `**<Tab>` trigger (e.g. `cd ~/Projects/**<Tab>`) and
+  # normal completion still work.
+  _lm_tab_hybrid() {
+    if [[ -n "$POSTDISPLAY" ]]; then
+      zle autosuggest-accept
+    else
+      zle fzf-completion
+    fi
+  }
+  zle -N _lm_tab_hybrid
+  bindkey '^I' _lm_tab_hybrid
+
   bindkey '^N' menu-select            # Ctrl+N → open/navigate autocomplete menu
   bindkey '^P' reverse-menu-complete  # Ctrl+P → reverse navigate
   bindkey -M menuselect '^N' menu-complete
@@ -52,6 +64,14 @@ function zvm_after_init() {
   bindkey '^F' fzf-file-widget
   bindkey '^T' fzf-file-widget
   bindkey '^R' fzf-history-widget
+
+  # zsh-autocomplete remaps Up/Down to a prefix-search widget; restore the
+  # familiar "walk through history" behavior. Bind both the CSI and SS3
+  # escape sequences so it works regardless of terminal application mode.
+  bindkey '^[[A' up-line-or-history    # Up
+  bindkey '^[[B' down-line-or-history  # Down
+  bindkey '^[OA' up-line-or-history    # Up (application keypad mode)
+  bindkey '^[OB' down-line-or-history  # Down (application keypad mode)
 }
 
 source $DF_HOME/custom.zsh

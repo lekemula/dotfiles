@@ -120,8 +120,8 @@ setup_finlink() {
     layout "finlink:dev-pal" "$FINLINK/dev-pal"
   fi
 
-  if new_window "finlink" azure ~; then
-    layout "finlink:azure" ~
+  if new_window "finlink" azure "$FINLINK/azure-infrastructure"; then
+    layout "finlink:azure" "$FINLINK/azure-infrastructure"
   fi
 
   if new_window "finlink" stubs-api "$FINLINK/stubs-api"; then

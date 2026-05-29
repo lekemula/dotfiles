@@ -30,6 +30,7 @@ alias birs='bin/rspec'
 alias birsf='bin/rspec --only-failures'
 alias birsd='bin/rspec --format documentation'
 alias weather='curl wttr.in'
+alias logrind='agrind' # angle-grinder: SQL-ish log slicing
 alias kc='kubectx'
 alias kns='kubens'
 alias ks='kubectx && kubens'

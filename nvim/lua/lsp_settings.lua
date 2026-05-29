@@ -138,6 +138,12 @@ vim.lsp.enable('stimulus_ls')
 -- HerbLS for Ruby (experimental)
 vim.lsp.enable('herb_ls')
 
+-- nvim-lspconfig skips :LspInfo/:LspLog on Nvim 0.12+ (PR #4234). Re-register them.
+vim.api.nvim_create_user_command('LspInfo', 'checkhealth vim.lsp', { desc = 'Alias to `:checkhealth vim.lsp`' })
+vim.api.nvim_create_user_command('LspLog', function()
+  vim.cmd('tabnew ' .. vim.lsp.log.get_filename())
+end, { desc = 'Open the Nvim LSP client log' })
+
 -- Keymaps for LSP actions
 vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true })
 
@@ -164,3 +170,9 @@ vim.keymap.set("n", "[e", vim.diagnostic.goto_prev, { noremap = true, silent = t
 vim.keymap.set("n", "]e", vim.diagnostic.goto_next, { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>e", vim.diagnostic.setqflist, { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>fd', '<cmd>lua vim.lsp.buf.format({timeout_ms = 10000})<CR>', { noremap = true, silent = true })
+
+-- The old :LspRestart Ex command was dropped in nvim 0.12 in favor of the
+-- :lsp restart [<client_name>] subcommand. Re-expose it under the familiar name.
+vim.api.nvim_create_user_command("LspRestart", function(opts)
+  vim.cmd("lsp restart " .. (opts.args or ""))
+end, { nargs = "?", desc = "Restart LSP client(s) — wraps :lsp restart" })

@@ -41,6 +41,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/CLAUDE.md ~/.claude/CLAUDE.m
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/plugins ~/.claude/local-plugins
 [ ! -d $CONFIG_DIR/solargraph ] && mkdir -p $CONFIG_DIR/solargraph
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml $CONFIG_DIR/solargraph/config.yml
+[ ! -d $CONFIG_DIR/btop ] && mkdir -p $CONFIG_DIR/btop
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/btop.conf $CONFIG_DIR/btop/btop.conf
 [ ! -d $CONFIG_DIR/mise ] && mkdir -p $CONFIG_DIR/mise
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/mise.config.toml $CONFIG_DIR/mise/config.toml
@@ -55,7 +56,9 @@ NEOVIM_CONFIG_DIR=$CONFIG_DIR/nvim
 [ ! -d $NEOVIM_CONFIG_DIR ] && mkdir -p $NEOVIM_CONFIG_DIR
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/nvim/* $NEOVIM_CONFIG_DIR
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json $NEOVIM_CONFIG_DIR/coc-settings.json
+[ ! -d $CONFIG_DIR/lazygit ] && mkdir -p $CONFIG_DIR/lazygit
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/lazygit.yml $CONFIG_DIR/lazygit/config.yml
+[ ! -d $CONFIG_DIR/lazydocker ] && mkdir -p $CONFIG_DIR/lazydocker
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/lazydocker.yml $CONFIG_DIR/lazydocker/config.yml
 
 VIMSPECTOR_GADGETS_DIR=~/vim/plugged/vimspector/gadgets/custom
@@ -63,8 +66,10 @@ VIMSPECTOR_GADGETS_DIR=~/vim/plugged/vimspector/gadgets/custom
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/vimspector/gadgets/custom/cust_vscode-ruby.json  $VIMSPECTOR_GADGETS_DIR/cust_vscode-ruby.json
 
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/bin/tmux-nvim-click.sh /usr/local/bin/tmux-nvim-click.sh
+[ ! -d $CONFIG_DIR/mcphub ] && mkdir -p $CONFIG_DIR/mcphub
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/nvim/mcphub/servers.json $CONFIG_DIR/mcphub/servers.json
-ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/opencode.json ~/.config/opencode/opencode.json
+[ ! -d $CONFIG_DIR/opencode ] && mkdir -p $CONFIG_DIR/opencode
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/opencode.json $CONFIG_DIR/opencode/opencode.json
 
 if ! command -v imgcat &> /dev/null; then
   # https://iterm2.com/documentation-images.html
