@@ -46,6 +46,9 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/btop.conf $CONFIG_DIR/btop/btop.con
 [ ! -d $CONFIG_DIR/mise ] && mkdir -p $CONFIG_DIR/mise
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/mise.config.toml $CONFIG_DIR/mise/config.toml
 
+[ ! -d ~/.logseq/config ] && mkdir -p ~/.logseq/config
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/logseq.edn ~/.logseq/config/config.edn
+
 [ ! -d ~/vim ] && mkdir ~/vim
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/coc-settings.json ~/vim/coc-settings.json
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/vim/my-snippets ~/vim/my-snippets
