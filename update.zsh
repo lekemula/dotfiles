@@ -1,5 +1,5 @@
 brew upgrade
-vim +PlugUpgrade +PlugUpdate +CocUpdate +qall
+nvim +PlugUpgrade +PlugUpdate +CocUpdate +qall
 gh extension upgrade --all
 ~/.tmux/plugins/tpm/bin/update_plugins all
 # antigen update - FIXME: this command is not found when running this script
