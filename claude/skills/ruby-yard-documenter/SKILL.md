@@ -68,6 +68,31 @@ Document generic classes via `@generic` and `@param` tags:
    end
    ```
 
+### Hashes
+
+For non-trivial Hash shapes, prefer the hash-specific syntax `Hash{KeyType => ValueType}` over the generic `Hash<K, V>` form. The hash-specific syntax also supports the following (per [yard#1630](https://github.com/lsegal/yard/pull/1630)):
+
+- **Multiple keys for the same value type(s)** — a comma-separated list of keys on the left of `=>` all share the value types on the right:
+   ```
+   # @param fields [Hash{:name, :title => String}]
+   ```
+- **Multiple key/value groups** — separate distinct key/value groups with a semicolon (`;`):
+   ```
+   # @param person [Hash{:name => String; :age => Integer}]
+   ```
+- **Nested hashes** — a value type can itself be a hash:
+   ```
+   # @param payload [Hash{:user => Hash{:name => String, :age => Integer}}]
+   ```
+- **Multiple value types** — comma-separated value types are an "or":
+   ```
+   # @param opts [Hash{:status => String, Symbol}]   # value is String OR Symbol
+   ```
+
+Keys are typically literal symbols (`:key`) or strings (`'key'`), but any type from the [type conventions](https://www.rubydoc.info/gems/yard/file/docs/Tags.md#Types) is allowed.
+
+Still skip annotation when the Hash shape is obvious from the method name/signature or already inferable by Solargraph (per rule 8 above).
+
 ### Resources 
 
 - [YARD Cheat sheet](https://gist.github.com/chetan/1827484)
