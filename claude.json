@@ -42,9 +42,17 @@
       "Bash(tree:*)",
       "Bash(uniq:*)",
       "Bash(wc:*)",
-      "Bash(which:*)"
+      "Bash(which:*)",
+      "mcp__claude_ai_Atlassian__getJiraIssue"
     ],
-    "deny": []
+    "deny": [],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(git commit -m:*)",
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ],
+    "additionalDirectories": ["~/Projects/finlink"]
   },
   "model": "opus",
   "statusLine": {
