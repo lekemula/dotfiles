@@ -270,6 +270,18 @@ if ! command -v delta &> /dev/null; then
   brew install git-delta
 fi
 
+# Review-first terminal diff viewer — https://github.com/modem-dev/hunk
+if ! command -v hunk &> /dev/null; then
+  brew install hunk
+fi
+
+# Expose Hunk's own built-in agent-review skill alongside our Claude skills.
+# `brew --prefix hunk` resolves Homebrew's stable per-formula symlink (survives
+# `brew upgrade`), so this self-heals across versions without re-running install.sh.
+if command -v hunk &> /dev/null && [[ -d ~/.claude/skills ]]; then
+  ln -vsfn "$(brew --prefix hunk)/libexec/skills/hunk-review" ~/.claude/skills/hunk-review
+fi
+
 if ! command -v terraform-ls &> /dev/null; then
   brew install hashicorp/tap/terraform-ls
 fi
@@ -316,6 +328,8 @@ if ! command -v lazygit &> /dev/null; then
 fi
 
 install_cask "/Applications/Loom.app" loom
+
+install_cask "/Applications/Spotify.app" spotify
 
 # Monosnap — not on Homebrew (removed due to download issues).
 # Install manually from https://monosnap.com/ or the Mac App Store.
@@ -397,3 +411,6 @@ fi
 if ! command -v opencode &> /dev/null; then
   brew install opencode
 fi
+
+# https://www.postman.com/ — API client
+install_cask "/Applications/Postman.app" postman
