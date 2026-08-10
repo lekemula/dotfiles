@@ -11,6 +11,7 @@ domains: []
 plugins:
   - solargraph-rspec
   - solargraph-rails
+  - solargraph-yard-lint
 rspec:
   let_methods:
     - let_it_be
@@ -20,6 +21,7 @@ reporters:
   - typecheck:strict
   - rubocop
   - require_not_found
+  - yard_lint
 formatter:
   rubocop:
     cops: all
