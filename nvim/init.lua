@@ -6,6 +6,7 @@ require('lsp_settings')
 require('copilot_settings')
 require('diffview_settings')
 require('autopairs_settings')
+require('octo_settings')
 
 local function soften_diff_highlights()
   vim.api.nvim_set_hl(0, 'DiffText', { bg = '#3a5050', bold = true })

@@ -38,6 +38,7 @@ endif
 " Set leader key
 nnoremap <SPACE> <Nop>
 let mapleader=" "
+let maplocalleader=" "
 
 set shell=zsh
 " Toggle relative line numbers

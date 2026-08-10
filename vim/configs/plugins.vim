@@ -64,6 +64,8 @@ if has('nvim')
   Plug 'sindrets/diffview.nvim'
   Plug 'kdheepak/lazygit.nvim'
   Plug 'windwp/nvim-autopairs'
+  Plug 'nvim-tree/nvim-web-devicons'
+  Plug 'pwntester/octo.nvim'
 endif
 
 " Make sure you use single quotes
