@@ -25,12 +25,14 @@ if !has('nvim')
 "   Plug 'vim-airline/vim-airline-themes'
 "   Plug 'vim-scripts/matchit.zip'
 "   Plug 'airblade/vim-gitgutter'
-"   Plug 'chun-yang/auto-pairs'
 "   Plug 'liuchengxu/vim-which-key'
 "   Plug 'michaeljsmith/vim-indent-object'
 "   Plug 'konfekt/fastfold'
 "   Plug 'Yggdroot/indentLine'
 "   Plug 'terryma/vim-expand-region'
+  " Unmaintained; crashes (E716 "rhs") when it runs on buffers that have
+  " Lua-callback keymaps (e.g. from nvim-cmp) - use nvim-autopairs on Neovim.
+  Plug 'chun-yang/auto-pairs'
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
   " fastfold messes up with avante in neovim
   Plug 'konfekt/fastfold'
@@ -56,11 +58,12 @@ if has('nvim')
   Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'stevearc/dressing.nvim' " for enhanced input UI
   " https://github.com/yetone/avante.nvim/issues/2689#issuecomment-3288641336
-  Plug 'yetone/avante.nvim', { 'tag': 'v0.0.27', 'do': 'make' }
+  " Plug 'yetone/avante.nvim', { 'tag': 'v0.0.27', 'do': 'make' }
   Plug 'ravitemer/mcphub.nvim', { 'do': 'npm install -g mcp-hub@latest' }
   Plug 'zbirenbaum/copilot.lua'
   Plug 'sindrets/diffview.nvim'
   Plug 'kdheepak/lazygit.nvim'
+  Plug 'windwp/nvim-autopairs'
 endif
 
 " Make sure you use single quotes
@@ -95,7 +98,6 @@ Plug 'ecomba/vim-ruby-refactoring'
 " Error: "It seems your ruby installation is missing psych"
 " Plug 'stefanoverna/vim-i18n'
 Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'chun-yang/auto-pairs'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree'
