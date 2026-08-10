@@ -16,9 +16,9 @@
       "bindings": {
         "escape": "chat:cancel",
         "shift+tab": "chat:cycleMode",
-        "meta+p": "chat:modelPicker",
-        "meta+o": "chat:fastMode",
-        "meta+t": "chat:thinkingToggle",
+        "ctrl+shift+p": "chat:modelPicker",
+        "ctrl+shift+o": "chat:fastMode",
+        "ctrl+shift+t": "chat:thinkingToggle",
         "enter": "chat:submit",
         "up": "history:previous",
         "down": "history:next",
@@ -142,11 +142,11 @@
         "j": "messageSelector:down",
         "ctrl+up": "messageSelector:top",
         "shift+up": "messageSelector:top",
-        "meta+up": "messageSelector:top",
+        "ctrl+shift+up": "messageSelector:top",
         "shift+k": "messageSelector:top",
         "ctrl+down": "messageSelector:bottom",
         "shift+down": "messageSelector:bottom",
-        "meta+down": "messageSelector:bottom",
+        "ctrl+shift+down": "messageSelector:bottom",
         "shift+j": "messageSelector:bottom",
         "enter": "messageSelector:select"
       }

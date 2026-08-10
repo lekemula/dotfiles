@@ -5,6 +5,10 @@
 - Don't add method comments unnecessarily. Only add comments for non-obvious code.
 - Run tests/specs/linters after making changes to ensure nothing is broken.
 - Don't commit or push unless I ask.
+- Avoid unexpanded acronyms (ECD, LoA, etc.) in titles, headings, commit subjects, and PR/ticket titles. In long-form bodies, expand on first use — e.g. `ExternalCreditDecision (ECD)` — then reuse the short form. Code identifiers like `PROCESS_STATUS_ERROR` are not acronyms; use them as-is.
+
+## Skills
+- Any helper script bundled inside a skill you author (SKILL.md directories under `~/.claude/skills/` or a repo's `.claude/skills/`) must be written in Ruby, not Python/bash/etc. — easier for me to review. Plain `bash`/CLI one-liners inline in skill steps are fine; this is about actual standalone scripts (e.g. a `scripts/*.rb` file a skill shells out to).
 
 ## Ruby / Rails
 - Primary stack: Ruby on Rails
@@ -13,6 +17,9 @@
 - Debugging: debugger
 - Linting: RuboCop - run after changes to Ruby files
 - Follow existing project conventions over style guide defaults
+
+## Credentials
+- `BUNDLE_RUBYGEMS__PKG__GITHUB__COM` (GitHub Packages auth for the private `rubygems.pkg.github.com/LoanLink` gem source, needed for `bundle install` in LoanLink Ruby repos) lives in `~/.zshrc.secrets` and is already present in any shell — check with `[ -n "$BUNDLE_RUBYGEMS__PKG__GITHUB__COM" ]` before assuming it's missing, and pass it through explicitly to `docker exec` when installing inside a container. Don't go hunting other credential stores for this or similar tokens — ask if it's not found here.
 
 ## Docker
 - Use Docker for development and testing when possible
