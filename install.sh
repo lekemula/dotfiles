@@ -47,6 +47,8 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml $CONFIG_DIR/solargr
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/btop.conf $CONFIG_DIR/btop/btop.conf
 [ ! -d $CONFIG_DIR/mise ] && mkdir -p $CONFIG_DIR/mise
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/mise.config.toml $CONFIG_DIR/mise/config.toml
+[ ! -d $CONFIG_DIR/hunk ] && mkdir -p $CONFIG_DIR/hunk
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/hunk.config.toml $CONFIG_DIR/hunk/config.toml
 
 [ ! -d ~/.logseq/config ] && mkdir -p ~/.logseq/config
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/logseq.edn ~/.logseq/config/config.edn

@@ -270,18 +270,6 @@ if ! command -v delta &> /dev/null; then
   brew install git-delta
 fi
 
-# Review-first terminal diff viewer — https://github.com/modem-dev/hunk
-if ! command -v hunk &> /dev/null; then
-  brew install hunk
-fi
-
-# Expose Hunk's own built-in agent-review skill alongside our Claude skills.
-# `brew --prefix hunk` resolves Homebrew's stable per-formula symlink (survives
-# `brew upgrade`), so this self-heals across versions without re-running install.sh.
-if command -v hunk &> /dev/null && [[ -d ~/.claude/skills ]]; then
-  ln -vsfn "$(brew --prefix hunk)/libexec/skills/hunk-review" ~/.claude/skills/hunk-review
-fi
-
 if ! command -v terraform-ls &> /dev/null; then
   brew install hashicorp/tap/terraform-ls
 fi
@@ -375,6 +363,12 @@ fi
 
 # https://claude.ai/download — Claude desktop app
 install_cask "/Applications/Claude.app" claude
+
+# Review-first terminal diff viewer — https://github.com/modem-dev/hunk
+if ! command -v hunk &> /dev/null; then
+  brew install hunk
+  ln -vsfn "$(brew --prefix hunk)/libexec/skills/hunk-review" ~/.claude/skills/hunk-review
+fi
 
 if ! command -v tree &> /dev/null; then
   brew install tree
