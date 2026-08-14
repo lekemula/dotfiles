@@ -357,9 +357,8 @@ if ! command -v cargo &> /dev/null; then
   brew install rust
 fi
 
-if ! command -v claude  &> /dev/null; then
-  npm install -g @anthropic-ai/claude-code
-fi
+# https://formulae.brew.sh/cask/claude-code@latest — Claude Code CLI, tracks the latest release
+install_cask "/opt/homebrew/bin/claude" claude-code@latest
 
 # https://claude.ai/download — Claude desktop app
 install_cask "/Applications/Claude.app" claude
