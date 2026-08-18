@@ -5,6 +5,9 @@ local comment_mappings = {
   add_reply = { lhs = "<localleader>ocr", desc = "add reply" },
   delete_comment = { lhs = "<localleader>ocd", desc = "delete comment" },
   comment_edits = { lhs = "<localleader>oce", desc = "show comment edit history" },
+  -- ]c/[c are Vim's built-in "next/prev diff change" motions; keep those free.
+  next_comment = { lhs = "]m", desc = "go to next comment" },
+  prev_comment = { lhs = "[m", desc = "go to previous comment" },
 }
 
 require("octo").setup({
@@ -13,9 +16,12 @@ require("octo").setup({
     discussion = comment_mappings,
     issue = comment_mappings,
     pull_request = comment_mappings,
-    review_thread = comment_mappings,
+    review_thread = vim.tbl_extend("force", comment_mappings, {
+      add_suggestion = { lhs = "<localleader>osa", desc = "add suggestion" },
+    }),
     review_diff = {
       add_review_comment = { lhs = "<localleader>oca", desc = "add a new review comment", mode = { "n", "x" } },
+      add_review_suggestion = { lhs = "<localleader>osa", desc = "add a new review suggestion", mode = { "n", "x" } },
     },
   },
 })
