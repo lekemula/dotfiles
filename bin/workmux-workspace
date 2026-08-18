@@ -1,0 +1,125 @@
+#!/usr/bin/env zsh
+# Reopen tmux windows for workmux worktrees that are still in flight.
+#
+# Companion to tmux-workspace, not a replacement. tmux-workspace rebuilds the
+# trunk windows (one per repo, nvim | claude | zsh); this restores the per-task
+# agent windows that `workmux add` created. After a reboot:
+#
+#   tmux-workspace && workmux-workspace && tmux attach -t finlink
+#
+# Usage: workmux-workspace [--dry-run|-n] [--no-continue]
+#   --dry-run       Show what would be restored, change nothing
+#   --no-continue   Reopen windows without resuming agent conversations
+#
+# Best run detached, before attaching: `workmux open` has no background flag,
+# so each call switches the attached client to the window it just opened.
+
+set -e
+
+DRY_RUN=0
+CONTINUE=1
+# zsh rebinds $0 inside functions, so capture the script name while at top level.
+SCRIPT_NAME=${0:t}
+
+usage() {
+  print -r -- "Usage: $SCRIPT_NAME [--dry-run|-n] [--no-continue]"
+  print -r -- "  --dry-run       Show what would be restored, change nothing"
+  print -r -- "  --no-continue   Reopen windows without resuming agent conversations"
+}
+
+while [[ ${1:-} == -* ]]; do
+  case "$1" in
+    --dry-run|-n)  DRY_RUN=1; shift ;;
+    --no-continue) CONTINUE=0; shift ;;
+    -h|--help)     usage; exit 0 ;;
+    *) print -r -- "Unknown option: $1" >&2; usage >&2; exit 1 ;;
+  esac
+done
+
+for cmd in workmux jq tmux; do
+  if ! command -v $cmd &> /dev/null; then
+    print -r -- "$cmd is required but not installed." >&2
+    exit 1
+  fi
+done
+
+# The tmux session a repo's agent windows belong in. Mirrors how tmux-workspace
+# groups repos into two sessions rather than giving each repo its own.
+session_for() {
+  case "$1" in
+    $HOME/Projects/open_source/*) print -r -- solargraph ;;
+    *)                            print -r -- finlink ;;
+  esac
+}
+
+# Repos that currently have worktrees, found via the sibling <repo>__worktrees
+# directory workmux creates. This tracks real work instead of a hardcoded repo
+# list, but it is tied to the default worktree_dir — if workmux.config.yaml ever
+# sets `worktree_dir`, these globs have to follow it.
+# (N/) is nullglob + directories-only, so absent paths disappear quietly.
+discover_repos() {
+  local wt repo
+  for wt in $HOME/Projects/*/*__worktrees(N/) $HOME/*__worktrees(N/); do
+    repo="${wt%__worktrees}"
+    if [[ -d "$repo/.git" ]]; then
+      print -r -- "$repo"
+    fi
+  done
+}
+
+open_flags=()
+if (( CONTINUE )); then
+  open_flags+=(--continue)
+fi
+
+# Return to whichever window was focused before we started; each `workmux open`
+# drags the attached client along with it. No-op when run detached.
+previous_window=$(tmux display-message -p '#{session_name}:#{window_index}' 2>/dev/null || true)
+
+restored=0
+already=0
+
+for repo in ${(f)"$(discover_repos)"}; do
+  session=$(session_for "$repo")
+  json=$(cd "$repo" && workmux list --json 2>/dev/null || true)
+  [[ -z "$json" ]] && continue
+
+  # The main checkout is always in `list`; only per-task worktrees interest us.
+  pending=(${(f)"$(print -r -- "$json" | jq -r '.[] | select(.is_main | not) | select(.is_open | not) | .handle')"})
+  live=(${(f)"$(print -r -- "$json" | jq -r '.[] | select(.is_main | not) | select(.is_open) | .handle')"})
+
+  (( ${#pending} + ${#live} == 0 )) && continue
+  print -r -- "${repo:t} -> $session"
+
+  for handle in $live; do
+    print -r -- "    worktree '$handle' already open"
+    already=$(( already + 1 ))
+  done
+
+  for handle in $pending; do
+    if (( DRY_RUN )); then
+      print -r -- "    worktree '$handle' would be restored"
+    else
+      (cd "$repo" && workmux open "$handle" --parent-session "$session" $open_flags > /dev/null)
+      print -r -- "    worktree '$handle' restored"
+    fi
+    restored=$(( restored + 1 ))
+  done
+done
+
+if (( restored == 0 && already == 0 )); then
+  print -r -- "No worktrees to restore."
+  exit 0
+fi
+
+if (( ! DRY_RUN )) && [[ -n "$previous_window" ]]; then
+  tmux select-window -t "$previous_window" 2>/dev/null || true
+fi
+
+if (( DRY_RUN )); then
+  print
+  print -r -- "$restored to restore, $already already open (dry run)."
+else
+  print
+  print -r -- "$restored restored, $already already open."
+fi
