@@ -128,3 +128,4 @@ If there is no such detail, omit the comment block entirely — don't pad it.
 - Summary is a title, so expand acronyms there (see the acronym rule in `~/.claude/CLAUDE.md`). In the comment body, expand on first use — e.g. `ExternalCreditDecision (ECD)` — then reuse the short form.
 - One board per ticket. If the work spans both FinLink and Coba, that is two tickets.
 - Never create the issue before the user approves the draft.
+- Keep tickets compact: a brief description (the symptom + how it was found) plus Acceptance Criteria. Move deep root-cause investigation, repro logs, and file/line detail into a comment, not the description.
