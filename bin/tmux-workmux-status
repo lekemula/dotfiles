@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+# Put workmux's agent status icon inside the theme's window status segments.
+#
+# workmux can inject the icon itself, but it appends #{@workmux_status} to the
+# END of the format string — after the theme's closing powerline separator — so
+# the icon renders outside the window segment. It also writes the formats as
+# per-window options, which the theme's global formats can never override.
+#
+# So workmux.config.yaml sets `status_format: false` and this puts the
+# placeholder next to #W instead. Called from .tmux.conf *after* tpm, since the
+# theme has to have set its formats first. Idempotent — safe on every reload.
+
+set -e
+
+STATUS='#{?@workmux_status, #{@workmux_status},}'
+# Held in a variable: quoting the literal inline in the replacement makes zsh
+# insert the quote characters themselves.
+NAME='#W'
+
+for opt in window-status-format window-status-current-format; do
+  current=$(tmux show -gv "$opt")
+  if [[ "$current" != *'@workmux_status'* ]]; then
+    tmux set -g "$opt" "${current/$NAME/$NAME$STATUS}"
+  fi
+done
+
+# Clear per-window overrides left behind from when status_format was enabled;
+# they shadow the global formats set above.
+tmux list-windows -a -F '#{session_name}:#{window_index}' | while read -r window; do
+  tmux set -uw -t "$window" window-status-format 2>/dev/null || true
+  tmux set -uw -t "$window" window-status-current-format 2>/dev/null || true
+done

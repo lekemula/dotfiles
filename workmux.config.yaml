@@ -30,6 +30,12 @@ worktree_naming: basename
 # the projects dir entirely:
 # worktree_dir: ~/.workmux/{project}
 
+# Do not let workmux rewrite the tmux window formats. It appends its status
+# placeholder after the theme's closing separator, so the icon lands outside the
+# window segment, and it writes per-window options the theme cannot override.
+# bin/tmux-workmux-status places the placeholder next to #W instead.
+status_format: false
+
 # nvim on the left, agent on the right — the bin/tmux-workspace layout without
 # its shell pane. In workmux `split: horizontal` is side-by-side (a vertical
 # divider), and `size` there counts columns, not rows.
