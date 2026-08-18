@@ -270,6 +270,12 @@ if ! command -v delta &> /dev/null; then
   brew install git-delta
 fi
 
+# Structural, syntax-aware diffs, used on demand via the git ddiff/dshow/dlog
+# aliases in .gitconfig. https://github.com/Wilfred/difftastic
+if ! command -v difft &> /dev/null; then
+  brew install difftastic
+fi
+
 if ! command -v terraform-ls &> /dev/null; then
   brew install hashicorp/tap/terraform-ls
 fi

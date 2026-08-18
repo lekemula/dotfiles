@@ -7,6 +7,7 @@ alias gcobfzf='git checkout -b $(git branch --all | fzf)'
 alias gcob='git checkout -b'
 alias glot='glo --tags --no-walk --tags --no-walk'
 alias mkdir='mkdir -p' # create dir recursively
+alias gdd='git ddiff' # structural diff
 alias gdb='git diff origin/main..HEAD'
 alias res='omz reload' # reload zsh
 alias upd='~/dotfiles/update.zsh'

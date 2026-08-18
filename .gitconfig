@@ -13,6 +13,31 @@
 [interactive]
   diffFilter = delta --color-only
 
+[diff]
+  colorMoved = default
+  # Structural, syntax-aware diffs on demand - https://github.com/Wilfred/difftastic
+  # Deliberately NOT diff.external: that would change `git diff` output for every
+  # tool that parses it, and difftastic's ANSI-only colours can't match delta's theme.
+  tool = difftastic
+
+[difftool]
+  prompt = false
+
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+  # Plain less, NOT core.pager (delta): delta expects a unified diff and would
+  # repaint difftastic's whole left column red and right column green.
+  difftool = less -FRX
+
+[alias]
+  # Difftastic on demand, for refactors where line-level diffs are all noise
+  # (reindentation, wrapping code in a module, reflowing long lines).
+  ddiff = "!git -c diff.external=difft -c core.pager='less -FRX' diff"
+  dshow = "!git -c diff.external=difft -c core.pager='less -FRX' show"
+  dlog = "!git -c diff.external=difft -c core.pager='less -FRX' log -p"
+
 [delta]
   navigate = true    # use n and N to move between diff sections
   light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
@@ -20,9 +45,6 @@
 
 [merge]
   conflictstyle = diff3
-
-[diff]
-  colorMoved = default
 
 [rebase]
   autoStash = true

@@ -4,6 +4,22 @@
 gui:
   scrollHeight: 4
   nerdFontsVersion: 3
+git:
+  # Cycle renderers with `|` (`\` reverses). First entry is the default, so
+  # lazygit's built-in rendering stays what you see on open.
+  # Difftastic is `extDiff` (it replaces git's diff engine, via GIT_EXTERNAL_DIFF)
+  # rather than `stdinFilter` like delta, which filters a unified diff. Its
+  # side-by-side default is unreadable in a narrow panel, hence --display=inline.
+  diffRenderers:
+    - type: rawGit
+      name: git
+    - type: stdinFilter
+      name: delta
+      command: delta --dark --paging=never
+      colorArg: always
+    - type: extDiff
+      name: difftastic
+      command: difft --color=always --display=inline
 keybinding:
   universal:
     prevPage: <c-u>
