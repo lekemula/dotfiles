@@ -37,6 +37,19 @@ panes:
   - split: horizontal
     size: 15
 
+# Always-on agent overview pinned to the edge of every tmux window — the
+# counterpart to `workmux dashboard`, which you open on demand and dismiss.
+# Toggle it with prefix + C-t (bound in .tmux.conf). It reads the same status
+# hooks as the dashboard, so without `workmux setup` it comes up empty.
+sidebar:
+  position: left
+  # Default is "10%", clamped to 25-50 columns; explicit values are not clamped.
+  width: 34
+  # "tiles" (cards, the default) or "compact" (one line per agent). `v` toggles
+  # it at runtime, `f` filters to the current session.
+  layout: tiles
+  dim_stale: true
+
 # Gitignored files a fresh worktree needs to actually run a Rails app.
 # Missing paths are skipped, so this is safe across non-Rails repos.
 files:
