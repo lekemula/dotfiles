@@ -605,3 +605,7 @@ function! SyntaxGroupStack()
 endfunc
 
 set runtimepath^=~/Projects/vscode-css-peek 
+
+" herdr pane navigation. Sourced last so its <C-h/j/k/l> mappings win over
+" vim-tmux-navigator's; it no-ops outside a herdr pane.
+source ~/vim/configs/herdr.vim

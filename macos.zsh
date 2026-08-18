@@ -216,6 +216,22 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
   fi
 fi
 
+# herdr: terminal workspace manager for AI coding agents. https://herdr.dev
+if ! command -v herdr &> /dev/null; then
+  brew install herdr
+fi
+
+# ctrl+h/j/k/l navigation across herdr panes and vim splits (vim-tmux-navigator,
+# ported to herdr). Keys are bound in herdr.config.toml, editor side is
+# vim/configs/herdr.vim. Needs jq, which navigate.sh uses to detect vim panes.
+if ! command -v jq &> /dev/null; then
+  brew install jq
+fi
+
+if ! herdr plugin list 2>/dev/null | grep -q vim-herdr-navigation; then
+  herdr plugin install paulbkim-dev/vim-herdr-navigation --yes
+fi
+
 if ! command -v go &> /dev/null; then
   brew install go
 fi

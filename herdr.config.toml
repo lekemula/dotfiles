@@ -1,0 +1,118 @@
+# herdr — terminal workspace manager for AI coding agents (https://herdr.dev)
+# Symlinked to ~/.config/herdr/config.toml by install.sh
+#
+# Keybindings mirror ~/.tmux.conf wherever herdr has an equivalent action.
+# Full schema: `herdr --default-config`. Validate with `herdr config check`.
+# Reload a running server with `herdr server reload-config` (or prefix+r below).
+
+[theme]
+# tmux: set -g @plugin 'egel/tmux-gruvbox' + set -g @tmux-gruvbox 'dark'
+name = "gruvbox"
+
+auto_switch = false
+[terminal]
+# tmux: split-window -c "#{pane_current_path}" — new panes inherit the source cwd
+new_cwd = "follow"
+
+[keys]
+# tmux: set -g prefix C-b
+prefix = "ctrl+b"
+
+# Splits — tmux: bind V split-window -h / bind S split-window -v
+# herdr's "vertical" is side-by-side, "horizontal" is stacked (same as tmux -h/-v).
+split_vertical = "prefix+shift+v"
+split_horizontal = "prefix+shift+s"
+
+# tmux: unbind r; bind r source-file ~/.tmux.conf
+# herdr binds prefix+r to resize mode by default, so the two are swapped here.
+reload_config = "prefix+r"
+resize_mode = "prefix+shift+r"
+
+# Pane focus. tmux uses ctrl+h/j/k/l (vim-tmux-navigator) for this and reserves
+# prefix+h/j/k/l for resizing — herdr has no vim-aware passthrough, so binding
+# ctrl+h/j/k/l here would steal them from vim/Neovim splits inside panes.
+# Resizing lives in resize_mode (prefix+shift+r) instead.
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# tmux built-in bindings worth keeping (herdr defaults differ)
+detach = "prefix+d"           # tmux: prefix d
+rename_tab = "prefix+comma"   # tmux: prefix , (rename-window)
+close_tab = "prefix+ampersand" # tmux: prefix & (kill-window)
+
+# Same as tmux defaults; spelled out so they survive future herdr default changes.
+new_tab = "prefix+c"
+previous_tab = "prefix+p"
+next_tab = "prefix+n"
+switch_tab = "prefix+1..9"
+close_pane = "prefix+x"
+zoom = "prefix+z"
+help = "prefix+?"
+
+# ctrl+h/j/k/l pane navigation, the vim-tmux-navigator equivalent.
+# Provided by the vim-herdr-navigation plugin:
+#   herdr plugin install paulbkim-dev/vim-herdr-navigation
+# Each action checks the focused pane's foreground process: if it is vim/nvim
+# the key is forwarded into that pane (so vim moves between its own splits and
+# crosses out at an edge via ~/vim/configs/herdr.vim), otherwise herdr moves
+# pane focus. Trade-off, same as in tmux today: ctrl+l no longer clears the
+# screen and ctrl+k no longer kills the line in non-vim panes.
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "vim-herdr-navigation.left"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "vim-herdr-navigation.down"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "vim-herdr-navigation.up"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "vim-herdr-navigation.right"
+description = "navigate right (vim/herdr)"
+
+# Optional: popup command bindings, e.g. lazygit
+# [[keys.command]]
+# key = "prefix+alt+g"
+# type = "popup"
+# command = "lazygit"
+# width = "80%"
+# height = "80%"
+
+[ui]
+# tmux: set -g mouse on
+mouse_capture = true
+
+# tmux: set -s set-clipboard on + copy-mode-vi 'y' send -X copy-selection
+copy_on_select = true
+
+# tmux new-window is immediate; don't prompt for a tab name.
+prompt_new_tab_name = false
+
+agent_panel_sort = "spaces"
+[session]
+# Replaces tmux-resurrect + tmux-continuum: herdr restores panes itself and can
+# resume agent conversations after a server restart.
+resume_agents_on_restore = true
+
+# Not portable from ~/.tmux.conf — herdr has no equivalent action:
+#   bind m select-pane -m / bind M join-pane   (mark + join pane)
+#   bind -r Left/Right swap-window             (reorder windows)
+#   bind ! @ $ % ^ select-layout               (layout presets)
+#   bind-key C-l last-window                   (no last_tab action)
+#   copy-mode-vi v / C-v / y                   (herdr uses copy_on_select,
+#                                               mouse selection, prefix+e to
+#                                               open scrollback in $EDITOR)
+#   set -sg escape-time / set -s extended-keys  (handled natively by herdr)
