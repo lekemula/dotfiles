@@ -41,6 +41,10 @@ let mapleader=" "
 let maplocalleader=" "
 
 set shell=zsh
+" Keep unfocused buffers loaded instead of unloading them; needed to avoid
+" https://github.com/pwntester/octo.nvim/issues/1518 (stale octo:// buffers
+" get re-read and crash when revisiting a file in a review's file panel).
+set hidden
 " Toggle relative line numbers
 nnoremap <leader>ln :set relativenumber!<CR>
 set norelativenumber
