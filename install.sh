@@ -51,6 +51,8 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/mise.config.toml $CONFIG_DIR/mise/c
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/hunk.config.toml $CONFIG_DIR/hunk/config.toml
 [ ! -d $CONFIG_DIR/herdr ] && mkdir -p $CONFIG_DIR/herdr
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/herdr.config.toml $CONFIG_DIR/herdr/config.toml
+[ ! -d $CONFIG_DIR/workmux ] && mkdir -p $CONFIG_DIR/workmux
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/workmux.config.yaml $CONFIG_DIR/workmux/config.yaml
 
 [ ! -d ~/.logseq/config ] && mkdir -p ~/.logseq/config
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/logseq.edn ~/.logseq/config/config.edn

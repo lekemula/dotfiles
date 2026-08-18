@@ -1,0 +1,53 @@
+# workmux — git worktrees + tmux windows for parallel agents (https://workmux.raine.dev)
+# Symlinked to ~/.config/workmux/config.yaml by install.sh
+#
+# This is the *global* config. Per-project overrides go in a `.workmux.yaml` at
+# the repo root (`workmux init` scaffolds one); use "<global>" inside a project's
+# hook/file lists to keep these values alongside the project-specific ones.
+# Full schema: `workmux config reference`. Edit with `workmux config edit`.
+#
+# Unlike herdr, workmux is not a multiplexer — it drives the tmux in ~/.tmux.conf,
+# so keybindings stay whatever tmux already has. Only workflow lives here.
+
+# Agent launched by the `<agent>` placeholder in `panes` below.
+agent: claude
+
+# Branch new worktrees off the repo's main branch rather than whatever happens to
+# be checked out — parallel worktrees should not inherit each other's WIP.
+# `workmux add --base <ref>` overrides per invocation.
+base_branch: auto
+
+# Matches the rebase-first setup in .gitconfig (pull.rebase = true).
+# `workmux merge --squash` / `--merge` override per invocation.
+merge_strategy: rebase
+
+# Branch `lekemula/GRT-123-thing` becomes worktree/window `GRT-123-thing`
+# instead of `lekemula-GRT-123-thing`.
+worktree_naming: basename
+
+# Worktrees are created in a sibling `<project>__worktrees/` directory by default,
+# e.g. ~/Projects/finlink__worktrees/GRT-123-thing. Uncomment to keep them out of
+# the projects dir entirely:
+# worktree_dir: ~/.workmux/{project}
+
+# Agent pane on top, plain shell underneath for git/tests/one-offs.
+panes:
+  - command: <agent>
+    focus: true
+  - split: horizontal
+    size: 15
+
+# Gitignored files a fresh worktree needs to actually run a Rails app.
+# Missing paths are skipped, so this is safe across non-Rails repos.
+files:
+  copy:
+    - .env
+    - .env.local
+    - config/master.key
+    - config/credentials/*.key
+
+# Hooks run in the new worktree with WM_HANDLE / WM_WORKTREE_PATH /
+# WM_PROJECT_ROOT / WM_CONFIG_DIR set. post_create blocks the tmux window from
+# opening, so keep it short — `bundle install` belongs in a project .workmux.yaml.
+# post_create:
+#   - mise install

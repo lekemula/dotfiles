@@ -12,6 +12,11 @@ if [[ $(which spin) != *'not found' ]]; then
   source <(spin completion --shell=zsh)
 fi
 
+# workmux completions — completes commands and existing worktree/branch names
+if command -v workmux &> /dev/null; then
+  eval "$(workmux completions zsh)"
+fi
+
 source ~/.aliases.zsh
 
 eval $(thefuck --alias)

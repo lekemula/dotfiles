@@ -232,6 +232,22 @@ if ! herdr plugin list 2>/dev/null | grep -q vim-herdr-navigation; then
   herdr plugin install paulbkim-dev/vim-herdr-navigation --yes
 fi
 
+# workmux — git worktrees + tmux windows for running agents in parallel.
+# https://github.com/raine/workmux (config: workmux.config.yaml)
+if ! command -v workmux &> /dev/null; then
+  brew install raine/workmux/workmux
+
+  # Installs the agent status-tracking hooks (🤖/💬/✅ in the tmux window list)
+  # and workmux's own agent skills. Writes into ~/.claude, which install.sh
+  # symlinks back into this repo, so the changes are tracked here.
+  # It refuses to run without a TTY, so only offer it on an interactive shell.
+  if [[ -o interactive ]]; then
+    workmux setup
+  else
+    echo "Run 'workmux setup' to install the agent status-tracking hooks."
+  fi
+fi
+
 if ! command -v go &> /dev/null; then
   brew install go
 fi
