@@ -51,3 +51,4 @@ files:
 # opening, so keep it short — `bundle install` belongs in a project .workmux.yaml.
 # post_create:
 #   - mise install
+nerdfont: true
