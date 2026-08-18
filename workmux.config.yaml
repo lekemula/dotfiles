@@ -30,12 +30,14 @@ worktree_naming: basename
 # the projects dir entirely:
 # worktree_dir: ~/.workmux/{project}
 
-# Agent pane on top, plain shell underneath for git/tests/one-offs.
+# nvim on the left, agent on the right — the bin/tmux-workspace layout without
+# its shell pane. In workmux `split: horizontal` is side-by-side (a vertical
+# divider), and `size` there counts columns, not rows.
 panes:
+  - command: nvim
   - command: <agent>
+    split: horizontal
     focus: true
-  - split: horizontal
-    size: 15
 
 # Always-on agent overview pinned to the edge of every tmux window — the
 # counterpart to `workmux dashboard`, which you open on demand and dismiss.
