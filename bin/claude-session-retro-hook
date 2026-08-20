@@ -1,0 +1,101 @@
+#!/usr/bin/env zsh
+# Draft a session retro before the conversation is lost to compaction or exit.
+#
+# PreCompact and SessionEnd hooks are plain shell commands: they cannot drive the
+# session they fire in, and by then the context is about to go (SessionEnd fires
+# after the session is already gone). So this spawns a detached, read-only
+# `claude -p` run over the session transcript instead.
+#
+# It only ever *proposes*. The session-retro skill requires explicit approval
+# before touching CLAUDE.md, and nothing here can ask for it, so the headless run
+# gets read tools only and its summary is written to the inbox for review:
+#
+#   ~/.claude/retro-inbox/<date>-<session>-<event>.md
+#
+# bin/claude-retro-inbox-notice surfaces pending proposals at SessionStart.
+#
+# Wired up from claude.json (~/.claude/settings.json) on PreCompact and
+# SessionEnd, both async so they never delay a compaction or an exit.
+#
+# Knobs: CLAUDE_RETRO_INBOX, CLAUDE_RETRO_MODEL, CLAUDE_RETRO_MIN_LINES.
+
+emulate -L zsh
+set -euo pipefail
+
+INBOX=${CLAUDE_RETRO_INBOX:-$HOME/.claude/retro-inbox}
+MODEL=${CLAUDE_RETRO_MODEL:-sonnet}
+# Transcript lines below this are a throwaway session with nothing to learn from.
+MIN_LINES=${CLAUDE_RETRO_MIN_LINES:-40}
+
+# --- detached worker ------------------------------------------------------
+# Re-entered as `--run` by the spawn below, so the prompt does not have to
+# survive a round trip through `nohup zsh -c '...'` quoting.
+if [[ ${1:-} == --run ]]; then
+  transcript=$2 session=$3 event=$4 out=$5
+  mkdir -p ${out:h}
+
+  read -r -d '' prompt <<EOF || true
+Use the session-retro skill to review a finished session, with these headless
+adjustments — there is no user here to answer you:
+
+- The conversation is NOT in your context. Read it from the transcript at
+  ${transcript} (JSONL, one message per line, newest last).
+- Propose only. You have read tools only: do not edit CLAUDE.md, the global
+  ~/.claude/CLAUDE.md, or any memory file. Skip the skill's write steps.
+- Still do the skill's duplicate check: read the CLAUDE.md files and memory that
+  already exist, and drop anything they already say.
+- Your final message IS the proposal document. Markdown, grouped by destination
+  file, each entry showing the exact line(s) to add and one line of why, followed
+  by a short list of candidates you rejected with a one-line reason each.
+- If nothing in the session is worth persisting, reply with exactly:
+  NOTHING TO PERSIST
+EOF
+
+  tmp=$out.partial
+  if CLAUDE_SESSION_RETRO=1 claude -p "$prompt" \
+       --model "$MODEL" \
+       --allowedTools Read Grep Glob \
+       >"$tmp" 2>"$out.log"; then
+    if grep -qx 'NOTHING TO PERSIST' "$tmp"; then
+      rm -f "$tmp" "$out.log"
+    else
+      { print -r -- "<!-- session $session · $event · transcript $transcript -->"; cat "$tmp" } >"$out"
+      rm -f "$tmp" "$out.log"
+    fi
+  else
+    # Keep the log when the run itself failed; the partial output is noise.
+    rm -f "$tmp"
+  fi
+  exit 0
+fi
+
+# --- hook entry point -----------------------------------------------------
+# A retro is itself a claude run: without this it would retro its own retro.
+[[ -z ${CLAUDE_SESSION_RETRO:-} ]] || exit 0
+# Background jobs and subagents end constantly and carry no standing decisions.
+[[ ${CLAUDE_CODE_CHILD_SESSION:-0} != 1 ]] || exit 0
+command -v claude >/dev/null 2>&1 || exit 0
+command -v jq >/dev/null 2>&1 || exit 0
+
+payload=$(cat 2>/dev/null || true)
+[[ -n $payload ]] || exit 0
+transcript=$(print -r -- "$payload" | jq -r '.transcript_path // empty' 2>/dev/null || true)
+session=$(print -r -- "$payload" | jq -r '.session_id // "unknown"' 2>/dev/null || true)
+event=$(print -r -- "$payload" | jq -r '.hook_event_name // "unknown"' 2>/dev/null || true)
+cwd=$(print -r -- "$payload" | jq -r '.cwd // empty' 2>/dev/null || true)
+[[ -f $transcript ]] || exit 0
+
+lines=$(wc -l <"$transcript" | tr -d ' ')
+(( lines >= MIN_LINES )) || exit 0
+
+mkdir -p "$INBOX/.processed"
+# PreCompact then SessionEnd on an unchanged transcript is the same session twice.
+stamp=$INBOX/.processed/$session
+[[ ! -f $stamp || "$(<$stamp)" != $lines ]] || exit 0
+print -r -- $lines >"$stamp"
+
+out=$INBOX/$(date +%Y%m%d-%H%M%S)-${session[1,8]}-$event.md
+[[ -d $cwd ]] && cd "$cwd"
+nohup "$0" --run "$transcript" "$session" "$event" "$out" >/dev/null 2>&1 &
+disown
+exit 0

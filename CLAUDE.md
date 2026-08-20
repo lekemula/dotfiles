@@ -36,6 +36,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `claude.json` → `~/.claude/settings.json` (global Claude Code settings)
 - `CLAUDE.md` → `~/.claude/CLAUDE.md` (global instructions for all projects)
 - Plugins: playwright, github, layered-rails, solargraph (local)
+- Hooks (all `bin/` scripts, symlinked to `/usr/local/bin` by `install.sh`):
+  - `workmux-claude-status` — reports agent status to the right tmux pane
+  - `claude-session-retro-hook` — on PreCompact/SessionEnd, drafts a read-only
+    session retro into `~/.claude/retro-inbox/` (proposes only, never writes
+    CLAUDE.md or memory)
+  - `claude-retro-inbox-notice` — announces pending retro proposals at SessionStart
 
 ### Tool Conventions
 - Shell plugin manager: Antigen (`.antigenrc`)

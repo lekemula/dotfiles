@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+# Tell me at SessionStart when bin/claude-session-retro-hook left proposals behind.
+#
+# The retros are drafted headlessly after a session is already over, so without
+# this they would pile up unread. Prints nothing when the inbox is empty.
+
+emulate -L zsh
+setopt null_glob
+
+INBOX=${CLAUDE_RETRO_INBOX:-$HOME/.claude/retro-inbox}
+
+proposals=($INBOX/*.md)
+(( ${#proposals} )) || exit 0
+
+newest=${proposals[-1]:t}
+if (( ${#proposals} == 1 )); then
+  message="1 session-retro proposal pending: $INBOX/$newest — read it, ask me to apply what you want, then delete it."
+else
+  message="${#proposals} session-retro proposals pending in $INBOX (newest: $newest) — read them, ask me to apply what you want, then delete them."
+fi
+
+jq -n --arg m "$message" '{systemMessage: $m}'
