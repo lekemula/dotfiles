@@ -36,6 +36,13 @@ worktree_naming: basename
 # bin/tmux-workmux-status places the placeholder next to #W instead.
 status_format: false
 
+# Claude Code's status hooks in claude.json call bin/workmux-claude-status, not
+# `workmux set-window-status` directly: Claude 2.1 runs sessions in its own
+# daemon and strips TMUX_PANE, so workmux cannot tell which pane a session is
+# in and stops registering new agents. The wrapper resolves the pane first.
+# `workmux setup` rewrites those hooks back to the plain command — re-apply
+# claude.json afterwards.
+
 # nvim on the left, agent on the right — the bin/tmux-workspace layout without
 # its shell pane. In workmux `split: horizontal` is side-by-side (a vertical
 # divider), and `size` there counts columns, not rows.

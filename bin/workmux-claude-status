@@ -1,0 +1,53 @@
+#!/usr/bin/env zsh
+# Report Claude Code's agent status to workmux when the hook has no $TMUX_PANE.
+#
+# Claude Code 2.1 runs sessions inside its own session daemon (spares, FleetView,
+# background jobs) and strips TMUX/TMUX_PANE from the agent's environment, since
+# a daemon session outlives the terminal it was started from. `workmux
+# set-window-status` keys its state by pane, so without TMUX_PANE it cannot tell
+# which pane the session belongs to: it silently refreshes whichever record it
+# wrote last — often a sidebar pane in an unrelated window — and never registers
+# a newly started session.
+#
+# This wrapper resolves the pane from the session's working directory, the one
+# piece of pane-adjacent context the hook payload carries, and hands workmux a
+# TMUX_PANE. Sessions with no pane of their own (fleet sessions, worktrees opened
+# elsewhere) report nothing rather than mislabelling someone else's pane.
+#
+# Wired up from claude.json (~/.claude/settings.json):
+#   workmux-claude-status working|waiting|done|clear
+
+emulate -L zsh
+set -euo pipefail
+
+state=${1:-}
+[[ -n $state ]] || exit 0
+command -v workmux >/dev/null 2>&1 || exit 0
+
+if [[ -n ${TMUX_PANE:-} ]]; then
+  exec workmux set-window-status "$state"
+fi
+
+command -v tmux >/dev/null 2>&1 || exit 0
+command -v jq >/dev/null 2>&1 || exit 0
+
+# The hook payload arrives on stdin; `cwd` is the session's working directory.
+payload=$(cat 2>/dev/null || true)
+cwd=$(print -r -- "$payload" | jq -r '.cwd // empty' 2>/dev/null || true)
+[[ -n $cwd ]] || cwd=$PWD
+# tmux reports resolved paths, so compare resolved against resolved.
+cwd=${cwd:A}
+
+# Only panes whose foreground process is the agent itself: a project window also
+# holds an editor, a shell and the workmux sidebar, all sharing the directory.
+typeset -a panes
+panes=(${(f)"$(
+  tmux list-panes -a -F $'#{pane_id}\t#{pane_current_command}\t#{pane_current_path}' 2>/dev/null |
+    awk -F'\t' -v dir="$cwd" '$3 == dir && $2 ~ /^(claude|codex|opencode|gemini)$/ { print $1 }'
+)"})
+
+# No pane means a detached session; several mean the directory cannot pick one.
+(( ${#panes} == 1 )) || exit 0
+
+export TMUX_PANE=${panes[1]}
+exec workmux set-window-status "$state"
