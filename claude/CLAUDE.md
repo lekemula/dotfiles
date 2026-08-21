@@ -35,6 +35,12 @@
 - Push sets up remote tracking automatically (autoSetupRemote)
 - Wait for confirmation before commiting and pushing to remote branches
 
+## Worktrees
+- Worktrees are workmux's job. It keeps them in a sibling `<project>__worktrees/<name>` with a tmux window and agent status tracking attached — reuse those instead of creating a parallel `.claude/worktrees/` copy of the same repo.
+- Need isolation: run `workmux list` first and enter an existing worktree by its path (`workmux path <name>` resolves it); only `workmux add <name>` a new one if none fits. Entering it counts as isolating, so background jobs don't need their own `.claude/worktrees/` copy.
+- Clean up with `workmux merge` or `workmux remove`, not `git worktree remove` — those also close the tmux window and drop the branch.
+- Don't hand-roll `git worktree add`.
+
 ## Environment
 - macOS, zsh, Neovim, tmux, iTerm2
 - Shell plugin manager: Antigen
