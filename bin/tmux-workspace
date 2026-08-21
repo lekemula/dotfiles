@@ -112,10 +112,6 @@ setup_finlink() {
     layout "finlink:coba-integrations" "$FINLINK/coba-integrations"
   fi
 
-  if new_window "finlink" postman ~; then
-    layout "finlink:postman" ~
-  fi
-
   if new_window "finlink" dev-pal "$FINLINK/dev-pal"; then
     layout "finlink:dev-pal" "$FINLINK/dev-pal"
   fi
