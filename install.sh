@@ -41,6 +41,16 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/statusline.sh ~/.claude/stat
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/CLAUDE.md ~/.claude/CLAUDE.md
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/MEMORY.md ~/.claude/MEMORY.md
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/plugins ~/.claude/local-plugins
+
+# hunk bundles its review skill inside its install prefix; link it in so Claude Code discovers it
+if command -v hunk >/dev/null 2>&1; then
+  # `hunk skill path` points into the versioned Cellar, which breaks on upgrade; prefer brew's stable opt prefix
+  hunk_skill_dir="$(dirname "$(hunk skill path)")"
+  if command -v brew >/dev/null 2>&1 && [ -d "$(brew --prefix hunk 2>/dev/null)/libexec/skills/hunk-review" ]; then
+    hunk_skill_dir="$(brew --prefix hunk)/libexec/skills/hunk-review"
+  fi
+  ln -vsfn "$hunk_skill_dir" ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/skills/hunk-review
+fi
 [ ! -d $CONFIG_DIR/solargraph ] && mkdir -p $CONFIG_DIR/solargraph
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.solargraph.yml $CONFIG_DIR/solargraph/config.yml
 [ ! -d $CONFIG_DIR/btop ] && mkdir -p $CONFIG_DIR/btop
