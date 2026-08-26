@@ -2,6 +2,7 @@
 # This file is symlinked to ~/.config/mise/config.toml
 
 [tools]
+java = "temurin-25.0.4+7.0.LTS"
 # Default global tool versions
 # Override these per-project with .mise.toml or .tool-versions
 node = "lts"
