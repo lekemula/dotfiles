@@ -18,6 +18,13 @@ if [[ -z "$WITHOUT_ZSHRC_SYMLINK" ]]; then
   ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.zshrc ~/.zshrc
 fi
 
+# .zshenv is read by non-interactive shells too, unlike .zshrc — that's where the
+# mise shims PATH prepend lives, so agent tooling and scripts get the right Ruby.
+# .zprofile re-sources it, because /etc/zprofile's path_helper undoes the prepend
+# for login shells.
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.zshenv ~/.zshenv
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.zprofile ~/.zprofile
+
 CONFIG_DIR=~/.config
 [ ! -d $CONFIG_DIR ] && mkdir -p $CONFIG_DIR
 

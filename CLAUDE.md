@@ -18,7 +18,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `install.sh` creates symlinks from this repo to home/config directories. When adding a new config file, add its symlink to `install.sh`. Executable scripts in `bin/` get symlinked to `/usr/local/bin/`.
 
 ### Shell Loading Order
-1. `.zshrc` — entrypoint, sets `$DF_HOME`
+0. `.zshenv` — read by *every* zsh, including non-interactive (`zsh -c`) and
+   scripts. Only holds the mise shims PATH prepend, so agent tooling and scripts
+   get the project's Ruby/Node instead of macOS system Ruby 2.6. Keep it fast,
+   side-effect free, and idempotent — interactive setup belongs in `.zshrc`.
+0b. `.zprofile` — login shells only, after `/etc/zprofile`. Sets up Homebrew and
+   Docker Desktop, then re-sources `.zshenv`, because `/etc/zprofile`'s
+   `path_helper` hoists `/usr/bin` back above the mise prepend.
+1. `.zshrc` — entrypoint, sets `$DF_HOME`. Interactive shells only.
 2. `environment.zsh` — env vars
 3. `macos.zsh` — macOS-only: auto-installs tools via Homebrew if missing
 4. Antigen plugins via `.antigenrc`
