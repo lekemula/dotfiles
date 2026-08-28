@@ -40,7 +40,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `bin/` — Custom scripts symlinked to `/usr/local/bin/`
 
 ### Claude Code Config
-- `claude.json` → `~/.claude/settings.json` (global Claude Code settings)
+- `claude.json` → `~/.claude/settings.json` (global Claude Code settings).
+  **Gitignored — machine-local.** Claude Code writes an `autoMode` block here
+  describing the environment (internal hosts, prod namespace patterns, paths to
+  credential files), and this repo is public, so the live file must never be
+  committed. `claude.example.json` is the tracked baseline; `install.sh` seeds
+  `claude.json` from it on a fresh machine before symlinking. When changing
+  settings that *should* be shared across machines, edit both files.
 - `CLAUDE.md` → `~/.claude/CLAUDE.md` (global instructions for all projects)
 - Plugins: playwright, github, layered-rails, solargraph (local)
 - Hooks (all `bin/` scripts, symlinked to `/usr/local/bin` by `install.sh`):

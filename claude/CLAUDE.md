@@ -21,6 +21,11 @@
 ## Credentials
 - `BUNDLE_RUBYGEMS__PKG__GITHUB__COM` (GitHub Packages auth for the private `rubygems.pkg.github.com/LoanLink` gem source, needed for `bundle install` in LoanLink Ruby repos) lives in `~/.zshrc.secrets` and is already present in any shell — check with `[ -n "$BUNDLE_RUBYGEMS__PKG__GITHUB__COM" ]` before assuming it's missing, and pass it through explicitly to `docker exec` when installing inside a container. Don't go hunting other credential stores for this or similar tokens — ask if it's not found here.
 
+## Jira / Confluence
+- Use the `atlassian-toolkit` plugin skills (`jira-api`, `confluence-api`, `jira-fetch`) **only** for uploading and downloading attachments — that's the one thing the MCP can't do. Use the Atlassian MCP (`mcp__claude_ai_Atlassian__*`) for everything else: reading issues, JQL search, comments, transitions, Confluence pages.
+- Gotchas when you do need the skills: `scripts/secrets.sh` uses bash-only `${!var}` indirection, so source it via `bash -c` (plain zsh dies with `bad substitution`). Its `use_atlassian_product jira` prefers `JIRA_API_TOKEN` over `ATLASSIAN_API_TOKEN`, so a stale per-product token silently shadows a working shared one — and Jira answers `404` (not `401`) for unauthenticated reads of a private issue, which reads as "ticket doesn't exist". Check auth with `/rest/api/3/myself` before believing a 404.
+- Scoped Atlassian tokens (created with explicit scopes) only work against `https://api.atlassian.com/ex/jira/<cloudId>`, not `https://<site>.atlassian.net`. Unscoped tokens work against both.
+
 ## Docker
 - Use Docker for development and testing when possible
 - Use docker-compose for multi-container applications
