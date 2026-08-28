@@ -26,6 +26,13 @@ zstyle ':autocomplete:*' widget-style menu-select
 zstyle ':autocomplete:*' delay 0.2
 source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
+# workmux completions — completes commands and existing worktree/branch names.
+# Must stay between zsh-autocomplete and antigen: antigen's cached init replaces
+# compdef with a permanent no-op (antigen.zsh:1843) until it runs compinit from a
+# precmd hook, so registering after it is silently dropped. Here, the compdef is
+# picked up by zsh-autocomplete's queue and replayed once compinit has run.
+command -v workmux &> /dev/null && eval "$(workmux completions zsh)"
+
 export ZVM_VI_ESCAPE_BINDKEY=jj # zsh-vi-mode
 # Load zsh plugins via Antigen
 source ~/antigen/antigen.zsh
