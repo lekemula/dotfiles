@@ -9,6 +9,9 @@
 # Unlike herdr, workmux is not a multiplexer — it drives the tmux in ~/.tmux.conf,
 # so keybindings stay whatever tmux already has. Only workflow lives here.
 
+post_create:
+  - mise install
+
 # Agent launched by the `<agent>` placeholder in `panes` below.
 agent: claude
 
