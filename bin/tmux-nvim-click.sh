@@ -3,7 +3,14 @@
 # terminal multiplexer the click came from (tmux or herdr).
 #
 # Wired up as iTerm2's Semantic History command (com.googlecode.iterm2.plist):
-#   /usr/local/bin/tmux-nvim-click.sh \1 \2
+#   action = raw command ("Always run command..."), text = tmux-nvim-click.sh \1 \2
+#
+# The action has to be "Always run command...", not "Run command...": the latter
+# only fires once iTerm has itself resolved the click to an existing file, and
+# iTerm cannot resolve a relative path inside tmux -- the cwd it sees belongs to
+# the tmux *client*, not to the pane that printed the path. So relative clicks
+# never reached this script at all. "Always run command..." hands over the raw
+# clicked text and leaves the resolving to absolutize() below.
 #
 # This never types into the clicked pane. The previous version used AppleScript
 # `write text`, which only works when a shell prompt owns the pane -- a TUI
@@ -11,9 +18,8 @@
 # AppleScript is now only used to *read* which iTerm session was clicked, so the
 # multiplexer's own CLI can do the rest.
 #
-# A click that does not resolve to a real file is ignored, so this is also safe
-# to drive from iTerm's "Always run command..." semantic history action or from
-# a smart selection rule, where the clicked text is any old word.
+# A click that does not resolve to a real file is ignored, so every cmd-click on
+# prose reaching this script is harmless.
 #
 # Overrides, for manual runs and debugging:
 #   TMUX_NVIM_CLICK_TARGET=tmux|herdr   skip multiplexer detection
@@ -94,18 +100,30 @@ case "$file" in
   '~/'*) file="$HOME/${file#\~/}" ;;
 esac
 
+orig_file=$file
 log "file=$file line=$line"
 
-# iTerm passes an absolute path when it can resolve one. When it cannot, the
-# path is relative to the clicked pane's cwd -- which is not this process's cwd
-# -- so the callers below re-try it against the panes they find.
+# A relative path is relative to the cwd of the pane that printed it, which is
+# not this process's cwd -- so the callers below hand over every cwd they know
+# of and each one is tried in turn. $PWD comes last: iTerm runs this from the
+# tmux client's cwd, which is rarely where the clicked text came from.
+#
+# Each base is also tried as its enclosing git worktree root, for the paths that
+# tools print relative to the repo root while the pane sits in a subdirectory.
 absolutize() {
   [ "${file#/}" = "$file" ] || return 0
-  local base
-  for base in "$PWD" "$@"; do
-    if [ -n "$base" ] && [ -e "$base/$file" ]; then
+  local base root
+  for base in "$@" "$PWD"; do
+    [ -n "$base" ] || continue
+    if [ -e "$base/$file" ]; then
       file="$base/$file"
       log "resolved relative path against $base"
+      return 0
+    fi
+    root=$(git -C "$base" rev-parse --show-toplevel 2>/dev/null)
+    if [ -n "$root" ] && [ "$root" != "$base" ] && [ -e "$root/$file" ]; then
+      file="$root/$file"
+      log "resolved relative path against repo root $root"
       return 0
     fi
   done
@@ -114,10 +132,21 @@ absolutize() {
 # Guard against opening junk: an absolute path may legitimately not exist yet
 # (clicking a path to create it), but a bare word that resolved to nothing is a
 # click on prose, not on a file.
+#
+# A single word with no slash is held to the stricter test of being a regular
+# file. Under "Always run command..." every cmd-click lands here, and plain
+# prose ("bin", "tmp", "docs") otherwise resolves to a directory next to the
+# pane and gets opened in netrw.
 openable() {
-  [ -e "$file" ] && return 0
-  [ "${file#/}" != "$file" ] && return 0
-  log "ignoring click that is not a file: $file"
+  if [ "${orig_file#/}" != "$orig_file" ]; then
+    [ -e "$file" ] || log "opening absolute path that does not exist yet: $file"
+    return 0
+  fi
+  case "$orig_file" in
+    */*) [ -e "$file" ] && return 0 ;;
+    *) [ -f "$file" ] && return 0 ;;
+  esac
+  log "ignoring click that is not a file: $orig_file"
   return 1
 }
 
@@ -206,16 +235,29 @@ open_in_tmux() {
   local clicked_path
   clicked_path=$(tmux display-message -p -t "${session}:" '#{pane_current_path}' 2>/dev/null)
 
+  # Cwds to resolve a relative path against, nearest the click first. iTerm does
+  # not move tmux's focus, so a click in an unfocused pane only tells us the
+  # window -- hence the sibling panes, and then the rest of the session.
+  local -a bases=("$clicked_path")
+  local path
+  while IFS= read -r path; do
+    [ -n "$path" ] && bases+=("$path")
+  done < <(tmux list-panes -t "${session}:" -F '#{pane_current_path}' 2>/dev/null)
+
   pane=$(tmux_nvim_pane "$session") || {
     log "tmux: no nvim pane, opening a new window"
-    absolutize "$clicked_path"
+    absolutize "${bases[@]}"
     openable || exit 0
     run tmux new-window -t "${session}:" nvim "+${line}" "$file"
     return $?
   }
   window=${pane%.*}
   log "tmux nvim pane=$pane"
-  absolutize "$clicked_path" "$(tmux display-message -p -t "$pane" '#{pane_current_path}' 2>/dev/null)"
+  bases+=("$(tmux display-message -p -t "$pane" '#{pane_current_path}' 2>/dev/null)")
+  while IFS= read -r path; do
+    [ -n "$path" ] && bases+=("$path")
+  done < <(tmux list-panes -s -t "$session" -F '#{pane_current_path}' 2>/dev/null)
+  absolutize "${bases[@]}"
   openable || exit 0
 
   run tmux select-window -t "$window"
