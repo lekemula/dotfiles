@@ -34,7 +34,6 @@
 
 ## Git
 - Commit messages: short, imperative, lowercase (e.g., "fix login redirect")
-- Follow repository format .github/PULL_REQUEST_TEMPLATE.md
 - Add detailed descriptions in the body of the commit message when necessary
 - Rebase workflow (pull.rebase = true, autoSquash, updateRefs)
 - Push sets up remote tracking automatically (autoSetupRemote)
@@ -47,6 +46,18 @@
   ```
   It authenticates with a **browser session cookie** (or `GH_SESSION_TOKEN`), not a PAT — that is how it reaches the web upload flow. Don't conclude CLI image upload is impossible: a plain PAT / `gh api` genuinely can't do it, and `raw.githubusercontent.com` links don't render for private repos (the camo image proxy can't authenticate), but `gh image` sidesteps both. Upload first, then splice the returned markdown into the body file and `gh pr edit <n> --body-file`.
 - `gh image` covers GitHub only — Jira attachments still need a working Atlassian API token, since the Atlassian MCP cannot upload attachments at all.
+
+### PR descriptions
+Keep them minimal. Follow the repo's `.github/PULL_REQUEST_TEMPLATE.md` (or `.github/PULL_REQUEST_TEMPLATE/`) when one exists — it wins over the shape below.
+
+With no template, use these sections and omit any that don't apply:
+- `### Ticket` — Jira ticket link, or the `NO-REF` branch prefix. Omit the section entirely if neither applies.
+- `### Purpose` — why, in a line or two.
+- `### Approach` — a few one-line bullets summarizing the change. High-level components only, never a file-by-file walkthrough. Order the bullets the way a reviewer should read the PR.
+- `### Review notes` — only to say the PR is best reviewed commit-by-commit, when the commits are atomic. Omit otherwise.
+- `### Testing` — high-level user interface steps if applicable; `rake` task snippets for prerequisites or when the PR changes local dev tooling; related end-to-end tests added in other PRs/repos (e.g. `loanlink-web`). Never mention that unit tests pass — that is a given.
+
+No narrative walkthroughs, no speculative caveat lists, no "future improvements" section.
 
 ## Worktrees
 - Worktrees are workmux's job. It keeps them in a sibling `<project>__worktrees/<name>` with a tmux window and agent status tracking attached — reuse those instead of creating a parallel `.claude/worktrees/` copy of the same repo.
