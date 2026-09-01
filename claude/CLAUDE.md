@@ -3,6 +3,7 @@
 ## General
 - Be concise. Skip obvious explanations.
 - Don't add method comments unnecessarily. Only add comments for non-obvious code.
+- Comments carry context that's hard to infer from the code, not rationale aimed at reviewers. Don't justify implementation decisions in a comment — that belongs in the PR description or commit body.
 - Run tests/specs/linters after making changes to ensure nothing is broken.
 - Don't commit or push unless I ask.
 - Avoid unexpanded acronyms (ECD, LoA, etc.) in titles, headings, commit subjects, and PR/ticket titles. In long-form bodies, expand on first use — e.g. `ExternalCreditDecision (ECD)` — then reuse the short form. Code identifiers like `PROCESS_STATUS_ERROR` are not acronyms; use them as-is.
