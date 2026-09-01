@@ -31,8 +31,6 @@ antigen bundle aliases
 antigen bundle git
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/bundler
 antigen bundle bundler
-# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/dotenv
-antigen bundle dotenv
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/macos
 antigen bundle macos
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/rake
