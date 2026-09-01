@@ -39,6 +39,14 @@
 - Rebase workflow (pull.rebase = true, autoSquash, updateRefs)
 - Push sets up remote tracking automatically (autoSetupRemote)
 - Wait for confirmation before commiting and pushing to remote branches
+- To put a screenshot in a PR description or comment, use `gh image` — it uploads from the CLI and prints ready-to-paste markdown pointing at a real `user-attachments/assets/<uuid>` URL that renders for private repos too:
+  ```bash
+  gh image check-token                     # verify; prints token source + username
+  gh image --repo OWNER/REPO shot.png      # prints ![shot.png](https://github.com/user-attachments/...)
+  gh image download <user-attachments-url> # reverse direction
+  ```
+  It authenticates with a **browser session cookie** (or `GH_SESSION_TOKEN`), not a PAT — that is how it reaches the web upload flow. Don't conclude CLI image upload is impossible: a plain PAT / `gh api` genuinely can't do it, and `raw.githubusercontent.com` links don't render for private repos (the camo image proxy can't authenticate), but `gh image` sidesteps both. Upload first, then splice the returned markdown into the body file and `gh pr edit <n> --body-file`.
+- `gh image` covers GitHub only — Jira attachments still need a working Atlassian API token, since the Atlassian MCP cannot upload attachments at all.
 
 ## Worktrees
 - Worktrees are workmux's job. It keeps them in a sibling `<project>__worktrees/<name>` with a tmux window and agent status tracking attached — reuse those instead of creating a parallel `.claude/worktrees/` copy of the same repo.
