@@ -90,6 +90,18 @@
         ]
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__claude_ai_Atlassian__(createJiraIssue|editJiraIssue)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-jira-skill-gate",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "hooks": [

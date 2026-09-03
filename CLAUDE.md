@@ -55,6 +55,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
     session retro into `~/.claude/retro-inbox/` (proposes only, never writes
     CLAUDE.md or memory)
   - `claude-retro-inbox-notice` — announces pending retro proposals at SessionStart
+  - `claude-jira-skill-gate` — PreToolUse gate on `createJiraIssue`/`editJiraIssue`;
+    blocks ticket-prose writes until the `jira-ticket` skill is loaded (detected by a
+    sentinel in its SKILL.md), fails open on any error
 
 ### Tool Conventions
 - Shell plugin manager: Antigen (`.antigenrc`)

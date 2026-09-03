@@ -1,6 +1,6 @@
 ---
-name: create-jira-ticket
-description: Create a Jira ticket with user story format, context, acceptance criteria, and test scenarios, filing it via Jira and splitting raw investigation detail into a follow-up comment. Use when asked to create, write, or draft a Jira ticket or issue.
+name: jira-ticket
+description: Write a Jira ticket — create a new one, or update an existing one's summary, description, context, acceptance criteria, or test section — in user-story format, splitting raw investigation detail into a follow-up comment. Use whenever asked to create, write, draft, file, update, edit, revise, reword, expand, or reformat a Jira ticket or issue, or to change what a ticket says.
 disable-model-invocation: false
 allowed-tools:
   - Read
@@ -12,11 +12,14 @@ allowed-tools:
   - mcp__claude_ai_Atlassian__getJiraProjectIssueTypesMetadata
   - mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql
   - mcp__claude_ai_Atlassian__createJiraIssue
+  - mcp__claude_ai_Atlassian__editJiraIssue
   - mcp__claude_ai_Atlassian__addCommentToJiraIssue
   - mcp__claude_ai_Atlassian__getJiraIssue
 ---
 
-Create a Jira ticket based on `$ARGUMENTS` and any context from the current conversation.
+<!-- JIRA_TICKET_SKILL_ACTIVE — sentinel read by the claude-jira-skill-gate hook; do not remove. -->
+
+Write Jira ticket content — new or existing — based on `$ARGUMENTS` and the current conversation.
 
 Keep the ticket readable but not bloated. The description carries the user story, the
 `Context` a reader needs to understand the problem, the `Acceptance Criteria`, and a
@@ -24,16 +27,33 @@ Keep the ticket readable but not bloated. The description carries the user story
 repro logs, stack traces, file/line references — goes into a separate follow-up comment,
 not the description.
 
+## When this skill applies
+
+Any time ticket *content* is written or rewritten, whichever tool ends up doing it:
+
+- Creating a ticket (`createJiraIssue`).
+- Editing an existing ticket's `summary` or `description` (`editJiraIssue`) — including
+  "add acceptance criteria to LI-123", "tidy up that ticket", "add the findings to the
+  ticket", "reword the description".
+- Turning conversation findings into ticket text at all.
+
+It does **not** apply to field-only changes that carry no prose: assignee, labels, sprint,
+story points, status transitions, or a plain conversational comment.
+
 ## Arguments
 
-Usage: `/create-jira-ticket [BOARD] [description]`
+Usage: `/jira-ticket [BOARD | ISSUE-KEY] [description]`
 
-- **First argument** (`$0`): Jira board key (e.g., `LI`, `COBA`, `PLAT`). If not provided, ask the user which board before drafting.
-- **Remaining arguments**: Description or context for the ticket.
+- **First argument** (`$0`):
+  - a board key (e.g. `LI`, `COBA`, `PLAT`) → create a new ticket on that board;
+  - an issue key (e.g. `LI-1234`) → update that existing ticket;
+  - absent → infer from the conversation, and ask if it is still unclear.
+- **Remaining arguments**: description, or the change being asked for.
 
-## Steps
+## Steps — creating a new ticket
 
-1. Parse `$ARGUMENTS`: extract the board key (first word, if it looks like a Jira key in uppercase) and the ticket description from the rest.
+1. Parse `$ARGUMENTS`: board key (first word, if it looks like an uppercase Jira key) plus
+   the ticket description from the rest.
 
 2. Gather from `$ARGUMENTS` and conversation context:
    - **Board**: Jira board key (e.g., `LI`)
@@ -71,13 +91,40 @@ Usage: `/create-jira-ticket [BOARD] [description]`
 
 9. Report the created issue key and URL back to the user.
 
+## Steps — updating an existing ticket
+
+1. Resolve `cloudId` with `getAccessibleAtlassianResources`, then read the current ticket
+   with `getJiraIssue` (summary + description). **Never write a description you haven't
+   read first** — an `editJiraIssue` on `description` replaces the whole field, so an
+   unread ticket means silently deleting whatever was there.
+
+2. Map the existing description onto the format below. If it predates this format, keep
+   every fact it carries and re-slot it into `Context` / `Acceptance Criteria` / `Test`;
+   if something genuinely has no home, say so rather than dropping it.
+
+3. Apply the requested change and re-check the whole description against the Guidelines —
+   an update is the moment to fix a stale user story or a `Context` full of stack traces,
+   not just to bolt on a new section.
+
+4. Investigation detail stays out of the description on updates too: new logs, root cause,
+   `file.rb:42` references go to `addCommentToJiraIssue`, even when the user says "add
+   this to the ticket".
+
+5. Show the user what changes — the full new description, and a short list of what is
+   added, rewritten, or moved to a comment. **Wait for approval.**
+
+6. On approval, call `editJiraIssue` with only the fields that change (typically
+   `description`, sometimes `summary`). Don't touch fields the user didn't ask about.
+
+7. Report the issue key and URL, and say what was changed.
+
 ## Output Format
 
-Draft in this shape, then create it via the Atlassian tools once approved.
+Draft in this shape, then create or update it via the Atlassian tools once approved.
 
 ---
 
-**Board**: [BOARD KEY]
+**Board**: [BOARD KEY]  (or **Ticket**: [ISSUE-KEY] when updating)
 **Summary**: [one line, imperative]
 
 As a **[persona]** I would like to **[action]** in order to **[goal]**
@@ -127,5 +174,5 @@ If there is no such detail, omit the comment block entirely — don't pad it.
 - Keep `Context` free of log excerpts and `file.rb:42` references — those go in the comment.
 - Summary is a title, so expand acronyms there (see the acronym rule in `~/.claude/CLAUDE.md`). In the comment body, expand on first use — e.g. `ExternalCreditDecision (ECD)` — then reuse the short form.
 - One board per ticket. If the work spans both FinLink and Coba, that is two tickets.
-- Never create the issue before the user approves the draft.
+- Never create or edit the issue before the user approves the draft.
 - Keep tickets compact: a brief description (the symptom + how it was found) plus Acceptance Criteria. Move deep root-cause investigation, repro logs, and file/line detail into a comment, not the description.

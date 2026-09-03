@@ -1,0 +1,72 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# PreToolUse gate for Jira writes that carry ticket prose.
+#
+# Blocks createJiraIssue, and editJiraIssue touching summary/description, until the
+# `jira-ticket` skill is loaded in this session. Detection is by sentinel: the skill body
+# carries JIRA_TICKET_SKILL_ACTIVE, so its presence in the transcript means the skill's
+# rules are in context. Field-only edits (labels, assignee, sprint) pass through.
+#
+# Fails open — any parse/read problem allows the call rather than wedging the session.
+
+require 'json'
+
+SENTINEL = 'JIRA_TICKET_SKILL_ACTIVE'
+SKILL = 'jira-ticket'
+PROSE_FIELDS = %w[summary description].freeze
+
+def allow
+  exit 0
+end
+
+def deny(reason)
+  puts JSON.generate(
+    hookSpecificOutput: {
+      hookEventName: 'PreToolUse',
+      permissionDecision: 'deny',
+      permissionDecisionReason: reason
+    }
+  )
+  exit 0
+end
+
+payload = begin
+  JSON.parse($stdin.read)
+rescue StandardError
+  allow
+end
+
+tool = payload['tool_name'].to_s
+input = payload['tool_input'] || {}
+
+case tool
+when /createJiraIssue\z/
+  # Always carries a summary.
+when /editJiraIssue\z/
+  fields = input['fields']
+  allow unless fields.is_a?(Hash)
+  allow if (fields.keys.map(&:downcase) & PROSE_FIELDS).empty?
+else
+  allow
+end
+
+transcript = payload['transcript_path'].to_s
+allow if transcript.empty? || !File.readable?(transcript)
+
+skill_loaded = begin
+  File.foreach(transcript).any? { |line| line.include?(SENTINEL) }
+rescue StandardError
+  true # unreadable mid-stream: fail open
+end
+
+allow if skill_loaded
+
+deny(
+  "Ticket prose must go through the `#{SKILL}` skill — it owns the user story / Context / " \
+  "Acceptance Criteria / Test format and the rule that investigation detail goes in a " \
+  "follow-up comment, not the description. Invoke the `#{SKILL}` skill, follow it " \
+  "(including reading the current ticket before replacing its description, and getting " \
+  "the user's approval on the draft), then retry this call. Field-only edits — labels, " \
+  "assignee, sprint, status — are not gated; edit those without touching summary/description."
+)

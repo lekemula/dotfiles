@@ -7,6 +7,7 @@
 - Run tests/specs/linters after making changes to ensure nothing is broken.
 - Don't commit or push unless I ask.
 - Avoid unexpanded acronyms (ECD, LoA, etc.) in titles, headings, commit subjects, and PR/ticket titles. In long-form bodies, expand on first use — e.g. `ExternalCreditDecision (ECD)` — then reuse the short form. Code identifiers like `PROCESS_STATUS_ERROR` are not acronyms; use them as-is.
+- Whenever the outcome is a list of things **I** have to do by hand — seed data to edit, dashboard steps, a migration runbook, anything I work through item by item — publish it as an Artifact checklist instead of leaving it in the terminal. Give each item what to set, where, and the current vs. target value, and say plainly which items to skip and why. A table in chat scrolls away; a checklist I can tick off does not.
 
 ## Skills
 - Any helper script bundled inside a skill you author (SKILL.md directories under `~/.claude/skills/` or a repo's `.claude/skills/`) must be written in Ruby, not Python/bash/etc. — easier for me to review. Plain `bash`/CLI one-liners inline in skill steps are fine; this is about actual standalone scripts (e.g. a `scripts/*.rb` file a skill shells out to).
@@ -23,6 +24,11 @@
 - `BUNDLE_RUBYGEMS__PKG__GITHUB__COM` (GitHub Packages auth for the private `rubygems.pkg.github.com/LoanLink` gem source, needed for `bundle install` in LoanLink Ruby repos) lives in `~/.zshrc.secrets` and is already present in any shell — check with `[ -n "$BUNDLE_RUBYGEMS__PKG__GITHUB__COM" ]` before assuming it's missing, and pass it through explicitly to `docker exec` when installing inside a container. Don't go hunting other credential stores for this or similar tokens — ask if it's not found here.
 
 ## Jira / Confluence
+- Writing ticket **content** always goes through the `jira-ticket` skill — creating a ticket, or
+  editing an existing ticket's summary/description (context, acceptance criteria, test section).
+  Never hand-write those with a bare `createJiraIssue`/`editJiraIssue` call; the
+  `claude-jira-skill-gate` hook blocks it. Field-only edits (labels, assignee, sprint,
+  transitions) and plain comments are exempt.
 - Use the `atlassian-toolkit` plugin skills (`jira-api`, `confluence-api`, `jira-fetch`) **only** for uploading and downloading attachments — that's the one thing the MCP can't do. Use the Atlassian MCP (`mcp__claude_ai_Atlassian__*`) for everything else: reading issues, JQL search, comments, transitions, Confluence pages.
 - Gotchas when you do need the skills: `scripts/secrets.sh` uses bash-only `${!var}` indirection, so source it via `bash -c` (plain zsh dies with `bad substitution`). Its `use_atlassian_product jira` prefers `JIRA_API_TOKEN` over `ATLASSIAN_API_TOKEN`, so a stale per-product token silently shadows a working shared one — and Jira answers `404` (not `401`) for unauthenticated reads of a private issue, which reads as "ticket doesn't exist". Check auth with `/rest/api/3/myself` before believing a 404.
 - Scoped Atlassian tokens (created with explicit scopes) only work against `https://api.atlassian.com/ex/jira/<cloudId>`, not `https://<site>.atlassian.net`. Unscoped tokens work against both.
