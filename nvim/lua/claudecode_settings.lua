@@ -6,7 +6,7 @@ local in_tmux = vim.env.TMUX ~= nil and vim.env.TMUX ~= ''
 -- Claude is still running but its CLAUDE_CODE_SSE_PORT points at the dead server:
 -- it looks alive, answers nothing, and sends silently go nowhere. Report whether
 -- the pane we found is still talking to *this* nvim.
----@return string? pane_id, boolean? connected_to_this_nvim
+---@return string? pane_id, boolean? connected_to_this_nvim, boolean? spawned_by_us
 local function existing_claude_pane()
   if not vim.env.TMUX_PANE then
     return nil
@@ -24,8 +24,10 @@ local function existing_claude_pane()
     if command == 'claude' then
       local ok, server = pcall(require, 'claudecode.server.init')
       local port = ok and server.state and server.state.port
-      local target = vim.fn.system({ 'ps', 'eww', '-p', pid }):match('CLAUDE_CODE_SSE_PORT=(%d+)')
-      return pane, port ~= nil and target == tostring(port)
+      local penv = vim.fn.system({ 'ps', 'eww', '-p', pid })
+      local target = penv:match('CLAUDE_CODE_SSE_PORT=(%d+)')
+      local owned = penv:match('CLAUDECODE_NVIM_OWNED=1') ~= nil
+      return pane, port ~= nil and target == tostring(port), owned
     end
   end
   return nil
@@ -37,15 +39,23 @@ end
 -- The MCP connection is unaffected - Claude finds the server through the env
 -- vars forwarded with -e, so diffs and @-mentions still land in this nvim.
 local function tmux_claude_cmd(cmd, env)
-  local pane, connected = existing_claude_pane()
+  local pane, connected, owned = existing_claude_pane()
 
   if pane and not connected then
-    -- Orphaned by an nvim restart: useless for IDE integration, and keeping it
-    -- around would also give workmux two claude panes to choose between.
-    vim.notify('Replacing Claude pane left over from a previous nvim (use --resume to pick the session back up)',
-      vim.log.levels.INFO)
-    vim.fn.system({ 'tmux', 'kill-pane', '-t', pane })
-    pane = nil
+    if owned then
+      -- Orphaned by an nvim restart: useless for IDE integration, and keeping it
+      -- around would also give workmux two claude panes to choose between.
+      vim.notify('Replacing Claude pane left over from a previous nvim (use --resume to pick the session back up)',
+        vim.log.levels.INFO)
+      vim.fn.system({ 'tmux', 'kill-pane', '-t', pane })
+      pane = nil
+    else
+      -- Someone else's Claude - workmux opens one beside nvim in every worktree
+      -- window, unconnected. Killing it would discard their session, so just hand
+      -- over focus; /ide binds it to this nvim via the lock file.
+      vim.notify('Claude in this window is not connected to this nvim - run /ide in it', vim.log.levels.WARN)
+      return { 'tmux', 'select-pane', '-t', pane }
+    end
   end
 
   if pane then
@@ -71,7 +81,8 @@ local function tmux_claude_cmd(cmd, env)
     vim.fn.system({ 'tmux', 'kill-pane', '-t', pane })
   end
 
-  local args = { 'tmux', 'split-window', '-h', '-l', '35%', '-c', vim.fn.getcwd() }
+  local args = { 'tmux', 'split-window', '-h', '-l', '35%', '-c', vim.fn.getcwd(),
+    '-e', 'CLAUDECODE_NVIM_OWNED=1' }
   if vim.env.TMUX_PANE then
     vim.list_extend(args, { '-t', vim.env.TMUX_PANE })
   end
