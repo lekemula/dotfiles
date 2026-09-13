@@ -66,6 +66,10 @@ if has('nvim')
   Plug 'windwp/nvim-autopairs'
   Plug 'nvim-tree/nvim-web-devicons'
   Plug 'pwntester/octo.nvim'
+  " Claude Code integration; snacks.nvim is the in-editor terminal fallback
+  " used when nvim runs outside tmux
+  Plug 'folke/snacks.nvim'
+  Plug 'coder/claudecode.nvim'
 endif
 
 " Make sure you use single quotes
