@@ -111,12 +111,9 @@ require('claudecode').setup({
   },
 })
 
--- claudecode.nvim launches the tmux CLI with jobstart{detach = true}, so its
--- on_exit never fires and the external provider never clears its jobid. is_valid()
--- then stays true for the rest of the session, making every later :ClaudeCode take
--- the "already running" branch - which silently drops arguments, so --model and
--- --resume did nothing. Clearing the dead job first puts the provider back into
--- open(), where external_terminal_cmd above gets to decide what to do.
+-- The external provider starts the tmux CLI detached, so on_exit never fires and
+-- its jobid is never cleared: is_valid() stays true and later :ClaudeCode calls
+-- silently drop their arguments. Reset it so open() runs again.
 local function reset_external_job()
   local ok, external = pcall(require, 'claudecode.terminal.external')
   if ok then
