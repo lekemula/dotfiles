@@ -55,7 +55,9 @@
 - `gh image` covers GitHub only — Jira attachments still need a working Atlassian API token, since the Atlassian MCP cannot upload attachments at all.
 
 ### PR descriptions
-Keep them minimal. Follow the repo's `.github/PULL_REQUEST_TEMPLATE.md` (or `.github/PULL_REQUEST_TEMPLATE/`) when one exists — it wins over the shape below.
+Keep them compact. Reference: https://github.com/LoanLink/ehyp-integrations/pull/315 — roughly 1.8KB including two screenshots. A description orients a reviewer; it is not the record. Evidence, root-cause analysis and the reasoning behind a decision live on the ticket or a Confluence page and get *linked* from the PR, never restated in it.
+
+Follow the repo's `.github/PULL_REQUEST_TEMPLATE.md` (or `.github/PULL_REQUEST_TEMPLATE/`) when one exists — it wins over the shape below.
 
 With no template, use these sections and omit any that don't apply:
 - `### Ticket` — Jira ticket link, or the `NO-REF` branch prefix. Omit the section entirely if neither applies.
@@ -64,13 +66,20 @@ With no template, use these sections and omit any that don't apply:
 - `### Review notes` — only to say the PR is best reviewed commit-by-commit, when the commits are atomic. Omit otherwise.
 - `### Testing` — high-level user interface steps if applicable; `rake` task snippets for prerequisites or when the PR changes local dev tooling; related end-to-end tests added in other PRs/repos (e.g. `loanlink-web`). Never mention that unit tests pass — that is a given.
 
-No narrative walkthroughs, no speculative caveat lists, no "future improvements" section.
+Show, don't explain — a screenshot or a before/after payload speaks a million words. Proof is the part that earns its space: lead with it and delete the prose it makes redundant. Screenshots and evidence always stay; the paragraphs around them are what gets cut.
+
+Cut on sight: narrative walkthroughs, speculative caveat lists, "future improvements" sections, file-by-file summaries, and collapsed `<details>` blocks — a before/after belongs inline as a couple of lines of code or JSON.
 
 ## Worktrees
 - Worktrees are workmux's job. It keeps them in a sibling `<project>__worktrees/<name>` with a tmux window and agent status tracking attached — reuse those instead of creating a parallel `.claude/worktrees/` copy of the same repo.
 - Need isolation: run `workmux list` first and enter an existing worktree by its path (`workmux path <name>` resolves it); only `workmux add <name>` a new one if none fits. Entering it counts as isolating, so background jobs don't need their own `.claude/worktrees/` copy.
 - Clean up with `workmux merge` or `workmux remove`, not `git worktree remove` — those also close the tmux window and drop the branch.
 - Don't hand-roll `git worktree add`.
+- When starting work in a worktree, always `git fetch` and rebase onto `main` first. A worktree cut earlier can be well behind, and a dependency the task needs may already have merged — rebasing is what makes it available, and it avoids building a scratch worktree to combine branches that `main` already combines.
+- **Talk to worktree agents with the built-in cross-session messaging, not `workmux send`.** `ListAgents` discovers addressable sessions, `SendMessage` reaches one. Keep workmux for what only it does: `add` to spawn a worktree plus tmux window, `status`/`wait` for lifecycle, `merge`/`remove` to clean up. `workmux send` types into a pane and returns nothing — no delivery confirmation, no reply path, so reading an answer means scraping scrollback with `workmux capture`, which truncates and interleaves UI chrome. When coordinating, ask spawned agents to report back via `SendMessage` to the coordinator's session name (it shows in their `ListAgents` output).
+  - A `SendMessage` message id confirms **queuing, not delivery**: the recipient's permission settings can hold it for their user's approval, which surfaces later as a delivery notice. Verify it landed rather than assuming. `workmux send` is the fallback that bypasses the gate, since it only types into a pane.
+  - `workmux status` reports `done` whenever a main agent idles between subagent turns, so it is not a completion signal. Trust the agent's own message, or a real artefact such as a lock owner file.
+- A shared repo checkout is a coordination hazard when several worktree agents need it (e.g. one `loanlink-web` serving many `ehyp-integrations` worktrees). Give each agent its own worktree of that repo rather than switching branches or stashing under another session's uncommitted work.
 
 ## Environment
 - macOS, zsh, Neovim, tmux, iTerm2
