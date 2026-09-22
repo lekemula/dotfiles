@@ -17,6 +17,7 @@ alias '???=gh copilot suggest'
 alias ghd='gh dash'
 alias gbl='git blame -w -b -C -C'
 alias gbL='git blame -w -b -C -C -C'
+alias gpr='gh pr view --web'
 
 # git-jump aliases
 alias gjd='git jump diff'
@@ -57,7 +58,17 @@ alias flrspec='dcr rails-test rspec'
 alias flrspecd='dcupd rails-test'
 alias fltest='flrspec'
 alias fltestd='flrspecd'
-alias fl='mise exec ruby@3.4.7 -- fl'
+# dev-pal authenticates to Jira as the it@finlink.de technical user, so it needs
+# that account's token under the generic name JIRA_API_TOKEN. Exporting it
+# globally made it shadow ATLASSIAN_API_TOKEN (l.mula@) for every other Jira
+# client, so it is injected per-invocation instead.
+function fl () {
+  JIRA_API_TOKEN="$DEVPAL_JIRA_API_TOKEN" mise exec ruby@3.4.7 -- fl "$@"
+}
+
+function dev-pal () {
+  JIRA_API_TOKEN="$DEVPAL_JIRA_API_TOKEN" command dev-pal "$@"
+}
 
 function lm_logseq_sync_dropbox () {
   icloud=$(eval "echo ~/Library/Mobile\ Documents/iCloud\~com\~logseq\~logseq/Documents")

@@ -108,9 +108,17 @@ if [ -f ~/.zshrc.secrets ]; then
   # This file is not checked into source control
   source ~/.zshrc.secrets 
 
-  if [ -z $JIRA_API_TOKEN ]; then
-    echo "${fg[red]}JIRA_API_TOKEN is not set. Please set it in ~/.zshrc.secrets${reset_color}"
+  # Never name this JIRA_API_TOKEN: it belongs to the it@finlink.de technical
+  # user, and that generic name shadows ATLASSIAN_API_TOKEN in any tool that
+  # prefers a per-product token. aliases.zsh injects it for dev-pal only.
+  if [ -z $DEVPAL_JIRA_API_TOKEN ]; then
+    echo "${fg[red]}DEVPAL_JIRA_API_TOKEN is not set. Please set it in ~/.zshrc.secrets${reset_color}"
     echo "${fg[red]}You can get the value by running 'op read \"op://vpqefcys2zayxb3ojzxxux3wpe/DevPal - Jira API Key/API Key\" --account=baufi24.1password.eu'${reset_color}"
+  fi
+
+  if [ -z $ATLASSIAN_API_TOKEN ]; then
+    echo "${fg[red]}ATLASSIAN_API_TOKEN is not set. Please set it in ~/.zshrc.secrets${reset_color}"
+    echo "${fg[red]}Create an unscoped token at https://id.atlassian.com/manage-profile/security/api-tokens (it pairs with your own email)${reset_color}"
   fi
 
   if [ -z $BUNDLE_RUBYGEMS__PKG__GITHUB__COM ]; then
