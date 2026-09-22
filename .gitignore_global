@@ -50,3 +50,5 @@ config/projections.json
 # opencode
 .opencode/
 opencode.json
+
+.workmux.yaml
