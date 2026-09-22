@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/lekemula/.docker/bin"
+# End of Docker Desktop section.
+
 # Login shells only, sourced after /etc/zprofile. Owned by dotfiles — anything an
 # installer (Docker Desktop, Homebrew) appends here must be mirrored in the repo.
 
