@@ -57,7 +57,7 @@
       "~/Projects/finlink"
     ]
   },
-  "model": "opus[1m]",
+  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
@@ -166,13 +166,13 @@
     "command": "$HOME/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "playwright@claude-plugins-official": true,
+    "playwright@claude-plugins-official": false,
     "layered-rails@palkan-skills": true,
     "github@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "warp@claude-code-warp": true,
-    "ruby-lsp@claude-plugins-official": true,
+    "ruby-lsp@claude-plugins-official": false,
     "solargraph@local-plugins": true,
     "fl-sdd@finlink": true,
     "github-toolkit@finlink": true,
@@ -196,7 +196,7 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "tui": "default",
+  "tui": "fullscreen",
   "theme": "dark",
   "editorMode": "vim",
   "verbose": false,
