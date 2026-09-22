@@ -205,5 +205,9 @@
   "feedbackSurveyState": {
     "lastShownTime": 1754072297712
   },
-  "remoteControlAtStartup": true
+  "autoCompactEnabled": false,
+  "subagentStatusLine": {
+    "type": "command",
+    "command": "$HOME/.claude/subagent-statusline.sh"
+  }
 }

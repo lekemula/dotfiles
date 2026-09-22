@@ -45,6 +45,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/skills ~/.claude/skills
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/agents ~/.claude/agents
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/keybindings.json ~/.claude/keybindings.json
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/statusline.sh ~/.claude/statusline.sh
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/subagent-statusline.sh ~/.claude/subagent-statusline.sh
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/CLAUDE.md ~/.claude/CLAUDE.md
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/MEMORY.md ~/.claude/MEMORY.md
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/plugins ~/.claude/local-plugins
