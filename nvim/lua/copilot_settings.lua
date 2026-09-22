@@ -1,7 +1,7 @@
 require("copilot").setup({
   suggestion = {
-    enabled = true,
-    auto_trigger = true,
+    enabled = false,
+    auto_trigger = false,
     keymap = {
       accept = "<C-l>",
       accept_word = false,
@@ -11,9 +11,12 @@ require("copilot").setup({
       dismiss = "<C-h>",
     },
   },
+  panel = {
+    enabled = false,
+  },
+  -- "*" is the fallback for any filetype without an explicit entry; a per-filetype
+  -- `true` here would still turn suggestions back on for that filetype.
   filetypes = {
-    yaml = true,
-    yml = true,
-    markdown = true,
-  }
+    ["*"] = false,
+  },
 })

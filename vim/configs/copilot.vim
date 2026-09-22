@@ -1,5 +1,6 @@
 " Copilot
 if !has('nvim')
+  let g:copilot_enabled = v:false
   imap <silent><script><expr> <C-l> copilot#Accept("\<CR>")
   let g:copilot_no_tab_map = v:true
   imap <silent> <C-j> <Plug>(copilot-next)
