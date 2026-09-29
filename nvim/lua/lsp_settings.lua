@@ -62,6 +62,21 @@ else
   solargraph_cmd = { "solargraph", "stdio" }
 end
 
+-- Use the project's solargraph (and its plugins, e.g. solargraph-rspec) when it is in the bundle,
+-- like VS Code's `solargraph.useBundler`
+local function solargraph_bundled()
+  local lockfile = vim.fs.find("Gemfile.lock", { upward = true, path = vim.fn.getcwd() })[1]
+  if not lockfile then return false end
+  for line in io.lines(lockfile) do
+    if line:match("^    solargraph %(") then return true end
+  end
+  return false
+end
+
+if solargraph_cmd[1] == "solargraph" and solargraph_bundled() then
+  solargraph_cmd = { "bundle", "exec", "solargraph", "stdio" }
+end
+
 vim.lsp.config("solargraph", {
   cmd = solargraph_cmd,
   settings = {
