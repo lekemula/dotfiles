@@ -88,6 +88,28 @@ vim.lsp.config("solargraph", {
 })
 vim.lsp.enable('solargraph')
 
+-- solargraph-rspec code lenses ("▶ Run RSpec"): show them, and run them like vim-test does, through
+-- vim-dispatch. `solargraph.runRspec` is a client-side command, so the client has to implement it.
+vim.lsp.commands["solargraph.runRspec"] = function(command)
+  local rspec_command = command.arguments and command.arguments[1] and command.arguments[1].command
+  if not rspec_command then return end
+  if vim.fn.exists(":Dispatch") == 2 then
+    vim.cmd("Dispatch " .. rspec_command)
+  else
+    vim.cmd("botright split | terminal " .. rspec_command)
+  end
+end
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.name == "solargraph" then
+      -- Scoped to the client (it takes either `bufnr` or `client_id`) so other Ruby servers show no lenses
+      vim.lsp.codelens.enable(true, { client_id = client.id })
+    end
+  end,
+})
+
 -- yaml
 vim.lsp.config("yamlls", {
   settings = {
