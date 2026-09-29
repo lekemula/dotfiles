@@ -46,6 +46,13 @@
 - Commit messages: short, imperative, lowercase (e.g., "fix login redirect")
 - Add detailed descriptions in the body of the commit message when necessary
 - Rebase workflow (pull.rebase = true, autoSquash, updateRefs)
+- Keep commits atomic: one problem per commit. A reviewer should be able to read the branch commit by commit, and any commit (or run of commits) should lift cleanly into its own PR if the branch grows too large.
+  - Don't mix concerns. A refactor, a rename, a formatting pass, a dependency bump and the behaviour change they enable are separate commits, prep commits first.
+  - Each commit leaves the tree working (tests and linters pass) and carries its own specs.
+  - Stage by hunk (`git add -p`) when one file holds changes for more than one commit.
+  - Follow-ups to an earlier commit on the branch — review fixes, missed specs, typos, lint — go in as `git commit --fixup=<sha>` (`--squash` if the message changes too), folded with `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base>`. Never leave "fix tests", "address review" or "wip" commits standing.
+  - Fixup and squash hard: the final history is a handful of lean, self-explanatory commits, not a log of how the work happened.
+  - Rewriting already-pushed history needs a force-push — ask first, and use `--force-with-lease`, never plain `--force`.
 - Push sets up remote tracking automatically (autoSetupRemote)
 - Wait for confirmation before commiting and pushing to remote branches
 - To put a screenshot or video in a PR/issue description or comment, use `gh`'s built-in `--attach` (gh 2.99.0+). It uploads over your normal `gh auth` login and yields a real `user-attachments/assets/<uuid>` URL that renders for private repos too:
