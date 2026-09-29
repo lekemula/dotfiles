@@ -8,9 +8,10 @@ if [[ ! -d $HOME/antigen ]]; then
 	cd -
 fi
 
-if [[ -z $(gem list solargraph | grep solargraph) ]]; then
-  gem install solargraph
-fi
+# One gem per call: installing them together sends the RubyGems resolver into a spin.
+for g in solargraph solargraph-rspec solargraph-rails solargraph-yard-lint; do
+  gem list -i "^$g\$" >/dev/null || gem install $g
+done
 
 # This runs after default install actions, so you can overwrite changes it makes if you want.
 if [[ -z "$WITHOUT_ZSHRC_SYMLINK" ]]; then
