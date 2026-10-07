@@ -4,6 +4,7 @@ alias lso='eza -1 --all --grid --icons=always --group-directories-first' # oneli
 alias lst='eza --all --tree --level=1 --icons=always --group-directories-first --long --no-permissions --no-user --no-time'
 alias gcofzf='git checkout $(git branch --all | fzf)'
 alias gcobfzf='git checkout -b $(git branch --all | fzf)'
+alias gw='cd "${$(git worktree list | fzf --preview "git -C {1} log --oneline --color=always -15" | awk "{print \$1}"):-.}"' # switch worktree
 alias gcob='git checkout -b'
 alias glot='glo --tags --no-walk --tags --no-walk'
 alias mkdir='mkdir -p' # create dir recursively
