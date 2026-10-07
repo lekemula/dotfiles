@@ -131,7 +131,6 @@ else
   echo "${fg[red]}Run: cp ~/dotfiles/.zshrc.secrets.example ~/.zshrc.secrets${reset_color}"
 fi
 
-eval "$(zoxide init zsh)"
 
 
 # AsyncAPI CLI Autocomplete
@@ -146,3 +145,6 @@ export GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token)
 
 # https://github.com/anomalyco/opencode/issues/7405#issuecomment-4018473781
 export OPENCODE_EXPERIMENTAL_LSP_TOOL=true
+
+# zoxide must init last, else its doctor warns that `cd` is overridden after it
+eval "$(zoxide init zsh)"
