@@ -37,6 +37,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `vim/` — Legacy Vim configs and snippets
 - `claude/` — Claude Code skills, symlinked to `~/.claude/skills/`
 - `claude/plugins/` — Custom Claude Code plugins (e.g., solargraph)
+- `claude/docs/` — reference docs the global CLAUDE.md points at, symlinked to `~/.claude/docs/`
 - `bin/` — Custom scripts symlinked to `/usr/local/bin/`
 
 ### Claude Code Config

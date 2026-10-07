@@ -1,0 +1,8 @@
+# Atlassian credentials and auth gotchas
+
+- Credentials live in **two** places that must be kept identical: `~/.zshrc.secrets` (for the terminal) and the `env` block of `~/.claude/settings.local.json` (for Claude Code tool calls, which do not source `.zshrc.secrets`). Both hold `ATLASSIAN_BASE_URL`, `ATLASSIAN_EMAIL` and `ATLASSIAN_API_TOKEN`. Rotate them together — a drifted copy is how a dead token hid for months. With the `env` block populated, the skills read these straight from the environment, so there is no need to source `scripts/secrets.sh` (and no need for the `bash -c` workaround) just to get credentials.
+- `scripts/secrets.sh` uses bash-only `${!var}` indirection, so source it via `bash -c` (plain zsh dies with `bad substitution`).
+- Its `use_atlassian_product jira` prefers `JIRA_API_TOKEN` over `ATLASSIAN_API_TOKEN` but pairs whichever it picks with the single `ATLASSIAN_EMAIL`, so a Jira token belonging to a *different account* silently breaks auth — it is not expiry, and rotating it fixes nothing.
+- My dev-pal token authenticates as the `it@finlink.de` technical user, so it lives in `~/.zshrc.secrets` as `DEVPAL_JIRA_API_TOKEN` and `aliases.zsh` injects it as `JIRA_API_TOKEN` for `fl`/`dev-pal` only — never export that name globally again.
+- Jira answers `404` (not `401`) for unauthenticated reads of a private issue, which reads as "ticket doesn't exist". Check auth with `/rest/api/3/myself` **and confirm the `displayName` it returns is the account you meant** before believing a 404.
+- Scoped Atlassian tokens (created with explicit scopes) only work against `https://api.atlassian.com/ex/jira/<cloudId>`, not `https://<site>.atlassian.net`. Unscoped tokens work against both.

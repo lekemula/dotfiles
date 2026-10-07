@@ -50,6 +50,7 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/subagent-statusline.sh ~/.cl
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/CLAUDE.md ~/.claude/CLAUDE.md
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/MEMORY.md ~/.claude/MEMORY.md
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/plugins ~/.claude/local-plugins
+ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/docs ~/.claude/docs
 
 # Lets background Claude jobs edit this checkout in place instead of forcing a worktree
 dotfiles_claude_local=~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.claude/settings.local.json
