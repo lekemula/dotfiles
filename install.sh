@@ -51,6 +51,13 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/CLAUDE.md ~/.claude/CLAUDE.m
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/MEMORY.md ~/.claude/MEMORY.md
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/plugins ~/.claude/local-plugins
 
+# Lets background Claude jobs edit this checkout in place instead of forcing a worktree
+dotfiles_claude_local=~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.claude/settings.local.json
+if [ ! -f "$dotfiles_claude_local" ]; then
+  mkdir -p "$(dirname "$dotfiles_claude_local")"
+  echo '{ "worktree": { "bgIsolation": "none" } }' > "$dotfiles_claude_local"
+fi
+
 # hunk bundles its review skill inside its install prefix; link it in so Claude Code discovers it
 if command -v hunk >/dev/null 2>&1; then
   # `hunk skill path` points into the versioned Cellar, which breaks on upgrade; prefer brew's stable opt prefix
