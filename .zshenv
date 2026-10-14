@@ -27,3 +27,9 @@
   # /usr/bin by macOS's path_helper — which is the whole problem.
   path=("$shims" ${path:#$shims})
 }
+
+# macOS defaults the soft fd limit to 256. The tmux server holds one pty fd per
+# pane (workmux's sidebar adds one to every window), so a big session set hits
+# it and tmux then fails every `if-shell`/`run-shell` — which is what breaks
+# vim-tmux-navigator's C-h/j/k/l. Only raises, never lowers.
+(( $(ulimit -Sn) < 10240 )) && ulimit -Sn 10240 2>/dev/null
