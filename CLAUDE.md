@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
   Personal dotfiles repository for macOS. Config files are symlinked from `~/dotfiles` to their expected locations via `install.sh`. The `PERSONAL_DOTFILES_DIRECTORY_NAME` env var controls the source directory name. Ensure that any changes to tool configurations are added in this repo and symlinked properly to maintain consistency across machines.
 
+## Working Here
+- Edit this checkout in place — no worktrees (`workmux add`, `EnterWorktree`), no PRs. It's a personal repo, and the symlinks point at this checkout, so a worktree edit isn't live. Exception: a very complex change, or several dotfiles changes in flight at once.
+- Background jobs block in-place edits unless `.claude/settings.local.json` (globally gitignored) holds `{"worktree": {"bgIsolation": "none"}}`.
+
 ## Key Commands
 
 - **Install**: `PERSONAL_DOTFILES_DIRECTORY_NAME=dotfiles ./install.sh`
