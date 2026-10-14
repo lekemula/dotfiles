@@ -236,6 +236,11 @@ differs from the worktree-derived default. Run `workmux` commands from the
 target repository so it creates the worktree from the correct Git repository
 and base branch.
 
+When you work in that worktree yourself instead of dispatching (rebase,
+resolve, validate, push), read the target repo's `CLAUDE.md` first. It does
+not auto-load when the session started in another repo, and it names that
+repo's own check command.
+
 Do NOT research before dispatching. Use context you already have, but
 do not explore or read code just to write the prompt. Worktree agents
 can read files from other projects via absolute paths, so reference

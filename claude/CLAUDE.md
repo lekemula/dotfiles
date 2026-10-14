@@ -49,10 +49,12 @@
   - Each commit leaves the tree working (tests and linters pass) and carries its own specs.
   - Stage by hunk (`git add -p`) when one file holds changes for more than one commit.
   - Follow-ups to an earlier commit on the branch — review fixes, missed specs, typos, lint — go in as `git commit --fixup=<sha>` (`--squash` if the message changes too), folded with `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base>`. Never leave "fix tests", "address review" or "wip" commits standing.
+  - Keep git's default `fixup! <original subject>` line, but never leave the body empty: describe what the change is about and why in the description (`git commit --fixup=<sha> -m "<what changes and why>"` puts it under the default subject). When the final message itself changes, use `git commit --fixup=amend:<sha>` or an `amend!` commit with the new message.
   - Fixup and squash hard: the final history is a handful of lean, self-explanatory commits, not a log of how the work happened.
   - Rewriting already-pushed history needs a force-push — ask first, and use `--force-with-lease`, never plain `--force`.
-- Push sets up remote tracking automatically (autoSetupRemote)
+- Push by name: `git push origin <branch>` (the github-toolkit hook rejects a bare `git push`; autoSetupRemote sets up tracking on the first push)
 - Wait for confirmation before commiting and pushing to remote branches
+- Push at the very last stage. Finish everything locally first — code, specs, e2e and manual verification, commit reshaping, PR text. When the work spans several repos or PRs, push them all together at the end, and postpone every push until all of them are complete locally. Don't push a branch early "so a PR exists" or to unblock one step.
 - To put a screenshot or video in a PR/issue description or comment, use `gh`'s built-in `--attach` (gh 2.99.0+). It uploads over your normal `gh auth` login and yields a real `user-attachments/assets/<uuid>` URL that renders for private repos too:
   ```bash
   gh pr create  --attach './before.png#The login error state'   # alt text after "#"
@@ -69,6 +71,9 @@ Before writing or editing a PR description, read `~/.claude/docs/pr-descriptions
 ## Worktrees
 - Worktrees are workmux's job. It keeps them in a sibling `<project>__worktrees/<name>` with a tmux window and agent status tracking attached — reuse those instead of creating a parallel `.claude/worktrees/` copy of the same repo.
 - Need isolation: run `workmux list` first and enter an existing worktree by its path (`workmux path <name>` resolves it); only `workmux add <name>` a new one if none fits. Entering it counts as isolating, so background jobs don't need their own `.claude/worktrees/` copy.
+- **Parallel work gets its own tmux session.** When a work stream spans several worktrees — subtasks of one ticket, or several epics tackled at once — give each stream its own tmux session named after its ticket key (e.g. `LI-2025`, one per epic), and put each subtask's worktree in as a window of that session. This keeps the main session uncluttered and lets me find a stream by name in the session list. A one-off worktree stays a window in the current session.
+  - Create the session if it's missing, then add into it: `tmux has-session -t LI-2025 2>/dev/null || tmux new-session -d -s LI-2025 -c <repo>`, then `workmux add --parent-session LI-2025 --background <branch>`. Without `--parent-session`, workmux places the window in the caller's session, and with no tmux pane (background jobs) and several sessions it refuses outright.
+  - Reuse an existing session for the stream (`tmux ls`) instead of creating a second one.
 - Clean up with `workmux merge` or `workmux remove`, not `git worktree remove` — those also close the tmux window and drop the branch.
 - Don't hand-roll `git worktree add`.
 - When starting work in a worktree, always `git fetch` and rebase onto `main` first. A worktree cut earlier can be well behind, and a dependency the task needs may already have merged — rebasing is what makes it available, and it avoids building a scratch worktree to combine branches that `main` already combines.
