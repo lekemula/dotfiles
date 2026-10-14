@@ -165,6 +165,10 @@
     "type": "command",
     "command": "$HOME/.claude/statusline.sh"
   },
+  "subagentStatusLine": {
+    "type": "command",
+    "command": "$HOME/.claude/subagent-statusline.sh"
+  },
   "enabledPlugins": {
     "playwright@claude-plugins-official": false,
     "layered-rails@palkan-skills": true,
@@ -174,11 +178,14 @@
     "warp@claude-code-warp": true,
     "ruby-lsp@claude-plugins-official": false,
     "solargraph@local-plugins": true,
-    "fl-sdd@finlink": true,
     "github-toolkit@finlink": true,
+    "atlassian-toolkit@finlink": true,
+    "customer-success@finlink": true,
+    "fl-sdd@finlink": true,
     "marketplace-dev@finlink": true,
+    "pm-toolkit@finlink": true,
     "ruby-toolkit@finlink": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "mattpocock-skills@mattpocock": true
   },
   "extraKnownMarketplaces": {
     "claude-code-warp": {
@@ -192,6 +199,12 @@
         "source": "directory",
         "path": "/Users/lekemula/.claude/local-plugins"
       }
+    },
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
@@ -200,14 +213,10 @@
   "theme": "dark",
   "editorMode": "vim",
   "verbose": false,
+  "autoCompactEnabled": false,
   "skipAutoPermissionPrompt": true,
   "mcpServers": {},
   "feedbackSurveyState": {
     "lastShownTime": 1754072297712
-  },
-  "autoCompactEnabled": false,
-  "subagentStatusLine": {
-    "type": "command",
-    "command": "$HOME/.claude/subagent-statusline.sh"
   }
 }
