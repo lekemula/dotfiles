@@ -78,6 +78,14 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "workmux-claude-status done"
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [

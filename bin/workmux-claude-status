@@ -11,8 +11,9 @@
 #
 # This wrapper resolves the pane from the session's working directory, the one
 # piece of pane-adjacent context the hook payload carries, and hands workmux a
-# TMUX_PANE. Sessions with no pane of their own (fleet sessions, worktrees opened
-# elsewhere) report nothing rather than mislabelling someone else's pane.
+# TMUX_PANE. Background sessions mirrored into tmux by tmux-claude-bg-sync are
+# matched by session id instead. Sessions with no pane of their own (worktrees
+# opened elsewhere) report nothing rather than mislabelling someone else's pane.
 #
 # Wired up from claude.json (~/.claude/settings.json):
 #   workmux-claude-status working|waiting|done|clear
@@ -38,12 +39,27 @@ cwd=$(print -r -- "$payload" | jq -r '.cwd // empty' 2>/dev/null || true)
 # tmux reports resolved paths, so compare resolved against resolved.
 cwd=${cwd:A}
 
+sid=$(print -r -- "$payload" | jq -r '.session_id // empty' 2>/dev/null || true)
+
+# Background sessions mirrored by tmux-claude-bg-sync carry their session id.
+typeset -a panes
+if [[ -n $sid ]]; then
+  panes=(${(f)"$(
+    tmux list-panes -a -F $'#{pane_id}\t#{@claude_session}' 2>/dev/null |
+      awk -F'\t' -v sid="$sid" '$2 == sid { print $1 }'
+  )"})
+  if (( ${#panes} == 1 )); then
+    export TMUX_PANE=${panes[1]}
+    exec workmux set-window-status "$state"
+  fi
+fi
+
 # Only panes whose foreground process is the agent itself: a project window also
 # holds an editor, a shell and the workmux sidebar, all sharing the directory.
-typeset -a panes
+# Mirror panes belong to their own session, never to a cwd match.
 panes=(${(f)"$(
-  tmux list-panes -a -F $'#{pane_id}\t#{pane_current_command}\t#{pane_current_path}' 2>/dev/null |
-    awk -F'\t' -v dir="$cwd" '$3 == dir && $2 ~ /^(claude|codex|opencode|gemini)$/ { print $1 }'
+  tmux list-panes -a -F $'#{pane_id}\t#{pane_current_command}\t#{pane_current_path}\t#{@claude_session}' 2>/dev/null |
+    awk -F'\t' -v dir="$cwd" '$3 == dir && $4 == "" && $2 ~ /^(claude|codex|opencode|gemini)$/ { print $1 }'
 )"})
 
 # No pane means a detached session; several mean the directory cannot pick one.

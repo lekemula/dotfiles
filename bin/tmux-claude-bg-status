@@ -1,0 +1,54 @@
+#!/usr/bin/env zsh
+# tmux status-right segment for Claude Code background sessions.
+#
+# workmux tracks agents per tmux pane, so background sessions (`claude --bg`,
+# `/bg`, agent view) never reach its dashboard or sidebar. This counts them from
+# `claude agents --json` instead: working (busy) and waiting for input (blocked).
+# Rows with a null status are finished jobs the daemon no longer runs. Each
+# refresh also runs tmux-claude-bg-sync, which mirrors them into tmux panes.
+#
+#   tmux-claude-bg-status           print the segment (empty when nothing to show)
+#   tmux-claude-bg-status install   prepend it to status-right; run after tpm,
+#                                   since the theme overwrites status-right
+
+emulate -L zsh
+setopt pipe_fail
+
+if [[ ${1:-} == install ]]; then
+  current=$(tmux show -gv status-right)
+  [[ $current == *tmux-claude-bg-status* ]] && exit 0
+  tmux set -g status-right "#(${0:A})$current"
+  exit 0
+fi
+
+# tmux runs #() through sh with its own environment, which may lack Homebrew.
+path=(/opt/homebrew/bin /usr/local/bin $path)
+command -v claude >/dev/null && command -v jq >/dev/null || exit 0
+
+# status-interval is 5s and `claude agents` costs ~0.4s, so reuse a recent result.
+cache=${TMPDIR:-/tmp}/tmux-claude-bg-status.$UID
+if [[ -f $cache ]] && (( $(date +%s) - $(stat -f %m $cache) < 15 )); then
+  cat $cache
+  exit 0
+fi
+
+claude agents --json > $cache.json 2>/dev/null || exit 0
+counts=$(jq -r '
+  [.[] | select(.kind == "background" and .status != null)] as $bg
+  | "\([$bg[] | select(.status == "busy")] | length) \([$bg[] | select(.state == "blocked")] | length)"
+' $cache.json) || exit 0
+read -r working waiting <<< $counts
+
+# Give the sessions panes so the workmux dashboard lists them too.
+${0:A:h}/tmux-claude-bg-sync $cache.json >/dev/null 2>&1 &!
+
+segment=
+if (( working + waiting > 0 )); then
+  segment='#[bg=#3c3836,fg=#a89984] bg'
+  (( working )) && segment+=" 🤖$working"
+  (( waiting )) && segment+=" 💬$waiting"
+  segment+=' '
+fi
+
+print -r -- $segment > $cache.$$ && mv -f $cache.$$ $cache
+print -r -- $segment

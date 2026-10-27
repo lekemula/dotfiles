@@ -1,0 +1,79 @@
+#!/usr/bin/env zsh
+# Mirror Claude Code background sessions into the `claude-bg` tmux session, one
+# window per session running `claude attach <id>`, so they get a pane and show
+# up in the workmux dashboard and sidebar.
+#
+# Each mirror pane carries @claude_session=<session id>; workmux-claude-status
+# routes the session's pane-less hooks to it by that id.
+#
+# Mirrors sessions that are working or waiting for input, plus finished ones
+# active within the last day; each attach costs ~150MB. Windows whose session
+# dropped out are closed. Run by tmux-claude-bg-status on each refresh.
+#
+#   tmux-claude-bg-sync [agents.json]   defaults to a fresh `claude agents --json`
+
+emulate -L zsh
+setopt pipe_fail
+
+SESSION=claude-bg
+MAX_IDLE=$(( 24 * 3600 ))
+
+path=(/opt/homebrew/bin /usr/local/bin $path)
+command -v claude >/dev/null && command -v jq >/dev/null && command -v tmux >/dev/null || exit 0
+tmux info >/dev/null 2>&1 || exit 0
+
+lock=${TMPDIR:-/tmp}/tmux-claude-bg-sync.$UID.lock
+mkdir $lock 2>/dev/null || exit 0
+trap 'rmdir $lock' EXIT
+
+if [[ -n ${1:-} ]]; then
+  agents=$(<$1)
+else
+  agents=$(claude agents --json 2>/dev/null) || exit 0
+fi
+
+now=$(date +%s)
+typeset -A wanted
+# id, session id, workmux status, cwd, name — tab-separated
+rows=(${(f)"$(print -r -- $agents | jq -r '
+  .[] | select(.kind == "background" and .status != null)
+  | [.id, .sessionId,
+     (if .status == "busy" then "working" elif .state == "blocked" then "waiting" else "done" end),
+     .cwd, .name] | @tsv')"})
+
+for row in $rows; do
+  IFS=$'\t' read -r id sid wm_status cwd name <<< $row
+
+  if [[ $wm_status == done ]]; then
+    updated=$(jq -r '.updatedAt // empty' ~/.claude/jobs/$id/state.json 2>/dev/null)
+    [[ -n $updated ]] || continue
+    updated=$(date -juf '%Y-%m-%dT%H:%M:%S' ${updated%%.*} +%s 2>/dev/null) || continue
+    (( now - updated < MAX_IDLE )) || continue
+  fi
+  wanted[$sid]=1
+
+  # `claude attach` never sets a pane title, and the dashboard's Title column
+  # reads it; without this it shows the hostname.
+  pane=$(tmux list-panes -s -t "=$SESSION" -F $'#{pane_id}\t#{@claude_session}' 2>/dev/null |
+    awk -F'\t' -v sid="$sid" '$2 == sid { print $1; exit }')
+  if [[ -n $pane ]]; then
+    tmux select-pane -t $pane -T $name
+    continue
+  fi
+
+  [[ -d $cwd ]] || cwd=$HOME
+  if tmux has-session -t "=$SESSION" 2>/dev/null; then
+    pane=$(tmux new-window -d -P -F '#{pane_id}' -t "=$SESSION:" -n $name -c $cwd "claude attach $id")
+  else
+    pane=$(tmux new-session -d -P -F '#{pane_id}' -s $SESSION -n $name -c $cwd "claude attach $id")
+  fi
+  tmux set -p -t $pane @claude_session $sid
+  tmux select-pane -t $pane -T $name
+  # Hooks only fire on the next transition; show the current state right away.
+  TMUX_PANE=$pane workmux set-window-status $wm_status >/dev/null 2>&1 || true
+done
+
+tmux list-panes -s -t "=$SESSION" -F $'#{window_id}\t#{@claude_session}' 2>/dev/null |
+  while IFS=$'\t' read -r window sid; do
+    [[ -z $sid || -n ${wanted[$sid]:-} ]] || tmux kill-window -t $window
+  done
