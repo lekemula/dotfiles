@@ -7,6 +7,7 @@ java = "temurin-25.0.4+7.0.LTS"
 # Override these per-project with .mise.toml or .tool-versions
 node = "lts"
 ruby = "3.4"  # Latest 3.4.x version
+gcloud = "latest"
 
 [settings]
 # Automatically install tools when entering a directory with .mise.toml/.tool-versions
