@@ -115,7 +115,8 @@ let g:which_key_map_visual =  {}
 " hover over a word and press `z=` for spell suggestions
 let g:which_key_map.s = { 'name' : '+spelling' }
 :set spelllang=en_us
-:set spell
+" Off by default; <leader>ss toggles it per buffer.
+:set nospell
 :set complete+=kspell
 nnoremap <leader>ss :setlocal spell!<CR>
 let g:which_key_map.s.s = 'enable-spelling'
