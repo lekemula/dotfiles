@@ -167,8 +167,39 @@ vim.lsp.enable('lua_ls')
 
 -- stimuls js
 vim.lsp.config("stimulus_ls", {
+  -- Pin to the global node: the bare shim resolves to the project's node, which often lacks the package
+  cmd = { "mise", "exec", "node@lts", "--", "stimulus-language-server", "--stdio" },
+  -- Lets extensionless imports in controllers/index.js resolve to TypeScript controllers
+  cmd_env = {
+    NODE_OPTIONS = vim.trim(("%s --require %s"):format(
+      vim.env.NODE_OPTIONS or "",
+      vim.fs.joinpath(vim.fn.stdpath("config"), "lua", "stimulus_ls_resolve_ts.js")
+    )),
+  },
   filetypes = { "html", "ruby", "eruby", "blade", "php" },
-  root_markers = { "Gemfile", ".git" }
+  root_markers = { "Gemfile", ".git" },
+  -- The server indexes controllers only at startup and ignores watched-file events for them, so a controller
+  -- added later stays "invalid". It re-indexes on didChangeConfiguration, so send one when JS/TS files change.
+  on_init = function(client)
+    local notify = client.notify
+    local timer = assert(vim.uv.new_timer())
+    client.notify = function(self, method, params)
+      local result = notify(self, method, params)
+      if method == "workspace/didChangeWatchedFiles" then
+        local relevant = vim.iter(params.changes):any(function(change)
+          return change.uri:match("%.[jt]s$") and not change.uri:match("/node_modules/")
+        end)
+        if relevant then
+          timer:start(300, 0, vim.schedule_wrap(function()
+            if not self:is_stopped() then
+              notify(self, "workspace/didChangeConfiguration", { settings = self.settings or {} })
+            end
+          end))
+        end
+      end
+      return result
+    end
+  end
 })
 vim.lsp.enable('stimulus_ls')
 
