@@ -33,6 +33,18 @@ source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # picked up by zsh-autocomplete's queue and replayed once compinit has run.
 command -v workmux &> /dev/null && eval "$(workmux completions zsh)"
 
+# gcloud completions — same placement constraint as workmux above. mise keeps
+# the `latest` symlink current on upgrade. The az completion sourced below
+# redefines `_python_argcomplete` as a zsh-native function, so gcloud gets its
+# own copy under another name.
+GCLOUD_COMPLETION=~/.local/share/mise/installs/gcloud/latest/completion.zsh.inc
+if [ -f $GCLOUD_COMPLETION ]; then
+  source $GCLOUD_COMPLETION
+  functions[_gcloud_argcomplete]=$functions[_python_argcomplete]
+  complete -o nospace -o default -F _gcloud_argcomplete gcloud
+  complete -o nospace -F _gcloud_argcomplete gsutil
+fi
+
 export ZVM_VI_ESCAPE_BINDKEY=jj # zsh-vi-mode
 # Load zsh plugins via Antigen
 source ~/antigen/antigen.zsh
