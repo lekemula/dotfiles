@@ -379,11 +379,12 @@
     fi
 
     # Styling for different parts of Git status.
-    local       meta='%7F' # white foreground
-    local      clean='%0F' # black foreground
-    local   modified='%0F' # black foreground
-    local  untracked='%0F' # black foreground
-    local conflicted='%1F' # red foreground
+    # Overridable per terminal; .p10k.rex.zsh sets them inside Rex.
+    local       meta=${P10K_GIT_META:-'%7F'}            # white foreground
+    local      clean=${P10K_GIT_CLEAN:-'%0F'}           # black foreground
+    local   modified=${P10K_GIT_MODIFIED:-'%0F'}        # black foreground
+    local  untracked=${P10K_GIT_UNTRACKED:-'%0F'}       # black foreground
+    local conflicted=${P10K_GIT_CONFLICTED:-'%1F'}      # red foreground
 
     local res
 

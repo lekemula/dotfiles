@@ -102,7 +102,15 @@ source $(brew --prefix)/etc/bash_completion.d/az
 # Change config dir for lazygit
 export XDG_CONFIG_HOME="$HOME/.config"
 
-export BAT_THEME="gruvbox-dark"
+# Inside Rex, follow its terminal palette (GitHub Dark) instead of gruvbox; this
+# also colours bat-based previews such as fzf.vim's.
+if [[ $TERM_PROGRAM == rex ]]; then
+  export BAT_THEME="ansi"
+  # fzf in GitHub Dark colours, on the terminal's own background.
+  export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:+$FZF_DEFAULT_OPTS }--color=fg:#e6edf3,bg:-1,hl:#58a6ff,fg+:#ffffff,bg+:#161b22,hl+:#79c0ff,gutter:-1,query:#e6edf3,info:#8b949e,prompt:#58a6ff,pointer:#58a6ff,marker:#3fb950,spinner:#d29922,header:#8b949e,border:#30363d,separator:#30363d,scrollbar:#30363d"
+else
+  export BAT_THEME="gruvbox-dark"
+fi
 
 if [ -f ~/.zshrc.secrets ]; then
   # This file is not checked into source control

@@ -1,0 +1,94 @@
+#!/usr/bin/env zsh
+# Report Claude Code's agent status to Rex, which shows it as tab spinners and
+# session-picker badges. Claude Code doesn't speak Rex's Program Status Protocol
+# (OSC 7501, https://www.superlogical.com/rex/docs/build/program-status) itself,
+# so this hook writes the sequence to the terminal Claude is shown in.
+#
+# A session started in a Rex tab runs its hooks on that tab's tty with $REX_BLOCK
+# set. Background sessions run inside Claude Code's daemon instead: no $REX_BLOCK,
+# and /dev/tty is the daemon's own pty, which Rex never sees. Those report to every
+# Rex pane showing them via `claude attach <id>` (the id is a session_id prefix),
+# else to the one Rex pane whose plain `claude` sits in the session's cwd.
+# Outside Rex, or with no match, nothing is reported.
+#
+# Wired up from claude.json (~/.claude/settings.json):
+#   rex-claude-status working|blocked|done|error|idle|clear
+
+emulate -L zsh
+set -uo pipefail
+
+state=${1:-}
+[[ -n $state ]] || exit 0
+
+payload=$(cat 2>/dev/null || true)
+field() {
+  command -v jq >/dev/null 2>&1 || return 0
+  print -r -- "$payload" | jq -r ".$1 // empty" 2>/dev/null || true
+}
+
+typeset -a pairs=("state=$state" "app=claude-code")
+if [[ $state == blocked ]]; then
+  case $(field notification_type) in
+    elicitation_dialog) pairs+=(kind=question) ;;
+    *) pairs+=(kind=permission) ;;
+  esac
+  msg=$(field message)
+  [[ -z $msg ]] && msg=$(field tool_name)
+  if [[ -n $msg ]]; then
+    # Single line, no control characters, well under the 2048-byte cap.
+    msg=${msg//[[:cntrl:]]/ }
+    pairs+=("msg=$(print -rn -- ${msg[1,200]} | base64 | tr -d '\n')")
+  fi
+fi
+seq=$'\e]7501;'"${(j.:.)pairs}"$'\e\\'
+
+if [[ -n ${REX_BLOCK:-} ]] && { print -rn -- $seq > /dev/tty } 2>/dev/null; then
+  exit 0
+fi
+
+command -v rex >/dev/null 2>&1 || exit 0
+command -v jq >/dev/null 2>&1 || exit 0
+
+fg_pid() {
+  rex block call -b $1 process 2>/dev/null | jq -r '.foreground.pid // empty' 2>/dev/null
+}
+
+typeset -a pids
+if [[ -n ${REX_BLOCK:-} ]]; then
+  pids=($(fg_pid $REX_BLOCK))
+else
+  sid=$(field session_id)
+  [[ -n $sid ]] || sid=${CLAUDE_CODE_SESSION_ID:-}
+  cwd=$(field cwd)
+  [[ -n $cwd ]] || cwd=$PWD
+  cwd=${cwd:A}
+
+  typeset -a attached by_cwd blocks args
+  blocks=(${(f)"$(rex block ls -A 2>/dev/null | awk '$4 ~ /^com\.superlogical\.terminal/ { print $3 }')"})
+  for block in $blocks; do
+    pid=$(fg_pid $block)
+    [[ -n $pid ]] || continue
+    args=(${(z)"$(ps -o args= -p $pid 2>/dev/null)"})
+    (( ${#args} )) && [[ ${args[1]:t} == claude ]] || continue
+    if [[ ${args[2]:-} == attach ]]; then
+      [[ -n $sid && -n ${args[3]:-} && $sid == ${args[3]}* ]] && attached+=($pid)
+    elif (( ${#args} == 1 )); then
+      dir=$(lsof -a -p $pid -d cwd -Fn 2>/dev/null | sed -n 's/^n//p')
+      [[ -n $dir && ${dir:A} == $cwd ]] && by_cwd+=($pid)
+    fi
+  done
+
+  if (( ${#attached} )); then
+    pids=($attached)
+  elif (( ${#by_cwd} == 1 )); then
+    # Several Claudes in one directory can't be told apart.
+    pids=($by_cwd)
+  fi
+fi
+
+for pid in $pids; do
+  tty=$(ps -o tty= -p $pid 2>/dev/null | tr -d ' ')
+  [[ -n $tty && $tty != '??' ]] || continue
+  { print -rn -- $seq > /dev/$tty } 2>/dev/null
+done
+exit 0

@@ -539,8 +539,14 @@ let g:gruvbox_material_enable_bold = 1
 " For better performance
 let g:gruvbox_material_better_performance = 1
 
-colorscheme gruvbox-material
-let g:airline_theme = 'gruvbox_material'
+if $TERM_PROGRAM ==# 'rex' && has('nvim')
+  " Match Rex's merino-dark theme, which is GitHub Dark Default.
+  silent! colorscheme github_dark_default
+  let g:airline_theme = 'rex'
+else
+  colorscheme gruvbox-material
+  let g:airline_theme = 'gruvbox_material'
+endif
 " let g:gruvbox_transparent_bg = 0
 " autocmd VimEnter * hi Normal ctermbg=none
 set background=dark
@@ -609,3 +615,6 @@ set runtimepath^=~/Projects/vscode-css-peek
 " herdr pane navigation. Sourced last so its <C-h/j/k/l> mappings win over
 " vim-tmux-navigator's; it no-ops outside a herdr pane.
 source ~/vim/configs/herdr.vim
+
+" Rex pane navigation, same idea; no-ops outside a Rex terminal.
+source ~/vim/configs/rex.vim

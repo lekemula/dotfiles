@@ -1,0 +1,160 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Copy live tmux sessions into Rex: each tmux window becomes a Rex tab with the same
+# name, pane directories and split proportions (read from tmux's window_layout tree).
+#
+#   rex-from-tmux [--dry-run] [SESSION...]   (default: every tmux session but SKIP)
+#
+# Processes can't move between terminals, so panes start fresh: nvim panes reopen
+# nvim, claude panes run `claude -c` (latest conversation in that directory, else a fresh one), the
+# rest are shells. An existing Rex session with the same name is replaced.
+#
+# Skipped: tmux-resurrect leftovers of the workmux sidebar and squeezed panes (under
+# MIN_WIDTH columns, or a sidebar-width pane on the far left), and the claude-bg
+# session, whose windows mirror Claude background sessions Rex shows via `claude attach`.
+
+require 'json'
+require 'open3'
+
+SKIP = %w[claude-bg].freeze
+MIN_WIDTH = 10
+SIDEBAR_WIDTH = 34
+
+Pane = Struct.new(:id, :command, :path, :width, :left, keyword_init: true)
+Node = Struct.new(:kind, :dims, :children, :pane, keyword_init: true) # kind: :leaf, :h (side by side), :v (stacked)
+
+def sh(*cmd)
+  out, err, status = Open3.capture3(*cmd)
+  raise "#{cmd.join(' ')}: #{err.strip}" unless status.success?
+
+  out
+end
+
+# Layout grammar: "csum,WxH,X,Y" then ",ID" for a pane, "{...}" side by side or "[...]" stacked.
+def parse_layout(str)
+  str = str.sub(/\A\h+,/, '')
+  node, = parse_cell(str, 0)
+  node
+end
+
+def parse_cell(str, pos)
+  m = str.match(/\G(\d+)x(\d+),\d+,\d+/, pos)
+  w = m[1].to_i
+  h = m[2].to_i
+  pos = m.end(0)
+  case str[pos]
+  when ','
+    id = str.match(/\G,(\d+)/, pos)
+    [Node.new(kind: :leaf, dims: [w, h], pane: "%#{id[1]}"), id.end(0)]
+  when '{', '['
+    kind = str[pos] == '{' ? :h : :v
+    children = []
+    pos += 1
+    loop do
+      child, pos = parse_cell(str, pos)
+      children << child
+      break if str[pos] =~ /[}\]]/
+
+      pos += 1 # comma between cells
+    end
+    [Node.new(kind: kind, dims: [w, h], children: children), pos + 1]
+  else
+    [Node.new(kind: :leaf, dims: [w, h]), pos]
+  end
+end
+
+def junk?(pane, window_panes)
+  return true if pane.width < MIN_WIDTH
+
+  pane.left.zero? && pane.width <= SIDEBAR_WIDTH && window_panes.size > 1
+end
+
+# Drops junk leaves and collapses containers left with a single child.
+def prune(node, panes, window_panes)
+  return (junk?(panes.fetch(node.pane), window_panes) ? nil : node) if node.kind == :leaf
+
+  kids = node.children.filter_map { |c| prune(c, panes, window_panes) }
+  return nil if kids.empty?
+  return kids.first if kids.size == 1
+
+  Node.new(kind: node.kind, dims: node.dims, children: kids)
+end
+
+def first_leaf(node)
+  node.kind == :leaf ? node : first_leaf(node.children.first)
+end
+
+# Types the pane's program into its shell, so it runs as the shell's foreground job
+# (rex.vim's ctrl+hjkl pass-through looks for nvim there) and the shell stays after.
+def start(pane, block)
+  command = { 'nvim' => 'nvim', 'vim' => 'nvim', 'claude' => 'claude -c || claude' }[pane.command]
+  sh('rex', 'send', '-b', block, "#{command}\n") if command
+end
+
+# Splits `block` into the node's children, then recurses into each.
+def build(session, node, block, panes)
+  return start(panes.fetch(node.pane), block) if node.kind == :leaf
+
+  dim = node.kind == :h ? 0 : 1
+  direction = node.kind == :h ? 'right' : 'below'
+  remaining = node.children.sum { |c| c.dims[dim] } + node.children.size - 1
+  blocks = [block]
+  node.children[0...-1].each do |child|
+    rest = remaining - child.dims[dim] - 1
+    ratio = (100.0 * rest / remaining).round.clamp(1, 99)
+    pane = panes.fetch(first_leaf(node.children[blocks.size]).pane)
+    out = sh('rex', 'split', '-s', session, '-b', blocks.last, '--split', direction, '--ratio', ratio.to_s,
+             '-c', pane.path, '--focus=false', '--json')
+    blocks << JSON.parse(out)['block_ids'].first
+    remaining = rest
+  end
+  node.children.zip(blocks).each { |child, b| build(session, child, b, panes) }
+end
+
+dry_run = ARGV.delete('--dry-run')
+panes = sh('tmux', 'list-panes', '-a', '-F',
+           "\#{pane_id}\t\#{pane_current_command}\t\#{pane_current_path}\t\#{pane_width}\t\#{pane_left}")
+        .lines.to_h do |l|
+          id, cmd, path, w, x = l.chomp.split("\t")
+          [id, Pane.new(id: id, command: cmd, path: path, width: w.to_i, left: x.to_i)]
+        end
+windows = sh('tmux', 'list-windows', '-a', '-F',
+             "\#{session_name}\t\#{window_name}\t\#{window_layout}\t\#{window_active}\t\#{window_panes}")
+          .lines.map { |l| l.chomp.split("\t") }
+wanted = ARGV.empty? ? windows.map(&:first).uniq - SKIP : ARGV
+existing = sh('rex', 'ls').lines.drop(1).map { |l| l.split.first }
+
+wanted.each do |session|
+  tabs = windows.select { |w| w[0] == session }
+  next warn("no tmux session #{session}") if tabs.empty?
+
+  puts "#{session} (#{tabs.size} tabs)"
+  next if dry_run
+
+  sh('rex', 'kill', session) if existing.include?(session)
+  active = nil
+  tabs.each_with_index do |(_, name, layout, is_active, _), i|
+    name = name.strip
+    tree = parse_layout(layout)
+    window_panes = []
+    collect = ->(n) { n.kind == :leaf ? window_panes << panes[n.pane] : n.children.each(&collect) }
+    collect.call(tree)
+    tree = prune(tree, panes, window_panes.compact) || tree
+    lead = panes.fetch(first_leaf(tree).pane)
+    if i.zero?
+      sh('rex', 'new', session, '-c', lead.path, '--window', name)
+      tab = JSON.parse(sh('rex', 'window', 'ls', '-s', session, '--json'))['windows'].first
+      window_id = tab['window_id']
+      block = tab['focused_block_id']
+    else
+      tab = JSON.parse(sh('rex', 'window', 'new', '-s', session, name, '-c', lead.path, '--focus=false', '--json'))
+      window_id = tab['window_id']
+      block = tab['block_ids'].first
+    end
+    build(session, tree, block, panes)
+    active = window_id if is_active == '1'
+    puts "  #{name}: #{tree.kind == :leaf ? 1 : 'split'} -> #{lead.path.sub(Dir.home, '~')}"
+  end
+  sh('rex', 'focus', '-s', session, active) if active
+end

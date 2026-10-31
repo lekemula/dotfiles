@@ -21,7 +21,8 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all,ctrl-d:preview-down,ctrl-u:preview-up'
+" Appended, so colours from the shell (e.g. Rex's in .zshrc) still apply.
+let $FZF_DEFAULT_OPTS = trim($FZF_DEFAULT_OPTS . ' --bind ctrl-a:select-all,ctrl-d:preview-down,ctrl-u:preview-up')
 
 " - down / up / left / right
 let g:fzf_layout = { 'down': '40%' }

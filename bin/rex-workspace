@@ -1,0 +1,129 @@
+#!/usr/bin/env zsh
+# Restore personal Rex workspace sessions — the Rex counterpart of tmux-workspace.
+# Usage: rex-workspace [--force|-f] [session]
+#   --force, -f   Kill the named sessions first to start fresh
+#   session       finlink|solargraph|all (default: all)
+#
+# The Rex server keeps sessions across app restarts on its own, so there is no
+# resurrect/continuum dance here; existing sessions and tabs are left alone.
+
+set -e
+
+FORCE=0
+while [[ ${1:-} == -* ]]; do
+  case "$1" in
+    --force|-f) FORCE=1; shift ;;
+    -h|--help)
+      echo "Usage: $(basename $0) [--force|-f] [finlink|solargraph|all]"
+      exit 0
+      ;;
+    *) echo "Unknown option: $1" >&2; exit 1 ;;
+  esac
+done
+
+has_session() { rex ls 2>/dev/null | awk 'NR > 1 { print $1 }' | grep -qx "$1"; }
+
+# Prints the first pane of a session's tab, by tab label.
+tab_block() {
+  rex window ls -s "$1" --json | jq -r --arg l "$2" '.windows[] | select(.label == $l) | .focused_block_id'
+}
+
+# Returns 0 (created) or 1 (already exists). Prints the new tab's first pane id.
+new_session() {
+  local session=$1 tab=$2 dir=$3
+  if has_session "$session"; then
+    echo "  session '$session' already exists" >&2
+    return 1
+  fi
+  rex new "$session" -c "$dir" --window "$tab" >/dev/null
+  echo "  session '$session' created" >&2
+  tab_block "$session" "$tab"
+}
+
+# Returns 0 (created) or 1 (already exists). Prints the new tab's first pane id.
+new_tab() {
+  local session=$1 name=$2 dir=$3
+  if rex window ls -s "$session" --json | jq -e --arg l "$name" '.windows[] | select(.label == $l)' >/dev/null; then
+    echo "    tab '$name' already exists" >&2
+    return 1
+  fi
+  rex window new -s "$session" "$name" -c "$dir" --focus=false --json | jq -r '.block_ids[0]'
+  echo "    tab '$name' created" >&2
+}
+
+# Layout: nvim (top-left) | claude (full right) | zsh (bottom-left).
+layout() {
+  local session=$1 block=$2 dir=$3
+  rex split -s "$session" -b "$block" --split right -c "$dir" --focus=false >/dev/null  # claude: full right
+  rex split -s "$session" -b "$block" --split below -c "$dir" --focus=false >/dev/null  # zsh: below nvim (left only)
+}
+
+session_tab() {
+  local block
+  if block=$(new_session "$@"); then layout "$1" "$block" "$3"; fi
+}
+
+tab() {
+  local block
+  if block=$(new_tab "$@"); then layout "$1" "$block" "$3"; fi
+}
+
+reset() {
+  if (( FORCE )) && has_session "$1"; then
+    echo "Killing existing session '$1'..."
+    rex kill "$1"
+  fi
+}
+
+# ── finlink ───────────────────────────────────────────────────────────────────
+FINLINK=~/Projects/finlink
+
+setup_finlink() {
+  reset finlink
+  session_tab finlink dotfiles ~/dotfiles
+  tab finlink api "$FINLINK/loanlink-api"
+  tab finlink console "$FINLINK/loanlink-api"
+  tab finlink ehyp "$FINLINK/ehyp-integrations"
+  tab finlink web "$FINLINK/loanlink-web"
+  tab finlink coba-integrations "$FINLINK/coba-integrations"
+  tab finlink dev-pal "$FINLINK/dev-pal"
+  tab finlink azure "$FINLINK/azure-infrastructure"
+  tab finlink stubs-api "$FINLINK/stubs-api"
+  rex focus -s finlink api >/dev/null
+}
+
+# ── solargraph ────────────────────────────────────────────────────────────────
+SOLARGRAPH=~/Projects/open_source/solargraph
+SOLARGRAPH_RSPEC=~/Projects/open_source/solargraph-rspec
+RUBOCOP=~/Projects/open_source/rubocop
+RUBOCOP_AST=~/Projects/open_source/rubocop-ast
+
+setup_solargraph() {
+  reset solargraph
+  session_tab solargraph dotfiles ~/dotfiles
+  tab solargraph solargraph "$SOLARGRAPH"
+  tab solargraph solargraph-rspec "$SOLARGRAPH_RSPEC"
+  tab solargraph yard ~
+  tab solargraph rspec ~
+  tab solargraph test ~
+  tab solargraph solargraph-rails ~
+  tab solargraph rubocop "$RUBOCOP"
+  tab solargraph rubocop-ast "$RUBOCOP_AST"
+  tab solargraph overcommit ~
+  rex focus -s solargraph dotfiles >/dev/null
+}
+
+# ── dispatch ──────────────────────────────────────────────────────────────────
+case "${1:-all}" in
+  finlink)     setup_finlink ;;
+  solargraph)  setup_solargraph ;;
+  all)
+    setup_finlink
+    setup_solargraph
+    echo "Done. Switch with ctrl+b s, or ctrl+b w for any tab."
+    ;;
+  *)
+    echo "Usage: $(basename $0) [finlink|solargraph|all]"
+    exit 1
+    ;;
+esac

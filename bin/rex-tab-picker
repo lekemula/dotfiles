@@ -1,0 +1,74 @@
+#!/usr/bin/env zsh
+# Fuzzy-pick any Rex tab across every session and jump to it — tmux's choose-tree
+# for Rex. Bound to ctrl+b w in rex/init.lua, which runs it in a popup.
+#
+# Switching the app to another session is a client action, which Rex.app only
+# takes from the CLI with Remote Control on (Settings > Rex Server). Without it the
+# tab still becomes its session's active one, so `ctrl+b s` lands on it.
+
+emulate -L zsh
+set -uo pipefail
+
+for cmd in rex jq fzf; do
+  command -v $cmd >/dev/null 2>&1 || { print -u2 "rex-tab-picker: $cmd not found"; exit 1; }
+done
+
+list_tabs() {
+  local label
+  for label in ${(f)"$(rex ls 2>/dev/null | awk 'NR > 1 { print $1 }')"}; do
+    rex window ls -s $label --json 2>/dev/null | jq -r --arg s $label '
+      . as $sess | .windows | to_entries[] |
+      [$sess.session_id, .value.window_id, (.value.focused_block_id // ""),
+       $s, (.key + 1 | tostring), (.value.label // "")] | @tsv'
+  done | while IFS=$'\t' read -r sid wid bid session num label; do
+    local fg=- dir=-
+    if [[ -n $bid ]]; then
+      # -s: inside a Rex pane the CLI resolves blocks within $REX_SESSION only.
+      IFS=$'\t' read -r fg dir <<< "$(rex block call -s $session -b $bid process < /dev/null 2>/dev/null |
+        jq -r '.foreground | [.name // "-", .cwd // "-"] | @tsv')"
+    fi
+    (( ${#label} > 40 )) && label="${label[1,39]}…"
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' $sid $wid $session $num $label $fg ${dir/#$HOME/\~}
+  done
+}
+
+# Ids stay in hidden fields 1-2. Padding is done here rather than with `column`,
+# which counts bytes and misaligns names carrying a branch icon.
+typeset -a rows widths=(7 1 3 7)
+rows=(${(f)"$(list_tabs)"})
+for row in $rows; do
+  cols=("${(@ps:\t:)row}")
+  for i in 1 2 3 4; do (( ${#cols[i+2]} > widths[i] )) && widths[i]=${#cols[i+2]}; done
+done
+line() { print -r -- "${(r:widths[1]:)1}  ${(l:widths[2]:)2}  ${(r:widths[3]:)3}  ${(r:widths[4]:)4}  $5"; }
+pick=$(for row in $rows; do
+         cols=("${(@ps:\t:)row}")
+         print -r -- "$cols[1]"$'\t'"$cols[2]"$'\t'"$(line "${(@)cols[3,7]}")"
+       done |
+  fzf --delimiter=$'\t' --with-nth=3 --prompt='tab> ' --reverse --no-multi \
+      --header="$(line session '#' tab program directory)")
+[[ -n $pick ]] || exit 0
+
+sid=${pick%%$'\t'*}
+rest=${pick#*$'\t'}
+wid=${rest%%$'\t'*}
+
+# Remember where we came from for ctrl+b ctrl+l (rex/tab_state.lua); `pending`
+# keeps the history watcher from recording this jump's own tab change.
+if [[ -n ${REX_SESSION:-} ]]; then
+  state=~/.local/state/rex/last-tab.json
+  from=$(rex window ls -s $REX_SESSION --json 2>/dev/null | jq -r .active_window_id)
+  mkdir -p ${state:h}
+  jq -n --arg s $REX_SESSION --arg w $from --arg t $wid --argjson at $(date +%s) \
+    '{previous: {session_id: $s, window_id: $w}, pending: {window_id: $t, at: $at}}' > $state
+fi
+
+# Active tab within its session first, so a refused app switch still leaves it one key away.
+rex focus -s $sid $wid >/dev/null 2>&1
+
+client=$(rex client ls 2>/dev/null | awk '$0 ~ / app / { print $NF; exit }')
+if [[ -z $client ]] || ! rex -C $client do session.select session_id=$sid window_id=$wid >/dev/null 2>&1; then
+  print "Tab is now active in its session, but Rex.app didn't switch: turn on"
+  print "Settings > Rex Server > Remote Control, or press ctrl+b s to go there."
+  read -sk '?press any key'
+fi

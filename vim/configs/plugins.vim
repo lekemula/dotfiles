@@ -113,6 +113,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'flazz/vim-colorschemes'
 Plug 'sainnhe/gruvbox-material', {'branch': 'master'}
+" Rex's merino-dark is GitHub Dark Default; .vimrc switches to it inside Rex.
+Plug 'projekt0n/github-nvim-theme', has('nvim') ? {} : {'on': []}
 Plug 'joom/vim-commentary'
 Plug 'airblade/vim-gitgutter'
 Plug 'machakann/vim-highlightedyank'
