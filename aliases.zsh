@@ -51,6 +51,10 @@ alias co='claude'
 alias coc='claude -c'
 alias oc='opencode'
 alias occ='opencode -c'
+alias wr='workmux remove'
+alias wrf='workmux remove --force'
+alias wa='workmux add'
+alias wap='workmux add --pr'
 
 # Finlink
 alias flb='dcb loanlink-api-finlink'
