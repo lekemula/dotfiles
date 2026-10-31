@@ -35,6 +35,12 @@
 - Screenshots and images on a ticket go **inline in the description**, never attachment-only — embed with `!filename|thumbnail!` and mention it in the prose as `[^filename]` so it is both visible and linked. The description field on these projects uses the **wiki renderer**, so write it via REST `api/2` with wiki markup: `api/3` hands back a lossy ADF conversion (`h3.` as literal text, `#` items as headings) and writing ADF to it mangles the formatting. Keep `#` list items on consecutive lines — a blank line between them turns each into an `<h1>`.
 - Before an Atlassian auth or token step (a 401/404 from Jira, a skill call failing auth, rotating a token), read `~/.claude/docs/atlassian-credentials.md`: tokens live in two places and several failures look like something else.
 
+## Notes (LogSeq)
+- For ad-hoc investigations with no ticket, save the important outcomes to LogSeq: findings, decisions, open questions, Mermaid diagrams and graphs. For ticketed work, Jira is the source of truth: put those notes on the ticket, not in LogSeq.
+- Work-related notes go in the **Work - Finlink** graph at `~/Documents/Logseq/Work - Finlink/`. Make one page per investigation under `pages/<Title>.md`. Whenever you create a new page, also add a one-line `[[<Title>]]` entry to the Daily Journal page for the date the work **started**, not the date you happen to write the note (`journals/YYYY_MM_DD.md`; append if the page exists, create it if not).
+- Match the graph's format: a Markdown outline with tab-indented `- ` blocks and `key:: value` page properties at the top. For Mermaid, use a plain fenced ```` ```mermaid ```` block nested under a bullet. `logseq-fenced-code-plus` renders it, so don't add `{{renderer :mermaid_…}}` macros, `mermaid.ink` image previews or `%%{init}%%` directives. Inside the diagram, indent with 2 spaces per level (subgraph contents, participants, messages), and leave out blank lines inside the block.
+- LogSeq writes its in-memory copy of an open page back over outside edits. Backups land in `logseq/bak/pages/<page>/`. After editing a page file, tell me to reload or re-index the page in LogSeq, and don't treat what LogSeq shows as the file's content until then.
+
 ## Docker
 - Use Docker for development and testing when possible
 - Use docker-compose for multi-container applications
