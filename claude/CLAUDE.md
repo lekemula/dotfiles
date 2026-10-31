@@ -55,9 +55,10 @@
   - Don't mix concerns. A refactor, a rename, a formatting pass, a dependency bump and the behaviour change they enable are separate commits, prep commits first.
   - Each commit leaves the tree working (tests and linters pass) and carries its own specs.
   - Stage by hunk (`git add -p`) when one file holds changes for more than one commit.
-  - Follow-ups to an earlier commit on the branch — review fixes, missed specs, typos, lint — go in as `git commit --fixup=<sha>` (`--squash` if the message changes too), folded with `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base>`. Never leave "fix tests", "address review" or "wip" commits standing.
+  - **Before the PR is open**, follow-ups to an earlier commit on the branch — missed specs, typos, lint — go in as `git commit --fixup=<sha>` (`--squash` if the message changes too), folded with `GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash <base>`. Never leave "fix tests", "address review" or "wip" commits standing.
   - Keep git's default `fixup! <original subject>` line, but never leave the body empty: describe what the change is about and why in the description (`git commit --fixup=<sha> -m "<what changes and why>"` puts it under the default subject). When the final message itself changes, use `git commit --fixup=amend:<sha>` or an `amend!` commit with the new message.
   - Fixup and squash hard: the final history is a handful of lean, self-explanatory commits, not a log of how the work happened.
+  - **Once the PR is open**, stop fixing up and autosquashing. Squashed-in changes hide what moved since the last review round. Add review fixes and other follow-ups as plain standalone commits with descriptive messages, and don't rebase onto a newer `main` unless asked. When I ask to squash them, use `git absorb` (`git absorb --base <base> --and-rebase`) to fold each one into the commit it belongs to. Check the result commit by commit afterwards.
   - Rewriting already-pushed history needs a force-push — ask first, and use `--force-with-lease`, never plain `--force`.
 - Push by name: `git push origin <branch>` (the github-toolkit hook rejects a bare `git push`; autoSetupRemote sets up tracking on the first push)
 - Wait for confirmation before commiting and pushing to remote branches
