@@ -55,6 +55,9 @@ alias wr='workmux remove'
 alias wrf='workmux remove --force'
 alias wa='workmux add'
 alias wap='workmux add --pr'
+# Headless /tmux-cleanup. -p denies anything not allowlisted; the skill calls its
+# helper by full path and writes the epic map under /tmp to match these rules.
+alias tmc='claude -p /tmux-cleanup --allowedTools "Skill(tmux-cleanup)" "Bash(ruby ~/dotfiles/claude/skills/tmux-cleanup/scripts/tmux_cleanup.rb *)" "mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql" "Edit(//tmp/**)" "Edit(//private/tmp/**)"'
 
 # Finlink
 alias flb='dcb loanlink-api-finlink'
