@@ -6,12 +6,16 @@
 #   merged   [--done FILE] [--apply] worktrees whose PR is merged or whose Jira ticket is closed
 #                                   (--apply removes the safe ones)
 #   stale    [--apply]              tabs whose worktree is gone (--apply closes them)
+#   remove   NAME|KEY... [--apply]  hard-remove worktrees by name or ticket key, backing up
+#                                   uncommitted changes and unpushed commits first
 #   tickets  [--all]                ticket keys of all worktree tabs (--all: of every worktree), as JSON
 #   group    --map FILE [--apply]   move tabs into one session per epic/parent ticket
 #   summary                         markdown table of every worktree and its PR
 #
-# Destructive subcommands are dry-run unless --apply is given.
+# Destructive subcommands are dry-run unless --apply is given. Backups of hard-removed
+# worktrees go to ~/.cache/rex-cleanup/<worktree>-<timestamp>/.
 
+require 'fileutils'
 require 'json'
 require 'open3'
 require 'optparse'
@@ -23,6 +27,8 @@ REPO_GLOBS = [File.join(HOME, 'Projects/finlink/*'), File.join(HOME, 'Projects/o
 TICKET_RE = /\b([A-Z][A-Z0-9]+-\d+)\b/i.freeze
 SHELLS = %w[zsh bash sh fish -zsh -bash].freeze
 WORKTREE_ICON = "\u{f418}"
+BACKUP_DIR = File.join(HOME, '.cache/rex-cleanup')
+STAMP = Time.now.strftime('%Y%m%d-%H%M%S')
 
 def sh(*cmd, chdir: nil)
   out, _err, st = Open3.capture3(*cmd, chdir: chdir || Dir.pwd)
@@ -145,43 +151,100 @@ def pushed_refs(wt, pr)
   end
 end
 
-def pushed?(wt, pr)
-  pushed_refs(wt, pr).any? do |ref|
-    system('git', '-C', wt.path, 'merge-base', '--is-ancestor', wt.head, ref, out: File::NULL, err: File::NULL)
-  end
+# Rev-list range of local commits on no pushed ref (on no remote branch at all when
+# none of the pushed refs exist locally). Shared by rev-list and format-patch.
+def unpushed_range(wt, pr)
+  excludes = pushed_refs(wt, pr).map { "^#{_1}" }
+  ['HEAD', *(excludes.empty? ? ['--not', '--remotes'] : excludes)]
 end
 
-# Safe = clean tree and every local commit pushed. Candidates are worktrees whose PR
-# is merged or whose ticket is in `done` (keys closed in Jira as done or won't do).
+# What removing the worktree would lose: a description per kind, and the
+# range of unpushed commits (empty when there are none).
+def at_risk(wt, pr)
+  dirty = sh('git', 'status', '--porcelain', chdir: wt.path).to_s.lines.size
+  range = unpushed_range(wt, pr)
+  count = sh('git', 'rev-list', '--count', *range, chdir: wt.path).to_i
+  loss = [("#{dirty} uncommitted file(s)" if dirty.positive?), ("#{count} unpushed commit(s)" if count.positive?)]
+  [loss.compact, count.zero? ? [] : range]
+end
+
+# Candidates are worktrees whose PR is merged or whose ticket is in `done` (keys
+# closed in Jira as done or won't do). A merged PR means the work landed, so
+# leftovers are backed up and the worktree removed anyway; a closed ticket alone
+# keeps a worktree with anything unpushed.
 def removal_verdict(wt, pr, done)
   merged = pr && pr['state'] == 'MERGED'
   ticket_done = wt.ticket && done.include?(wt.ticket)
   return [:skip, "PR #{pr ? pr['state'].downcase : 'missing'}"] unless merged || ticket_done
 
-  dirty = sh('git', 'status', '--porcelain', chdir: wt.path).to_s.strip
-  return [:keep, 'uncommitted changes'] unless dirty.empty?
-  return [:keep, "local commits not pushed#{pr ? " (PR head #{pr['headRefOid'][0, 8]})" : ''}"] unless pushed?(wt, pr)
-  return [:remove, "merged #{pr['url']}"] if merged
+  loss, = at_risk(wt, pr)
+  backed_up = loss.any? ? " (backing up #{loss.join(', ')})" : ''
+  return [:remove, "merged #{pr['url']}#{backed_up}"] if merged
+  return [:keep, loss.join(', ')] if loss.any?
 
   [:remove, "#{wt.ticket} closed in Jira#{pr ? ", PR #{pr['state'].downcase} #{pr['url']}" : ', no PR'}"]
 end
 
-# workmux removes the worktree, branch and its (background) tmux window; the Rex
-# tabs sitting in the worktree are closed here.
+def worktree_tabs(wt) = tabs.select { tab_worktree(_1) == wt }
+
+# Uncommitted changes, untracked files included (staged into a throwaway index),
+# go to uncommitted.patch; unpushed commits to commits/*.patch.
+def backup(wt, unpushed, dir)
+  FileUtils.mkdir_p(dir)
+  index = File.join(dir, 'index.tmp')
+  FileUtils.cp(File.expand_path(sh('git', 'rev-parse', '--git-path', 'index', chdir: wt.path).strip, wt.path), index)
+  env = { 'GIT_INDEX_FILE' => index }
+  system(env, 'git', '-C', wt.path, 'add', '-A', out: File::NULL)
+  diff, = Open3.capture2(env, 'git', '-C', wt.path, 'diff', '--cached', '--binary', 'HEAD')
+  File.write(File.join(dir, 'uncommitted.patch'), diff) unless diff.empty?
+  FileUtils.rm_f(index)
+  return if unpushed.empty?
+
+  system('git', '-C', wt.path, 'format-patch', '-q', '-o', File.join(dir, 'commits'), *unpushed, out: File::NULL)
+end
+
+# Anything at risk is backed up first. workmux removes the worktree, branch and
+# its (background) tmux window; the Rex tabs sitting in the worktree are closed here.
+def remove_worktree(wt, pr, open_tabs)
+  loss, unpushed = at_risk(wt, pr)
+  if loss.any?
+    dir = File.join(BACKUP_DIR, "#{wt.name}-#{STAMP}")
+    backup(wt, unpushed, dir)
+    puts "       backup: #{dir}"
+  end
+  out, st = Open3.capture2e('workmux', 'remove', '-f', wt.name, chdir: wt.repo_dir)
+  open_tabs.reject(&:own?).each { close_tab(_1) } if st.success?
+  puts "       #{st.success? ? "removed, closed #{open_tabs.reject(&:own?).size} tab(s)" : "FAILED: #{out.lines.last}"}"
+end
+
 def merged(apply:, done: [])
   worktrees.each do |wt|
-    verdict, why = removal_verdict(wt, best_pr(prs_for(wt)), done)
+    pr = best_pr(prs_for(wt))
+    verdict, why = removal_verdict(wt, pr, done)
     next if verdict == :skip
 
-    open_tabs = tabs.select { tab_worktree(_1) == wt }
+    open_tabs = worktree_tabs(wt)
     puts "#{verdict.to_s.upcase.ljust(6)} #{wt.repo}/#{wt.name} (#{wt.branch}) — #{why}" \
          "#{open_tabs.empty? ? '' : " [tabs: #{open_tabs.map { "#{_1.session}:#{_1.label}" }.join(', ')}]"}"
-    next unless apply && verdict == :remove
-
-    out, st = Open3.capture2e('workmux', 'remove', '-f', wt.name, chdir: wt.repo_dir)
-    open_tabs.reject(&:own?).each { close_tab(_1) } if st.success?
-    puts "       #{st.success? ? "removed, closed #{open_tabs.reject(&:own?).size} tab(s)" : "FAILED: #{out.lines.last}"}"
+    remove_worktree(wt, pr, open_tabs) if apply && verdict == :remove
   end
+end
+
+# ── remove ───────────────────────────────────────────────────────────────────
+# Hard-remove regardless of PR or ticket state, backing up what would be lost.
+def remove(names, apply:)
+  abort('remove needs worktree names or ticket keys') if names.empty?
+  targets = worktrees.select { |wt| names.any? { _1 == wt.name || _1.upcase == wt.ticket } }
+  names.reject { |n| targets.any? { n == _1.name || n.upcase == _1.ticket } }.each { puts "NOT FOUND #{_1}" }
+
+  targets.each do |wt|
+    pr = best_pr(prs_for(wt))
+    loss, = at_risk(wt, pr)
+    puts "HARD   #{wt.repo}/#{wt.name} (#{wt.branch}) — #{loss.empty? ? 'nothing unpushed' : loss.join(', ')}" \
+         "#{pr ? ", PR #{pr['state'].downcase} #{pr['url']}" : ', no PR'}"
+    remove_worktree(wt, pr, worktree_tabs(wt)) if apply
+  end
+  puts '(dry run — pass --apply to back up and remove)' unless apply
 end
 
 # ── stale ────────────────────────────────────────────────────────────────────
@@ -301,6 +364,7 @@ case ARGV.first
 when 'reorder' then reorder
 when 'merged'  then merged(apply: opts[:apply], done: opts.fetch(:done, []))
 when 'stale'   then stale(apply: opts[:apply])
+when 'remove'  then remove(ARGV.drop(1), apply: opts[:apply])
 when 'tickets' then tickets(all: opts[:all])
 when 'group'   then group(map_file: opts[:map] || abort('--map FILE required'), apply: opts[:apply])
 when 'summary' then summary
