@@ -54,7 +54,7 @@ def tabs
     view['windows'].map do |w|
       layout = w.dig('layers', 0, 'layout')
       panes = (layout ? leaves(layout) : []).compact.map do |b|
-        fg = JSON.parse(rex('block', 'call', '-b', b, 'process') || '{}')['foreground'] || {}
+        fg = JSON.parse(rex('block', 'call', '-s', session, '-b', b, 'process') || '{}')['foreground'] || {}
         Pane.new(block_id: b, program: fg['name'], cwd: fg['cwd'].to_s)
       end
       Tab.new(session: session, window_id: w['window_id'], label: w['label'], layout: layout, panes: panes)
