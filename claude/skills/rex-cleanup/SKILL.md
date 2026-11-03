@@ -27,7 +27,7 @@ Closed-unmerged PRs and worktrees without a PR are not listed and must stay: the
 
 Run `ruby $S merged --apply` to remove the `REMOVE` ones: `workmux remove -f` drops the worktree, branch and its background tmux window, and the helper closes the worktree's Rex tabs. The user asked for this cleanup, so apply without a further prompt, but state what was removed.
 
-After step 2, run `ruby $S stale` to list tabs with any pane in a missing directory or an unregistered `*__worktrees/*` path (a worktree removed some other way), then `ruby $S stale --apply` to close them.
+After step 2, run `ruby $S stale` to list stale tabs: any pane in a missing directory or an unregistered `*__worktrees/*` path (a worktree removed some other way), or a tab workmux labelled after a worktree that no longer exists, with no pane in a live worktree. `ruby $S stale --apply` closes them and kills any session left without tabs. Tabs running anything but a shell are listed as `SKIP` and stay open; report them.
 
 ## 3. Regroup by epic / parent ticket
 

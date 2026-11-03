@@ -21,6 +21,7 @@ REPO_GLOBS = [File.join(HOME, 'Projects/finlink/*'), File.join(HOME, 'Projects/o
               File.join(HOME, 'Projects/private/*')].freeze
 TICKET_RE = /\b([A-Z][A-Z0-9]+-\d+)\b/i.freeze
 SHELLS = %w[zsh bash sh fish -zsh -bash].freeze
+WORKTREE_ICON = "\u{f418}"
 
 def sh(*cmd, chdir: nil)
   out, _err, st = Open3.capture3(*cmd, chdir: chdir || Dir.pwd)
@@ -105,7 +106,12 @@ def best_pr(prs)
   nil
 end
 
-def close_tab(tab) = rex('window', 'close', '-s', tab.session, tab.window_id)
+# A session left without tabs is killed too.
+def close_tab(tab)
+  rex('window', 'close', '-s', tab.session, tab.window_id)
+  left = JSON.parse(rex('window', 'ls', '-s', tab.session, '--json') || '{}')['windows']
+  rex('kill', tab.session) if left&.empty?
+end
 
 # ── reorder ──────────────────────────────────────────────────────────────────
 def desired_order
@@ -167,18 +173,27 @@ end
 # ── stale ────────────────────────────────────────────────────────────────────
 # A tab is stale when any pane sits in a missing directory, or in a
 # *__worktrees/* path git no longer lists (e.g. removed with `git worktree remove`).
+# It is also stale when workmux labelled it after a worktree (WORKTREE_ICON prefix)
+# that no repo has any more, and no pane sits in a live worktree: its shells have
+# since moved out of the removed directory, so the paths alone don't give it away.
 def stale(apply:)
   live = worktrees.map(&:path)
+  in_live = ->(cwd) { live.any? { cwd == _1 || cwd.start_with?("#{_1}/") } }
   tabs.reject(&:own?).each do |tab|
     gone = tab.panes.any? do |p|
       next false if p.cwd.empty?
 
-      !Dir.exist?(p.cwd) || (p.cwd.include?('__worktrees/') && live.none? { p.cwd == _1 || p.cwd.start_with?("#{_1}/") })
+      !Dir.exist?(p.cwd) || (p.cwd.include?('__worktrees/') && !in_live.(p.cwd))
     end
-    next unless gone
+    orphan = tab.label.to_s.start_with?(WORKTREE_ICON) &&
+             worktrees.none? { _1.name == tab.label.delete_prefix(WORKTREE_ICON).strip } &&
+             tab.panes.none? { in_live.(_1.cwd) }
+    next unless gone || orphan
 
-    puts "STALE #{tab.session}:#{tab.label} (#{tab.panes.map(&:cwd).uniq.join(', ')})"
-    close_tab(tab) if apply
+    busy = tab.panes.reject(&:idle?).map(&:program).uniq
+    puts "#{busy.any? ? 'SKIP ' : 'STALE'} #{tab.session}:#{tab.label} (#{tab.panes.map(&:cwd).uniq.join(', ')})" \
+         "#{busy.any? ? " — running #{busy.join(', ')}" : ''}"
+    close_tab(tab) if apply && busy.empty?
   end
   puts '(dry run — pass --apply to close tabs)' unless apply
 end
