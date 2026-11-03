@@ -3,9 +3,10 @@
 
 # Helper for the rex-cleanup skill — the Rex counterpart of tmux-cleanup. Subcommands:
 #   reorder                         move tabs into rex-workspace order
-#   merged   [--apply]              worktrees whose PR is merged (--apply removes the safe ones)
+#   merged   [--done FILE] [--apply] worktrees whose PR is merged or whose Jira ticket is closed
+#                                   (--apply removes the safe ones)
 #   stale    [--apply]              tabs whose worktree is gone (--apply closes them)
-#   tickets                         ticket keys of all worktree tabs, as JSON
+#   tickets  [--all]                ticket keys of all worktree tabs (--all: of every worktree), as JSON
 #   group    --map FILE [--apply]   move tabs into one session per epic/parent ticket
 #   summary                         markdown table of every worktree and its PR
 #
@@ -136,27 +137,40 @@ def reorder
 end
 
 # ── merged ───────────────────────────────────────────────────────────────────
-# Safe = PR merged, clean tree, and every local commit is in the PR head
-# (a squash merge leaves the branch "unmerged" to git, so compare to the PR head instead).
-def removal_verdict(wt, pr)
-  return [:skip, "PR #{pr ? pr['state'].downcase : 'missing'}"] unless pr && pr['state'] == 'MERGED'
+# Refs that exist locally and count as "pushed": the PR head (a squash merge leaves
+# the branch "unmerged" to git, so compare to the PR head instead), upstream, default branch.
+def pushed_refs(wt, pr)
+  [pr && pr['headRefOid'], "#{wt.branch}@{upstream}", 'origin/HEAD'].compact.select do |ref|
+    system('git', '-C', wt.path, 'rev-parse', '--verify', '--quiet', "#{ref}^{commit}", out: File::NULL)
+  end
+end
+
+def pushed?(wt, pr)
+  pushed_refs(wt, pr).any? do |ref|
+    system('git', '-C', wt.path, 'merge-base', '--is-ancestor', wt.head, ref, out: File::NULL, err: File::NULL)
+  end
+end
+
+# Safe = clean tree and every local commit pushed. Candidates are worktrees whose PR
+# is merged or whose ticket is in `done` (keys closed in Jira as done or won't do).
+def removal_verdict(wt, pr, done)
+  merged = pr && pr['state'] == 'MERGED'
+  ticket_done = wt.ticket && done.include?(wt.ticket)
+  return [:skip, "PR #{pr ? pr['state'].downcase : 'missing'}"] unless merged || ticket_done
 
   dirty = sh('git', 'status', '--porcelain', chdir: wt.path).to_s.strip
   return [:keep, 'uncommitted changes'] unless dirty.empty?
+  return [:keep, "local commits not pushed#{pr ? " (PR head #{pr['headRefOid'][0, 8]})" : ''}"] unless pushed?(wt, pr)
+  return [:remove, "merged #{pr['url']}"] if merged
 
-  pr_head = pr['headRefOid']
-  contained = system('git', '-C', wt.path, 'merge-base', '--is-ancestor', wt.head, pr_head,
-                     out: File::NULL, err: File::NULL)
-  return [:keep, "local commits not in PR head #{pr_head[0, 8]}"] unless contained
-
-  [:remove, "merged #{pr['url']}"]
+  [:remove, "#{wt.ticket} closed in Jira#{pr ? ", PR #{pr['state'].downcase} #{pr['url']}" : ', no PR'}"]
 end
 
 # workmux removes the worktree, branch and its (background) tmux window; the Rex
 # tabs sitting in the worktree are closed here.
-def merged(apply:)
+def merged(apply:, done: [])
   worktrees.each do |wt|
-    verdict, why = removal_verdict(wt, best_pr(prs_for(wt)))
+    verdict, why = removal_verdict(wt, best_pr(prs_for(wt)), done)
     next if verdict == :skip
 
     open_tabs = tabs.select { tab_worktree(_1) == wt }
@@ -199,8 +213,8 @@ def stale(apply:)
 end
 
 # ── tickets / group ──────────────────────────────────────────────────────────
-def tickets
-  keys = tabs.filter_map { tab_worktree(_1)&.ticket }.uniq.sort
+def tickets(all: false)
+  keys = (all ? worktrees : tabs.filter_map { tab_worktree(_1) }).filter_map(&:ticket).uniq.sort
   puts JSON.pretty_generate(keys)
 end
 
@@ -279,13 +293,15 @@ opts = { apply: false }
 OptionParser.new do |o|
   o.on('--apply') { opts[:apply] = true }
   o.on('--map FILE') { opts[:map] = _1 }
+  o.on('--done FILE') { opts[:done] = JSON.parse(File.read(_1)).map(&:upcase) }
+  o.on('--all') { opts[:all] = true }
 end.parse!
 
 case ARGV.first
 when 'reorder' then reorder
-when 'merged'  then merged(apply: opts[:apply])
+when 'merged'  then merged(apply: opts[:apply], done: opts.fetch(:done, []))
 when 'stale'   then stale(apply: opts[:apply])
-when 'tickets' then tickets
+when 'tickets' then tickets(all: opts[:all])
 when 'group'   then group(map_file: opts[:map] || abort('--map FILE required'), apply: opts[:apply])
 when 'summary' then summary
 else abort(File.read(__FILE__)[/\A.*?^$/m].gsub(/^# ?/, ''))

@@ -1,6 +1,6 @@
 ---
 name: rex-cleanup
-description: Tidy the user's Rex terminal sessions and workmux worktrees in one pass - reorder tabs to the rex-workspace order, remove worktrees whose PRs are merged and close their tabs, regroup worktree tabs into one Rex session per epic/parent ticket, and summarise pending PRs/worktrees. Use whenever the user says cleanup rex, tidy my rex sessions, rex-cleanup, prune merged worktrees in Rex, regroup my Rex tabs by epic, or asks what PRs/worktrees are still pending while working in Rex, even if they only ask for one of the four steps.
+description: Tidy the user's Rex terminal sessions and workmux worktrees in one pass - reorder tabs to the rex-workspace order, remove worktrees whose PRs are merged or whose Jira tickets are done or won't-do and close their tabs, regroup worktree tabs into one Rex session per epic/parent ticket, and summarise pending PRs/worktrees. Use whenever the user says cleanup rex, tidy my rex sessions, rex-cleanup, prune merged worktrees in Rex, regroup my Rex tabs by epic, or asks what PRs/worktrees are still pending while working in Rex, even if they only ask for one of the four steps.
 ---
 
 The Rex counterpart of `tmux-cleanup`. The helper reads every tab in every Rex session (`rex window ls`, plus each pane's foreground program and directory) and every repo any pane sits in, so it needs no session argument. Run the steps in order; each is independent, so skip any the user did not ask for:
@@ -17,15 +17,19 @@ Destructive subcommands (`merged`, `stale`, `group`) are dry-run unless `--apply
 
 `ruby $S reorder` moves tabs into the order `~/dotfiles/bin/rex-workspace` creates them. Other tabs (worktrees) follow, in their existing relative order. It is idempotent.
 
-## 2. Remove merged worktrees
+## 2. Remove finished worktrees
 
-`ruby $S merged` lists worktrees with a merged PR, the Rex tabs sitting in each, and a verdict:
-- `REMOVE` - merged, clean tree, every local commit is in the PR head. Safe.
-- `KEEP` - merged but dirty or holding commits the PR lacks. Never remove these; report them.
+A worktree is finished when its PR is merged **or** its Jira ticket is closed, as Done or as Won't Do. A ticket can be closed while its PR is still open or was closed unmerged, and that worktree is finished too.
 
-Closed-unmerged PRs and worktrees without a PR are not listed and must stay: the user may still want that work.
+1. `ruby $S tickets --all` prints the ticket keys of every worktree.
+2. Find which keys are closed with the Atlassian MCP: `searchJiraIssuesUsingJql` with `key in (...) AND (statusCategory = Done OR resolution IS NOT EMPTY)`. The `resolution` clause catches a Won't Do set as a resolution on a status outside the Done category. Write those keys as a JSON array to a temp file (`$CLAUDE_JOB_DIR/tmp/done.json` in a background job, else the scratchpad). If Jira is unreachable, say so and drop `--done`, so only merged PRs count.
+3. `ruby $S merged --done FILE` lists the finished worktrees, the Rex tabs sitting in each, and a verdict:
+   - `REMOVE` - clean tree, and every local commit is pushed: in the PR head, the upstream branch or the default branch. Safe.
+   - `KEEP` - dirty, or holding commits that are not pushed. Never remove these; report them.
 
-Run `ruby $S merged --apply` to remove the `REMOVE` ones: `workmux remove -f` drops the worktree, branch and its background tmux window, and the helper closes the worktree's Rex tabs. The user asked for this cleanup, so apply without a further prompt, but state what was removed.
+Worktrees with neither a merged PR nor a done ticket are not listed and must stay: the user may still want that work.
+
+Run `ruby $S merged --done FILE --apply` to remove the `REMOVE` ones: `workmux remove -f` drops the worktree, branch and its background tmux window, and the helper closes the worktree's Rex tabs. The user asked for this cleanup, so apply without a further prompt, but state what was removed. For each removed worktree whose ticket is done but whose PR is still open, say so: the PR outlives the worktree, and the user may want to close it.
 
 After step 2, run `ruby $S stale` to list stale tabs: any pane in a missing directory or an unregistered `*__worktrees/*` path (a worktree removed some other way), or a tab workmux labelled after a worktree that no longer exists, with no pane in a live worktree. `ruby $S stale --apply` closes them and kills any session left without tabs. Tabs running anything but a shell are listed as `SKIP` and stay open; report them.
 
