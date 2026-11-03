@@ -26,6 +26,7 @@
 - `BUNDLE_RUBYGEMS__PKG__GITHUB__COM` (GitHub Packages auth for the private `rubygems.pkg.github.com/LoanLink` gem source, needed for `bundle install` in LoanLink Ruby repos) lives in `~/.zshrc.secrets` and is already present in any shell — check with `[ -n "$BUNDLE_RUBYGEMS__PKG__GITHUB__COM" ]` before assuming it's missing, and pass it through explicitly to `docker exec` when installing inside a container. Don't go hunting other credential stores for this or similar tokens — ask if it's not found here.
 
 ## Jira / Confluence
+- Write every Jira ticket key in output to me as a link: `[LI-1861](https://finlink.atlassian.net/browse/LI-1861)`, not a bare `LI-1861`. Rex has no smart selection, so a bare key isn't clickable. This includes headings, lists and tables. Keys inside code blocks, commit messages and branch names stay plain.
 - Writing ticket **content** always goes through the `jira-ticket` skill — creating a ticket, or
   editing an existing ticket's summary/description (context, acceptance criteria, test section).
   Never hand-write those with a bare `createJiraIssue`/`editJiraIssue` call; the
