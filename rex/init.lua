@@ -134,6 +134,29 @@ rex.action{
 }
 
 lead("ctrl+a", "popup", { command = { "claude", "agents" } })
+
+-- New agent in a tab of its own, in the current pane's directory. Agents started
+-- from `claude agents` run in Claude Code's background daemon, outside any Rex
+-- terminal, so they never show up in Rex's activity list; this one does.
+rex.action{
+  name = "claude_tab",
+  title = "New Claude Tab",
+  description = "Open claude in a new tab, in the current pane's directory",
+  run = function(ctx)
+    local pwd = rex.block.call(TERMINAL, "pwd", { block_id = ctx.block_id })
+    local cwd = pwd and pwd.pwd and pwd.pwd:gsub("^file://[^/]*", "")
+    local _, err = rex.session.new_window{
+      window_label = "claude",
+      focus = true,
+      layout = rex.layout.block{
+        flavor = SHELL,
+        options = { command = { "claude" }, cwd = cwd },
+      },
+    }
+    if err ~= nil then error(err, 0) end
+  end,
+}
+lead("ctrl+n", "claude_tab")
 -- tmux's choose-tree: every tab in every session (bin/rex-tab-picker)
 lead("w", "popup", { command = { DOTFILES_BIN .. "/rex-tab-picker" } })
 
