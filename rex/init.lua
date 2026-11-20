@@ -86,7 +86,12 @@ end
 
 for key, direction in pairs({ h = "left", j = "down", k = "up", l = "right" }) do
   repeatable(key, "pane.resize", { direction = direction, amount = 10 })
+  -- Move the pane within the tab (tmux swap-pane), shift+hjkl.
+  repeatable("shift+" .. key, "pane.move", { direction = direction })
 end
+-- tmux's { and } swap with the previous/next pane; here left/right.
+repeatable("shift+[", "pane.move", { direction = "left" })
+repeatable("shift+]", "pane.move", { direction = "right" })
 repeatable("left", "client.tab.move.backward")
 repeatable("right", "client.tab.move.forward")
 
