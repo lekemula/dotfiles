@@ -36,6 +36,7 @@ endfunction
 function! s:Map() abort
   for [l:key, l:dir] in [['h', 'left'], ['j', 'down'], ['k', 'up'], ['l', 'right']]
     execute printf("nnoremap <silent> <C-%s> :call <SID>Navigate('%s', '%s')<CR>", l:key, l:key, l:dir)
+    execute printf("xnoremap <silent> <C-%s> <Esc>:call <SID>Navigate('%s', '%s')<CR>", l:key, l:key, l:dir)
     if has('nvim')
       execute printf("tnoremap <expr> <silent> <C-%s> <SID>TermNavigate(\"\\<C-%s>\", '%s', '%s')", l:key, l:key, l:key, l:dir)
     endif
