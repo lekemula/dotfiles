@@ -14,6 +14,14 @@ local function soften_diff_highlights()
   vim.api.nvim_set_hl(0, 'DiffText', { bg = '#3a5050', bold = true })
   vim.api.nvim_set_hl(0, 'DiffChange', { bg = 'NONE' })
   -- Floats (LSP hover) on the editor background, framed by a muted border.
+  -- GitHub Dark (Rex): diffs like github.com, a background tint only so syntax
+  -- colours stay, and dimmer than the theme's own Added/Removed.
+  if (vim.g.colors_name or ''):match('^github') then
+    vim.api.nvim_set_hl(0, 'DiffAdd', { bg = '#12261e' })
+    vim.api.nvim_set_hl(0, 'DiffDelete', { bg = '#25171c', fg = '#3d2a2f' })
+    vim.api.nvim_set_hl(0, 'DiffText', { bg = '#1d3b2a' })
+    vim.api.nvim_set_hl(0, 'DiffTextAdd', { bg = '#1d3b2a' })
+  end
   vim.api.nvim_set_hl(0, 'NormalFloat', { link = 'Normal' })
   local comment = vim.api.nvim_get_hl(0, { name = 'Comment', link = false })
   vim.api.nvim_set_hl(0, 'FloatBorder', { fg = comment.fg, bg = 'NONE' })
