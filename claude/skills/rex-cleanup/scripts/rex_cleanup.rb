@@ -204,7 +204,8 @@ def backup(wt, unpushed, dir)
 end
 
 # Anything at risk is backed up first. workmux removes the worktree, branch and
-# its (background) tmux window; the Rex tabs sitting in the worktree are closed here.
+# its own Rex tab, but leaves an emptied session; closing the worktree's tabs here
+# catches tabs workmux didn't create and kills that session.
 def remove_worktree(wt, pr, open_tabs)
   loss, unpushed = at_risk(wt, pr)
   if loss.any?
@@ -212,7 +213,7 @@ def remove_worktree(wt, pr, open_tabs)
     backup(wt, unpushed, dir)
     puts "       backup: #{dir}"
   end
-  out, st = Open3.capture2e('workmux', 'remove', '-f', wt.name, chdir: wt.repo_dir)
+  out, st = Open3.capture2e('workmux', 'remove', '-f', wt.name, chdir: wt.repo_dir, stdin_data: '')
   open_tabs.reject(&:own?).each { close_tab(_1) } if st.success?
   puts "       #{st.success? ? "removed, closed #{open_tabs.reject(&:own?).size} tab(s)" : "FAILED: #{out.lines.last}"}"
 end

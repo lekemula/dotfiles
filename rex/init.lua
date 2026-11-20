@@ -51,9 +51,13 @@ lead("shift+0", "session.next")
 rex.bind("alt+j", "session.next")
 rex.bind("alt+k", "session.previous")
 
--- Sidebar and agent activity, standing in for the workmux sidebar/dashboard
-lead("ctrl+t", "client.sidebar.toggle")
-lead("ctrl+d", "client.sidebar.activity.toggle")
+-- workmux drives Rex natively (0.1.283+), so these match .tmux.conf: agent
+-- sidebar, dashboard, and a new worktree from the current pane's repo.
+lead("ctrl+t", "popup", { command = { "workmux", "sidebar" } })
+lead("ctrl+d", "popup", { command = { "workmux", "dashboard" } })
+lead("ctrl+w", "popup", { command = { "zsh", "-c", 'read "b?worktree: " && [[ -n $b ]] && workmux add "$b"' } })
+-- Rex's own session sidebar
+lead("shift+t", "client.sidebar.toggle")
 
 lead("r", "client.config.reload")
 lead("[", "client.find.open")

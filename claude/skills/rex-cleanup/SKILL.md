@@ -29,7 +29,7 @@ A worktree is finished when its PR is merged **or** its Jira ticket is closed, a
 
 Worktrees with neither a merged PR nor a done ticket are not listed and must stay: the user may still want that work.
 
-Run `ruby $S merged --done FILE --apply` to remove the `REMOVE` ones: `workmux remove -f` drops the worktree, branch and its background tmux window, and the helper closes the worktree's Rex tabs. The user asked for this cleanup, so apply without a further prompt, but state what was removed. For each removed worktree whose ticket is done but whose PR is still open, say so: the PR outlives the worktree, and the user may want to close it. Report each backup path the helper prints.
+Run `ruby $S merged --done FILE --apply` to remove the `REMOVE` ones: `workmux remove -f` drops the worktree, branch and its own Rex tab, and the helper closes any other tab in the worktree and the session that leaves empty. The user asked for this cleanup, so apply without a further prompt, but state what was removed. For each removed worktree whose ticket is done but whose PR is still open, say so: the PR outlives the worktree, and the user may want to close it. Report each backup path the helper prints.
 
 ### Hard remove
 

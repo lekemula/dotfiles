@@ -29,6 +29,12 @@ if [[ -n ${TMUX_PANE:-} ]]; then
   exec workmux set-window-status "$state"
 fi
 
+# Inside Rex (workmux 0.1.283+ has a Rex backend) workmux finds the pane from
+# $REX_BLOCK itself.
+if [[ -n ${REX_BLOCK:-} && -z ${TMUX:-} ]]; then
+  exec workmux set-window-status "$state"
+fi
+
 command -v tmux >/dev/null 2>&1 || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 
