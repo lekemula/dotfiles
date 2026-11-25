@@ -5,6 +5,7 @@
 - Don't add method comments unnecessarily. Only add comments for non-obvious code.
 - Comments carry context that's hard to infer from the code, not rationale aimed at reviewers. Don't justify implementation decisions in a comment. Line-level rationale — why this parse, why this guard, why not the obvious alternative — goes in an inline GitHub comment on the diff. Only the high-level approach belongs in the PR description or commit body.
 - Inline GitHub comments post under my account, so start every one with a marker making clear it is the agent talking, not me: `> 🤖 **Claude Code (AI agent)** — written by the agent, not by the PR author.` Write them in the third person too — no "I tried X", which reads as me having tried it. Keep them human-readable and as compact as possible: a few short sentences of plain language, one idea per paragraph, two or three paragraphs at most. Reviewers stop reading a dense one, so length defeats the point of moving the rationale onto the diff.
+  - Exception: when I explicitly ask you to send a comment (e.g. a review comment carrying my point), it is mine, so use `> 🤖 Comment written by Claude Code, on behalf of Lekë Mula.` instead, and write it in my voice.
 - Run tests/specs/linters after making changes to ensure nothing is broken.
 - When I answer only some questions in a round of questions (grilling, clarifications), take your recommended answer for the ones I skipped instead of asking them again.
 - Don't commit or push unless I ask.
