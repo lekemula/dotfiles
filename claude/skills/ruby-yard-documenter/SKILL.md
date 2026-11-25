@@ -52,19 +52,31 @@ If constructor is defined then prefer the following style:
 
 ### Generics
 
-Document generic classes via `@generic` and `@param` tags:
+Declare a type variable with `@generic T`, then reference it as `generic<T>` inside a type. A bare `T` is read as a class named `T`. This is Solargraph's syntax ([castwide/solargraph#743](https://github.com/castwide/solargraph/pull/743)); `@generic` is not a standard YARD tag.
+
+On a class:
    ```
    # @generic T
    class Box
-     # @param items [Array<T>]
+     # @param items [Array<generic<T>>]
      def initialize(items)
        @items = items
      end
 
-     # @return [Array<T>]
+     # @return [Array<generic<T>>]
      def items
        @items
      end
+   end
+   ```
+
+On a method whose return type follows a class argument:
+   ```
+   # @generic T
+   # @param model [Class<generic<T>>]
+   # @return [generic<T>]
+   def build(model)
+     model.new
    end
    ```
 
