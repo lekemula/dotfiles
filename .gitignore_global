@@ -52,3 +52,5 @@ config/projections.json
 opencode.json
 
 .workmux.yaml
+
+**/.claude/settings.local.json
