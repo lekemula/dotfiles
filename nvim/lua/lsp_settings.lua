@@ -79,6 +79,8 @@ end
 
 vim.lsp.config("solargraph", {
   cmd = solargraph_cmd,
+  -- ERB views too, for solargraph-herb
+  filetypes = { "ruby", "eruby", "eruby.html" },
   settings = {
     solargraph = {
       diagnostics = true,

@@ -1,6 +1,7 @@
 ---
 include:
   - "**/*.rb"
+  - "app/views/**/*.erb"
 exclude:
   - "**/spec/**/*"
   - test/**/*
@@ -11,6 +12,7 @@ domains: []
 plugins:
   - solargraph-rspec
   - solargraph-rails
+  - solargraph-herb
   - solargraph-yard-lint
 rspec:
   let_methods:
@@ -22,6 +24,7 @@ reporters:
   - rubocop
   - require_not_found
   - yard_lint
+  - herb
 formatter:
   rubocop:
     cops: all
