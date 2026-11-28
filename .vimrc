@@ -576,6 +576,8 @@ syntax enable
 set encoding=UTF-8
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#branch#displayed_head_limit = 10
+" Position in words instead of airline's ㏑ ≡ ℅ symbols: "100% Ln 313/313 Col 1".
+let g:airline_section_z = '%p%% Ln %l/%L Col %v'
 filetype plugin indent on
 set autoindent
 set cindent
@@ -612,6 +614,13 @@ function! SyntaxGroupStack()
 endfunc
 
 set runtimepath^=~/Projects/vscode-css-peek 
+
+" vim-tmux-navigator only maps normal mode; leave visual mode and navigate.
+" Overrides coc-snippets' visual <C-j>, which stays mapped in select mode.
+xnoremap <silent> <C-h> <Esc>:TmuxNavigateLeft<CR>
+xnoremap <silent> <C-j> <Esc>:TmuxNavigateDown<CR>
+xnoremap <silent> <C-k> <Esc>:TmuxNavigateUp<CR>
+xnoremap <silent> <C-l> <Esc>:TmuxNavigateRight<CR>
 
 " herdr pane navigation. Sourced last so its <C-h/j/k/l> mappings win over
 " vim-tmux-navigator's; it no-ops outside a herdr pane.
