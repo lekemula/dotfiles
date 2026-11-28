@@ -10,6 +10,12 @@
       "description": "Solargraph LSP for Ruby",
       "version": "1.0.0",
       "source": "./solargraph"
+    },
+    {
+      "name": "replay-theater",
+      "description": "Step through the file edits Claude made in the last turn, one diff at a time (vendored from anthropics/claude-code-playground@569c528)",
+      "version": "0.1.0",
+      "source": "./replay-theater"
     }
   ]
 }

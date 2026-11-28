@@ -357,7 +357,8 @@
     "todoist@doist": true,
     "merman@merman": true,
     "image-view@claude-image-view": true,
-    "filetree@claude-code-filetree": true
+    "filetree@claude-code-filetree": true,
+    "replay-theater@local-plugins": true
   },
   "extraKnownMarketplaces": {
     "doist": {
