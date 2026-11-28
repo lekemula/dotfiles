@@ -166,5 +166,7 @@ export GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token)
 # https://github.com/anomalyco/opencode/issues/7405#issuecomment-4018473781
 export OPENCODE_EXPERIMENTAL_LSP_TOOL=true
 
-# zoxide must init last, else its doctor warns that `cd` is overridden after it
+# zoxide must init last, else its doctor warns that `cd` is overridden after it.
+# Non-interactive shells (agents, scripts) still trip the doctor through the `cd` alias, so silence it.
+export _ZO_DOCTOR=0
 eval "$(zoxide init zsh)"
