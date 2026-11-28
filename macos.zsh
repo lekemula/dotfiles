@@ -48,6 +48,12 @@ if ! command -v nvim &> /dev/null; then
   brew install neovim
 fi
 
+# vim-gutentags needs Universal Ctags; macOS's /usr/bin/ctags is BSD ctags and
+# rejects its options, so `command -v ctags` alone can't tell them apart.
+if ! brew list universal-ctags &> /dev/null; then
+  brew install universal-ctags
+fi
+
 # pynvim must be installed for the same python3 nvim uses, otherwise
 # has('python3') is 0 and plugins like UltiSnips fail to load. Guard
 # independently from nvim so it self-heals if pynvim is missing for any
