@@ -12,3 +12,7 @@ prompt_save_view_preferences = false
 [keybindings]
 "hunk.review.pageDown" = "ctrl+d"
 "hunk.review.pageUp" = "ctrl+u"
+"hunk.review.previousFile" = ["{", ","]
+"hunk.review.nextFile" = ["}", "."]
+"hunk.review.previousAnnotatedHunk" = false
+"hunk.review.nextAnnotatedHunk" = false
