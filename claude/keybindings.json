@@ -27,7 +27,8 @@
         "ctrl+g": "chat:externalEditor",
         "ctrl+s": "chat:stash",
         "ctrl+v": "chat:imagePaste",
-        "ctrl+q": "chat:snippetPicker"
+        "ctrl+q": "chat:snippetPicker",
+        "meta+l": "abovePrompt:focus"
       }
     },
     {
@@ -187,6 +188,18 @@
       "bindings": {
         "space": "plugin:toggle",
         "i": "plugin:install"
+      }
+    },
+    {
+      "context": "Pane",
+      "bindings": {
+        "meta+h": "abovePrompt:leave"
+      }
+    },
+    {
+      "context": "PaneField",
+      "bindings": {
+        "meta+h": "abovePrompt:leave"
       }
     }
   ]
