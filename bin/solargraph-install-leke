@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Install solargraph, solargraph-rails and solargraph-herb from my local checkouts, so the editor runs what I'm
+# testing: the `main-leke` branch (upstream plus my open PRs and fork stacks), else `main` (solargraph-herb has no
+# upstream), else the RubyGems release.
+#
+#   solargraph-install-leke                 # every gem
+#   solargraph-install-leke solargraph      # just one
+#   SOLARGRAPH_BRANCH=other solargraph-install-leke
+
+require 'tmpdir'
+
+BRANCHES = [ENV.fetch('SOLARGRAPH_BRANCH', 'main-leke'), 'main'].uniq.freeze
+CHECKOUTS = File.expand_path('~/Projects/open_source')
+GEMS = %w[solargraph solargraph-rails solargraph-herb].freeze
+
+# @param cmd [Array<String>]
+# @return [void]
+def run!(*cmd, chdir: Dir.pwd)
+  system(*cmd, chdir: chdir, exception: true)
+end
+
+# @param repo [String]
+# @return [String, nil] the first of BRANCHES the repo has
+def branch_in(repo)
+  BRANCHES.find do |branch|
+    system('git', '-C', repo, 'rev-parse', '--verify', '--quiet', "refs/heads/#{branch}", out: File::NULL,
+                                                                                            err: File::NULL)
+  end
+end
+
+# @param name [String]
+# @return [void]
+def install(name)
+  repo = File.join(CHECKOUTS, name)
+  branch = branch_in(repo)
+  unless branch
+    warn "#{name}: none of #{BRANCHES.join(', ')} in #{repo}, installing the RubyGems release"
+    run!('gem', 'install', '--no-document', name)
+    return
+  end
+
+  # The gemspecs list their files with `git ls-files`, so build from a clone rather than an export
+  Dir.mktmpdir("#{name}-#{branch}") do |dir|
+    run!('git', 'clone', '--quiet', '--depth', '1', '--branch', branch, "file://#{repo}", dir)
+    run!('gem', 'build', '--silent', "#{name}.gemspec", '--output', "#{name}.gem", chdir: dir)
+    # Not --local: the built gem's dependencies may still have to come from RubyGems (e.g. on a fresh Ruby)
+    run!('gem', 'install', '--no-document', File.join(dir, "#{name}.gem"))
+  end
+  puts "#{name}: installed from #{repo} @ #{branch}"
+end
+
+(ARGV.empty? ? GEMS : ARGV).each { |name| install(name) }

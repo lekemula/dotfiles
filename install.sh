@@ -9,9 +9,11 @@ if [[ ! -d $HOME/antigen ]]; then
 fi
 
 # One gem per call: installing them together sends the RubyGems resolver into a spin.
-for g in solargraph solargraph-rspec solargraph-rails solargraph-yard-lint; do
+for g in solargraph-rspec solargraph-yard-lint; do
   gem list -i "^$g\$" >/dev/null || gem install $g
 done
+# solargraph, solargraph-rails and solargraph-herb come from my checkouts' main-leke (else main) branch
+~/$PERSONAL_DOTFILES_DIRECTORY_NAME/bin/solargraph-install-leke
 
 # This runs after default install actions, so you can overwrite changes it makes if you want.
 if [[ -z "$WITHOUT_ZSHRC_SYMLINK" ]]; then
