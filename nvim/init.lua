@@ -9,6 +9,7 @@ require('autopairs_settings')
 require('octo_settings')
 require('claudecode_settings')
 require('tmux_navigator_terminal')
+require('fold_settings')
 
 local function soften_diff_highlights()
   vim.api.nvim_set_hl(0, 'DiffText', { bg = '#3a5050', bold = true })
