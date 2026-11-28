@@ -41,6 +41,8 @@ ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.pryrc ~/.pryrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.rdbgrc ~/.rdbgrc
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/.antigenrc ~/.antigenrc
 [ ! -d ~/.claude ] && mkdir -p ~/.claude
+# claude.json is gitignored: Claude Code writes machine-local state (autoMode) into it
+[ -f ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude.json ] || cp ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude.example.json ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude.json
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude.json ~/.claude/settings.json
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/skills ~/.claude/skills
 ln -vsfn ~/$PERSONAL_DOTFILES_DIRECTORY_NAME/claude/agents ~/.claude/agents
