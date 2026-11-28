@@ -1,11 +1,11 @@
 ---
 name: ruby-yard-documenter
-description: Add YARD documentation to Ruby classes and methods
+description: YARD conventions for Ruby. Use whenever writing or editing YARD comments (`@param`, `@return`, `@!method`), documenting Struct/Data members, or adding YARD docs to a file.
 disable-model-invocation: false
 allowed-tools: Read, Grep, Glob, Edit
 ---
 
-Add YARD documentation to the file at `$ARGUMENTS`.
+Add YARD documentation to the file at `$ARGUMENTS`. Without arguments, apply these rules to the YARD comments you are writing.
 
 Rules:
 1. Read the file and identify all undocumented public classes, modules, and methods
@@ -25,6 +25,7 @@ Rules:
 10. Do NOT modify any code — only add doc comments
 11. Try to reveal as much as ruby/rails magic via `@!method` and `@!attribute` as possible for dynamic methods
     - Verify with LSP `documentSymbol` before adding annotations — if the method already appears in the symbol list, skip the `@!method`.
+    - Struct/Data members take `@param` tags instead (see [Structs](#structs)): Solargraph types them from `@param` and ignores `@!attribute` there.
 
 ## Guidelines
 
