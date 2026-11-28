@@ -135,6 +135,22 @@ rex.action{
 
 lead("ctrl+a", "popup", { command = { "claude", "agents" } })
 
+-- iTerm2's cmd-click-a-path, by keyboard: Rex can't run a command on click, so
+-- pick a path from this pane's screen and open it in the tab's nvim
+-- (bin/rex-open-path).
+rex.action{
+  name = "open_path",
+  title = "Open Path in Nvim",
+  description = "Pick a file path on this pane's screen and open it in the tab's nvim",
+  run = function(ctx)
+    local _, err = rex.invoke("popup", {
+      command = { DOTFILES_BIN .. "/rex-open-path", ctx.session_id, ctx.block_id },
+    })
+    if err ~= nil then error(err, 0) end
+  end,
+}
+lead("ctrl+o", "open_path")
+
 -- New agent in a tab of its own, in the current pane's directory. Agents started
 -- from `claude agents` run in Claude Code's background daemon, outside any Rex
 -- terminal, so they never show up in Rex's activity list; this one does.

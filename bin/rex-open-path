@@ -1,0 +1,117 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Pick a file path printed in a Rex pane and open it in the nvim of the same tab —
+# the keyboard stand-in for iTerm2's cmd-click (bin/tmux-nvim-click.sh), since Rex
+# can't run a command when a path is clicked. Bound to ctrl+b ctrl+o in
+# rex/init.lua, which runs it in a popup.
+#
+#   rex-open-path SESSION BLOCK
+#   rex-open-path --file PATH [LINE]
+#
+# --file skips the picker and opens PATH in the tab of $REX_SESSION/$REX_BLOCK, for
+# callers that already know the file (Claude Code's filetree "Open with"). With no
+# nvim in that session, it opens in a new nvim pane split to the right instead.
+#
+# Paths come from the pane's screen and recent scrollback, newest first, keeping a
+# `:line` suffix; relative ones resolve against the pane's directory or its git
+# root, and only existing files are offered. The file opens through nvim's server
+# socket, so nothing is typed into any pane, then that nvim pane gets focus. With
+# no nvim in the tab, the session's first one is used.
+
+require 'json'
+require 'open3'
+require 'tmpdir'
+
+LINES = 600
+PATH_RE = %r{(?<![\w/.~-])((?:~|\.{1,2})?/?[\w.@+-]+(?:/[\w.@+-]+)*\.?[\w-]*)(?::(\d+))?}
+
+def sh(*cmd)
+  out, _err, st = Open3.capture3(*cmd, stdin_data: '')
+  st.success? ? out : nil
+rescue SystemCallError
+  nil
+end
+
+def process(session, block)
+  JSON.parse(sh('rex', 'block', 'call', '-s', session, '-b', block, 'process') || '{}')['foreground'] || {}
+end
+
+def candidates(text, cwd)
+  roots = [cwd, sh('git', '-C', cwd, 'rev-parse', '--show-toplevel')&.strip].compact.uniq
+  text.lines.last(LINES).reverse.flat_map { _1.scan(PATH_RE) }.filter_map do |path, line|
+    next unless path.include?('/') || path.match?(/\.\w+\z/)
+
+    full = if path.start_with?('~') then File.expand_path(path)
+           elsif path.start_with?('/') then path
+           else roots.map { File.expand_path(path, _1) }.find { File.file?(_1) }
+           end
+    [full, line] if full && File.file?(full) && full.start_with?(Dir.home, Dir.tmpdir, '/tmp', '/private')
+  end.uniq
+end
+
+# The focused block of the window the user is looking at. A background Claude
+# Code job keeps the REX_BLOCK of the pane it started in, which may be another tab.
+def active_block(session)
+  view = JSON.parse(sh('rex', 'api', 'call', '-s', session, 'session.view') || '{}')
+  view['windows']&.find { _1['window_id'] == view['active_window_id'] }&.dig('focused_block_id')
+end
+
+# The nvim in the same tab as BLOCK, else (unless same_tab) the session's first nvim.
+def nvim_block(session, block, same_tab: false)
+  windows = JSON.parse(sh('rex', 'window', 'ls', '-s', session, '--json') || '{"windows":[]}')['windows']
+  leaves = ->(n) { n['split'] ? leaves.call(n['split']['before']) + leaves.call(n['split']['after']) : [n['block_id']] }
+  blocks = windows.map { |w| (l = w.dig('layers', 0, 'layout')) ? leaves.call(l).compact : [] }
+  own = blocks.find { |bs| bs.any? { _1.end_with?(block) } } || []
+  (same_tab ? own : own + (blocks.flatten - own)).find { process(session, _1)['name'] == 'nvim' }
+end
+
+# The pane's foreground nvim is the TUI; the server owning the socket is its child.
+def socket(pid)
+  pids = [pid, *sh('pgrep', '-P', pid.to_s).to_s.split]
+  pids.lazy.filter_map do |p|
+    Dir.glob(File.join(ENV.fetch('TMPDIR', '/tmp'), "nvim.#{ENV.fetch('USER')}", '*', "nvim.#{p}.0")).first
+  end.first
+end
+
+USAGE = 'usage: rex-open-path SESSION BLOCK | rex-open-path --file PATH [LINE]'
+
+
+if ARGV.first == '--file'
+  _, file, line = ARGV
+  session = ENV.fetch('REX_SESSION', nil)
+  abort USAGE unless file
+  abort 'not inside Rex: REX_SESSION unset' unless session
+  block = active_block(session) || ENV.fetch('REX_BLOCK', nil) or abort 'no focused Rex block'
+  file = File.expand_path(file)
+  line = nil unless line.to_s.match?(/\A\d+\z/)
+else
+  session, block = ARGV
+  abort USAGE unless session && block
+
+  cwd = process(session, block)['cwd'] || Dir.home
+  text = sh('rex', 'capture', '-s', session, '-b', block, '--unwrap') || ''
+  paths = candidates(text, cwd)
+  abort 'no existing file paths on screen' if paths.empty?
+
+  home = Dir.home
+  menu = paths.map { |full, line| [full.sub(home, '~'), line].compact.join(':') }
+  pick, = Open3.capture2('fzf', '--prompt=open> ', '--reverse', '--no-multi', stdin_data: menu.join("\n"))
+  file, line = paths[menu.index(pick.strip) || exit]
+end
+
+target = nvim_block(session, block, same_tab: ARGV.first == '--file')
+if target.nil? && ARGV.first == '--file'
+  sh('rex', 'split', '-s', session, '-b', block, '-c', File.dirname(file), '--',
+     'nvim', *(line ? ["+#{line}"] : []), file) or abort 'rex split failed'
+  exit
+end
+abort 'no nvim in this session' unless target
+sock = socket(process(session, target)['pid']) or abort 'nvim has no server socket'
+# --remote-send, not --remote-expr: an expr waits forever while nvim sits at a
+# "Press ENTER" prompt, keys are just queued. Escaped for the command line, and
+# `<` as <lt> so it isn't read as key notation.
+escaped = file.gsub(/([ \\%#|"])/, '\\\\\1').gsub('<', '<lt>')
+keys = "<C-\\><C-n>:edit #{line ? "+#{line} " : ''}#{escaped}<CR>"
+sh('perl', '-e', 'alarm 5; exec @ARGV', 'nvim', '--server', sock, '--remote-send', keys)
+sh('rex', 'focus', '-s', session, target)
